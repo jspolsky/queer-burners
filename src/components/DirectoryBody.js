@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
 import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -45,22 +46,21 @@ export default class DirectoryBody extends React.Component {
                   </Button>
                 </Link>
                 <DropdownButton
+                  as={ButtonGroup}
                   id="dropdown-basic-button"
                   title={filterButtonString}
                   size="sm"
-                  as="ButtonGroup"
                   style={{ marginLeft: "2rem" }}
                 >
                   {campIdentifications.map((s) => (
                     <Dropdown.Item
-                      as="button"
+                      key={s}
                       onClick={() => this.setState({ filter: s })}
                     >
                       {s}
                     </Dropdown.Item>
                   ))}
                   <Dropdown.Item
-                    as="button"
                     onClick={() =>
                       this.setState({ filter: "Seeking new members" })
                     }
@@ -94,7 +94,7 @@ export default class DirectoryBody extends React.Component {
                       this.state.filter === onecamp.identifies
                   )
                   .map((onecamp) => (
-                    <CampCard o={onecamp} />
+                    <CampCard o={onecamp} key={onecamp.name} />
                   ))}
               </CardColumns>
             </Col>
