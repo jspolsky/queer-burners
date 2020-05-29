@@ -7,11 +7,12 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 
 function JoinButton(props) {
-  if (props.o.join && props.o.join.open) {
+  const o = props.o;
+  if (o.join && o.join.open) {
     const popover = (
       <Popover id="popover-basic">
         <Popover.Title as="h3">Join our camp!</Popover.Title>
-        <Popover.Content>{props.o.join.message}</Popover.Content>
+        <Popover.Content>{o.join.message}</Popover.Content>
       </Popover>
     );
 
@@ -60,38 +61,40 @@ function DisplayEmail(props) {
   }
 }
 
-const CampCard = (props) => (
-  <Card style={{ width: "20rem" }} bg="light">
-    <Card.Img variant="top" src={require("../camp_images/" + props.o.image)} />
-    <Card.Header>
-      <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
-        {props.o.name}
-      </span>
-      <JoinButton o={props.o} />
-    </Card.Header>
-    <Card.Body>
-      <Card.Subtitle className="mb-2 text-muted">
-        {props.o.identifies}
-        <br />
-        {props.o.location.string}
-      </Card.Subtitle>
-      <Card.Text>{props.o.about}</Card.Text>
-      <DisplayURL url={props.o.url} />
-      <DisplayEmail email={props.o.email} />
-      <Image
-        src={require("../assets/social_facebook.svg")}
-        style={{ width: "1.8rem", paddingRight: ".35rem" }}
-      />
-      <Image
-        src={require("../assets/social_twitter.svg")}
-        style={{ width: "1.8rem", paddingRight: ".35rem" }}
-      />
-      <Image
-        src={require("../assets/social_instagram.svg")}
-        style={{ width: "1.8rem", paddingRight: ".35rem" }}
-      />
-    </Card.Body>
-  </Card>
-);
+const CampCard = (props) => {
+  const o = props.o;
+  return (
+    <Card style={{ width: "20rem" }} bg="light">
+      <Card.Img variant="top" src={require("../camp_images/" + o.image)} />
+      <Card.Header>
+        <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
+          {o.name}
+        </span>
+        <JoinButton o={o} />
+      </Card.Header>
+      <Card.Body>
+        <Card.Subtitle className="mb-2 text-muted">
+          {o.identifies}
+          <br />
+          {o.location.string}
+        </Card.Subtitle>
+        <Card.Text>{o.about}</Card.Text>
+        <DisplayURL url={o.url} />
+        <DisplayEmail email={o.email} />
+        {["facebook", "instagram", "twitter"].map((s) => {
+          if (!o[s]) return null;
+          return (
+            <a href={o[s]} key={s}>
+              <Image
+                src={require("../assets/social_" + s + ".svg")}
+                style={{ width: "1.8rem", paddingRight: ".35rem" }}
+              />
+            </a>
+          );
+        })}
+      </Card.Body>
+    </Card>
+  );
+};
 
 export default CampCard;
