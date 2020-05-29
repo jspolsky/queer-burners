@@ -99,7 +99,6 @@ export const testData = [
     email: "joel@spolsky.com",
     facebook: "https://facebook.com/futureturtle",
     instagram: "https://www.instagram.com/futureturtles/",
-    twitter: "https://twitter.com/spolsky",
     location: {
       string: "E & 4:15",
       frontage: "E",
