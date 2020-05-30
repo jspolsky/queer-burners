@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Queer Burners API SAM Template
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Timeout: 3
+    CodeUri: lambdasrc/
+    Tags:
+      app: queerburners
+
+Resources:
+  CampsPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Creates a new camp"
+      FunctionName: qb-camps-post
+      Handler: multifunc.campsPost
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        CampsPost:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: post
+  CampsGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Gets a list of all camps"
+      FunctionName: qb-camps-get
+      Handler: multifunc.campsGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsGet:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: get
+  CampsYearGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Gets a list of camps for a single year"
+      FunctionName: qb-camps-year-get
+      Handler: multifunc.campsYearGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsYearGet:
+          Type: Api
+          Properties:
+            Path: /camps/{year}
+            Method: get
+  CampsYearNameGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Gets details of a single camp for a single year"
+      FunctionName: qb-camps-year-name-get
+      Handler: multifunc.campsYearNameGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsYearNameGet:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: get
+  CampsYearNameDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Deletes a single camp"
+      FunctionName: qb-camps-year-name-delete
+      Handler: multifunc.campsYearNameDelete
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        CampsYearNameDelete:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: delete
+  CampsYearNamePut:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Updates data for a single camp"
+      FunctionName: qb-camps-year-name-put
+      Handler: multifunc.campsYearNamePut
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        CampsYearNamePut:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: put
