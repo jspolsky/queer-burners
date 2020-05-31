@@ -3,7 +3,7 @@ export const campIdentifications = [
   "Lesbian / Female Identified",
   "Gay / Male Identified",
   "Trans / GNC / Non-binary",
-  "Ally",
+  "Ally Camp",
 ];
 
 export const testData = [
