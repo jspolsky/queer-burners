@@ -1,6 +1,16 @@
 const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
+const StandardResponse = (o) => ({
+  statusCode: 200,
+  headers: {
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+  },
+  body: JSON.stringify(o),
+});
+
 exports.campsPost = async (event) => {
   const { year, name } = JSON.parse(event.body);
   const params = {
@@ -14,10 +24,7 @@ exports.campsPost = async (event) => {
 
   try {
     const data = await db.put(params).promise();
-    const response = {
-      statusCode: 200,
-    };
-    return response;
+    return StandardResponse(null);
   } catch (e) {
     return {
       statusCode: 500,
@@ -33,16 +40,7 @@ exports.campsGet = async (event) => {
 
   try {
     const data = await db.scan(params).promise();
-    const response = {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-      },
-      body: JSON.stringify(data.Items),
-    };
-    return response;
+    return StandardResponse(data.Items);
   } catch (e) {
     return {
       statusCode: 500,
@@ -68,11 +66,7 @@ exports.campsYearGet = async (event) => {
 
   try {
     const data = await db.query(params).promise();
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(data.Items),
-    };
-    return response;
+    return StandardResponse(data.Items);
   } catch (e) {
     return {
       statusCode: 500,
@@ -95,11 +89,7 @@ exports.campsYearNameGet = async (event) => {
   };
   try {
     const data = await db.get(params).promise();
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(data.Item),
-    };
-    return response;
+    return StandardResponse(data.Item);
   } catch (e) {
     return {
       statusCode: 500,
@@ -122,10 +112,7 @@ exports.campsYearNameDelete = async (event) => {
   };
   try {
     await db.delete(params).promise();
-    const response = {
-      statusCode: 200,
-    };
-    return response;
+    return StandardResponse(null);
   } catch (e) {
     return {
       statusCode: 500,
@@ -186,10 +173,7 @@ exports.campsYearNamePut = async (event) => {
   };
   try {
     await db.update(params).promise();
-    const response = {
-      statusCode: 200,
-    };
-    return response;
+    return StandardResponse(null);
   } catch (e) {
     if (e.code === "ConditionalCheckFailedException")
       return {
