@@ -23,13 +23,12 @@ export default class DirectoryBody extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetch("https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps")
-      .then((res) => res.json())
-      .then((d) => {
-        this.setState({ data: d });
-      })
-      .catch(console.log);
+  async componentDidMount() {
+    const response = await fetch(
+      "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps"
+    );
+    const d = await response.json();
+    this.setState({ data: d });
   }
 
   render() {
