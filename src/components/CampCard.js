@@ -78,8 +78,7 @@ const CampCard = (props) => {
       <Card.Body>
         <Card.Subtitle className="mb-2 text-muted">
           {o.identifies}
-          <br />
-          {o.location ? o.location.string : "UNDONE no location string"}
+          {o.location && o.location.string && <div>{o.location.string}</div>}
         </Card.Subtitle>
         <Card.Text>{o.about}</Card.Text>
         <DisplayURL url={o.url} />

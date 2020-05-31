@@ -12,12 +12,18 @@ const StandardResponse = (o) => ({
 });
 
 exports.campsPost = async (event) => {
-  const { year, name } = JSON.parse(event.body);
+  const { year, name, identifies, url, facebook, location } = JSON.parse(
+    event.body
+  );
   const params = {
     TableName: "camps",
     Item: {
       year: year,
       name: name,
+      identifies: identifies,
+      url: url,
+      facebook: facebook,
+      location: location,
       created: new Date().toISOString(),
     },
   };
