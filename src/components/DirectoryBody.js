@@ -19,7 +19,7 @@ export default class DirectoryBody extends React.Component {
     super(props);
     this.state = {
       filter: "all",
-      data: testData,
+      data: null,
     };
   }
 
@@ -92,18 +92,27 @@ export default class DirectoryBody extends React.Component {
           <Row>
             <Col>
               <CardColumns>
-                {this.state.data
-                  .filter(
-                    (onecamp) =>
-                      this.state.filter === "all" ||
-                      (this.state.filter === "Seeking new members" &&
-                        onecamp.join &&
-                        onecamp.join.open) ||
-                      this.state.filter === onecamp.identifies
-                  )
-                  .map((onecamp) => (
-                    <CampCard o={onecamp} key={onecamp.name} />
-                  ))}
+                {!this.state.data ? (
+                  <div className="spinner-border" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  this.state.data
+                    .filter(
+                      (onecamp) =>
+                        this.state.filter === "all" ||
+                        (this.state.filter === "Seeking new members" &&
+                          onecamp.join &&
+                          onecamp.join.open) ||
+                        this.state.filter === onecamp.identifies
+                    )
+                    .map((onecamp) => (
+                      <CampCard
+                        o={onecamp}
+                        key={onecamp.year + " " + onecamp.name}
+                      />
+                    ))
+                )}
               </CardColumns>
             </Col>
           </Row>
