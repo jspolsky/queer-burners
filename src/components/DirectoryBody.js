@@ -19,8 +19,19 @@ export default class DirectoryBody extends React.Component {
     super(props);
     this.state = {
       filter: "all",
+      data: testData,
     };
   }
+
+  componentDidMount() {
+    fetch("https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps")
+      .then((res) => res.json())
+      .then((d) => {
+        this.setState({ data: d });
+      })
+      .catch(console.log);
+  }
+
   render() {
     let filterButtonString = this.state.filter;
     if (this.state.filter === "all") {
@@ -82,7 +93,7 @@ export default class DirectoryBody extends React.Component {
           <Row>
             <Col>
               <CardColumns>
-                {testData
+                {this.state.data
                   .filter(
                     (onecamp) =>
                       this.state.filter === "all" ||

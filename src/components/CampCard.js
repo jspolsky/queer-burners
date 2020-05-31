@@ -65,7 +65,10 @@ const CampCard = (props) => {
   const o = props.o;
   return (
     <Card style={{ width: "20rem" }} bg="light">
-      <Card.Img variant="top" src={require("../camp_images/" + o.image)} />
+      {
+        // UNDONE THE IMAGE IS PROBABLY NOT THERE
+        // <Card.Img variant="top" src={require("../camp_images/" + o.image)} />
+      }
       <Card.Header>
         <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
           {o.name}
@@ -76,7 +79,7 @@ const CampCard = (props) => {
         <Card.Subtitle className="mb-2 text-muted">
           {o.identifies}
           <br />
-          {o.location.string}
+          {o.location ? o.location.string : "UNDONE no location string"}
         </Card.Subtitle>
         <Card.Text>{o.about}</Card.Text>
         <DisplayURL url={o.url} />
