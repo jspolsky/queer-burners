@@ -11,6 +11,28 @@ const StandardResponse = (o) => ({
   body: JSON.stringify(o),
 });
 
+const StandardError = (e) => ({
+  statusCode: 500,
+  body: JSON.stringify(e),
+});
+
+// list of attributes which can be seen publically
+const publicAttributes = [
+  "year",
+  "name",
+  "identifies",
+  "url",
+  "facebook",
+  "location",
+];
+
+const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
+  res["#" + it] = it;
+  return res;
+}, {});
+
+const publicAttributesPE = publicAttributes.map((s) => "#" + s).join(",");
+
 exports.campsPost = async (event) => {
   const { year, name, identifies, url, facebook, location } = JSON.parse(
     event.body
@@ -32,25 +54,22 @@ exports.campsPost = async (event) => {
     const data = await db.put(params).promise();
     return StandardResponse(null);
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(e),
-    };
+    return StandardError(e);
   }
 };
 
 exports.campsGet = async (event) => {
   const params = {
     TableName: "camps",
+    ExpressionAttributeNames: publicAttributesEAN,
+    ProjectionExpression: publicAttributesPE,
   };
 
   try {
     const data = await db.scan(params).promise();
     return StandardResponse(data.Items);
   } catch (e) {
-    return {
-      statusCode: 500,
-    };
+    return StandardError(e);
   }
 };
 
@@ -61,12 +80,11 @@ exports.campsYearGet = async (event) => {
 
   const params = {
     TableName: "camps",
-    KeyConditionExpression: "#yr = :yyyy",
-    ExpressionAttributeNames: {
-      "#yr": "year",
-    },
+    KeyConditionExpression: "#year = :year",
+    ExpressionAttributeNames: publicAttributesEAN,
+    ProjectionExpression: publicAttributesPE,
     ExpressionAttributeValues: {
-      ":yyyy": Number(year),
+      ":year": Number(year),
     },
   };
 
@@ -74,10 +92,7 @@ exports.campsYearGet = async (event) => {
     const data = await db.query(params).promise();
     return StandardResponse(data.Items);
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(e),
-    };
+    return StandardError(e);
   }
 };
 
@@ -92,15 +107,14 @@ exports.campsYearNameGet = async (event) => {
       year: Number(year),
       name: decodeURIComponent(name),
     },
+    ExpressionAttributeNames: publicAttributesEAN,
+    ProjectionExpression: publicAttributesPE,
   };
   try {
     const data = await db.get(params).promise();
     return StandardResponse(data.Item);
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(e),
-    };
+    return StandardError(e);
   }
 };
 
@@ -120,10 +134,7 @@ exports.campsYearNameDelete = async (event) => {
     await db.delete(params).promise();
     return StandardResponse(null);
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(e),
-    };
+    return StandardError(e);
   }
 };
 
@@ -186,10 +197,6 @@ exports.campsYearNamePut = async (event) => {
         statusCode: 500,
         body: "That camp doesn't exist",
       };
-    else
-      return {
-        statusCode: 500,
-        body: JSON.stringify(e),
-      };
+    else return StandardError(e);
   }
 };
