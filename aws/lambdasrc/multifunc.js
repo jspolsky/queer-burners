@@ -160,7 +160,6 @@ exports.campsYearNamePut = async (event) => {
   const a = JSON.parse(event.body);
 
   for (var key of Object.keys(a)) {
-    console.log(key + " -> " + a[key]);
     if (
       [
         "since",
