@@ -34,9 +34,15 @@ const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
 const publicAttributesPE = publicAttributes.map((s) => "#" + s).join(",");
 
 exports.campsPost = async (event) => {
-  const { year, name, identifies, url, facebook, location } = JSON.parse(
-    event.body
-  );
+  const {
+    year,
+    name,
+    identifies,
+    url,
+    facebook,
+    location,
+    contact,
+  } = JSON.parse(event.body);
   const params = {
     TableName: "camps",
     Item: {
@@ -46,6 +52,7 @@ exports.campsPost = async (event) => {
       url: url,
       facebook: facebook,
       location: location,
+      contact: contact,
       created: new Date().toISOString(),
     },
   };
