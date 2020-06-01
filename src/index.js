@@ -7,10 +7,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
 
+function Year(props) {
+  return <Directory year={props.match.params.year} />;
+}
+
 ReactDOM.render(
   <Router>
     <Route exact path="/" component={Directory} />
-    <Route exact path="/submit" component={Submit} />
+    <Route path="/submit" component={Submit} />
+    <Route path="/year/:year" component={Year} />
   </Router>,
   document.getElementById("root")
 );

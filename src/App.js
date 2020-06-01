@@ -16,11 +16,11 @@ const Header = () => (
   </header>
 );
 
-export function Directory() {
+export function Directory(props) {
   return (
     <div className="App">
       <Header />
-      <DirectoryBody />
+      <DirectoryBody year={props.year} />
     </div>
   );
 }

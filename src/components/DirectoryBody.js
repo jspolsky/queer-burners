@@ -12,7 +12,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import CampCard from "./CampCard.js";
 
 import { Link } from "react-router-dom";
-import { campIdentifications } from "../definitions.js";
+import { campIdentifications, defaultYear } from "../definitions.js";
 
 const axios = require("axios");
 
@@ -22,13 +22,18 @@ export default class DirectoryBody extends React.Component {
     this.state = {
       filter: "all",
       data: null,
+      year:
+        props.year && props.year >= 1996 && props.year < 3000
+          ? props.year
+          : defaultYear,
     };
   }
 
   async componentDidMount() {
     try {
       const response = await axios.get(
-        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps"
+        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/" +
+          this.state.year
       );
       this.setState({ data: response.data });
     } catch (error) {
@@ -48,7 +53,7 @@ export default class DirectoryBody extends React.Component {
           <Row>
             <Col style={{ marginTop: "2rem", marginBottom: "1rem" }}>
               <h2>
-                Camp Directory 2021
+                Camp Directory {this.state.year}
                 <Link to="/submit">
                   <Button
                     size="sm"

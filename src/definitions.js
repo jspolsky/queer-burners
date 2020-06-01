@@ -6,6 +6,8 @@ export const campIdentifications = [
   "Ally Camp",
 ];
 
+export const defaultYear = new Date().getFullYear();
+
 console.error("UNDONE - delete testData");
 
 export const testData = [
