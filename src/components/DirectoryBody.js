@@ -12,7 +12,9 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import CampCard from "./CampCard.js";
 
 import { Link } from "react-router-dom";
-import { campIdentifications, testData } from "../definitions.js";
+import { campIdentifications } from "../definitions.js";
+
+const axios = require("axios");
 
 export default class DirectoryBody extends React.Component {
   constructor(props) {
@@ -24,11 +26,14 @@ export default class DirectoryBody extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await fetch(
-      "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps"
-    );
-    const d = await response.json();
-    this.setState({ data: d });
+    try {
+      const response = await axios.get(
+        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps"
+      );
+      this.setState({ data: response.data });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {

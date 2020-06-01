@@ -6,6 +6,8 @@ export const campIdentifications = [
   "Ally Camp",
 ];
 
+console.error("UNDONE - delete testData");
+
 export const testData = [
   {
     updated: "2020-05-21T23:14:25.597Z",
