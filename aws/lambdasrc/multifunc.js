@@ -2,23 +2,8 @@ const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
 // TODO need to move this out to a shared module
-const campErrors = (camp) => {
-  // TODO check if it's even a plain string. for the api
-
-  if (camp.name.length === 0)
-    return {
-      field: "name",
-      err: "Camp name is required",
-    };
-
-  if (camp.name.length > 48)
-    return {
-      field: "name",
-      err: "Camp name must be 48 characters or less",
-    };
-
-  return null;
-};
+const campErrors = require("shared").campErrors;
+// const campErrors = () => "hi";
 
 const StandardResponse = (o) => ({
   statusCode: 200,
