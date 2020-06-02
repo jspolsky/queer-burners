@@ -3,7 +3,7 @@
 //
 
 export const campErrors = (camp) => {
-  // TODO check if it's even a plain string. for the api
+  // TODO check if it's even a plain string. (for the api)
 
   if (camp.name.length === 0)
     return {
