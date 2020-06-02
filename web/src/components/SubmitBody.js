@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 import { campIdentifications, streets } from "../definitions.js";
+const campErrors = require("shared").campErrors;
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
@@ -25,6 +26,12 @@ export default class SubmitBody extends React.Component {
       },
     };
   }
+
+  submitHandler = (event) => {
+    const err = campErrors(this.state);
+    console.log(err);
+    event.preventDefault();
+  };
 
   changeHandler = (event) => {
     // if the name of the form control is a single
@@ -288,10 +295,7 @@ export default class SubmitBody extends React.Component {
                 <Button
                   variant="primary"
                   type="submit"
-                  onClick={(e) => {
-                    console.log(this.state);
-                    e.preventDefault();
-                  }}
+                  onClick={this.submitHandler}
                 >
                   Submit
                 </Button>
