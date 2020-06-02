@@ -1,6 +1,25 @@
 const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
+// TODO need to move this out to a shared module
+const campErrors = (camp) => {
+  // TODO check if it's even a plain string. for the api
+
+  if (camp.name.length === 0)
+    return {
+      field: "name",
+      err: "Camp name is required",
+    };
+
+  if (camp.name.length > 48)
+    return {
+      field: "name",
+      err: "Camp name must be 48 characters or less",
+    };
+
+  return null;
+};
+
 const StandardResponse = (o) => ({
   statusCode: 200,
   headers: {
@@ -13,6 +32,11 @@ const StandardResponse = (o) => ({
 
 const StandardError = (e) => ({
   statusCode: 500,
+  headers: {
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+  },
   body: JSON.stringify(e),
 });
 
@@ -56,6 +80,11 @@ exports.campsPost = async (event) => {
       created: new Date().toISOString(),
     },
   };
+
+  const ce = campErrors(params.Item);
+  if (ce) {
+    return StandardError(ce);
+  }
 
   try {
     const data = await db.put(params).promise();
