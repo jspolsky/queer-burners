@@ -7,16 +7,15 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 import { campIdentifications, streets } from "../definitions.js";
-const campErrors = require("shared").campErrors;
+import { campErrors } from "shared";
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //  one for each form field
-
-      // warning - this is not the same data type as our camp info
-      // natch
+      // The state object is just a standard
+      // camp directory object, which can be submitted to the
+      // API and stored in the database.
       name: "",
       identifies: campIdentifications[0],
       about: "",
@@ -24,13 +23,61 @@ export default class SubmitBody extends React.Component {
         frontage: "",
         intersection: "",
       },
+
+      // state keys starting with '_' are Component state
+      // and form metadata, in other words, they will
+      // not be submitted to the API
+      _validated: false,
+      _error_name: null,
     };
   }
 
   submitHandler = (event) => {
-    const err = campErrors(this.state);
-    console.log(err);
+    var camp = {};
+    for (var key in this.state) {
+      if (!key.startsWith("_")) {
+        camp[key] = this.state[key];
+      }
+    }
+
     event.preventDefault();
+
+    if (this.fieldValidator("name", camp.name)) {
+      console.log(JSON.stringify(camp));
+    }
+
+    this.setState({ _validated: true });
+  };
+
+  // TODO
+  // This is working fine, but it needs to be sufficiently refactored
+  // to rely on the shared javascript validation function instead of
+  // having it's own logic
+  //
+  // also it is spaghetti codes
+  //
+
+  fieldValidator = (key, value) => {
+    let valid = true;
+    if (key === "name") {
+      if (value.length === 0) {
+        this.setState({ _error_name: "A camp name is required" });
+        document
+          .getElementById("name")
+          .setCustomValidity("A camp name is required"); //TODO this can be any text
+        valid = false;
+      } else if (value.length > 50) {
+        this.setState({ _error_name: "Maximum length 50 characters" });
+        document
+          .getElementById("name")
+          .setCustomValidity("Maximum length 50 characters");
+        valid = false;
+      } else {
+        this.setState({ _error_name: "" });
+        document.getElementById("name").setCustomValidity("");
+      }
+    }
+    return valid;
   };
 
   changeHandler = (event) => {
@@ -69,6 +116,8 @@ export default class SubmitBody extends React.Component {
         };
       });
     }
+
+    this.fieldValidator(event.target.name, y);
   };
 
   render() {
@@ -86,7 +135,11 @@ export default class SubmitBody extends React.Component {
                 To add your theme camp to this directory, please fill out this
                 form.
               </p>
-              <Form>
+              <Form
+                noValidate
+                validated={this.state._validated}
+                onSubmit={this.submitHandler}
+              >
                 <Row>
                   <Col xs={7}>
                     <Form.Group controlId="name">
@@ -98,6 +151,9 @@ export default class SubmitBody extends React.Component {
                         value={this.state.name}
                         onChange={this.changeHandler}
                       ></Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_name}
+                      </Form.Control.Feedback>
                       <Form.Text className="text-muted">
                         If your camp is registered with placement, make sure
                         this name matches exactly.
@@ -292,11 +348,7 @@ export default class SubmitBody extends React.Component {
                   </Form.Text>
                 </Form.Group>
 
-                <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={this.submitHandler}
-                >
+                <Button variant="primary" type="submit">
                   Submit
                 </Button>
               </Form>

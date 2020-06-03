@@ -1,6 +1,4 @@
-//
-// definitions.js is available both on the server and the client
-//
+// TODO  moved this all into shared
 
 export const campIdentifications = [
   "LGBTQ",
