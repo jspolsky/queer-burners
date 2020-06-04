@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 import { campIdentifications, streets } from "../definitions.js";
-import { campErrors } from "shared";
+import { fieldError } from "shared";
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
@@ -49,25 +49,8 @@ export default class SubmitBody extends React.Component {
     this.setState({ _validated: true });
   };
 
-  // TODO
-  // This is working fine, but it needs to be sufficiently refactored
-  // to rely on the shared javascript validation function instead of
-  // having its own logic
-  //
-
   fieldValidator = (key, value) => {
-    let err = "";
-
-    switch (key) {
-      case "name":
-        if (value.length === 0) {
-          err = "Camp name is required";
-        } else if (value.length > 50) {
-          err = "Camp name is too long by " + (value.length - 50);
-        }
-        break;
-      default:
-    }
+    const err = fieldError(key, value);
 
     this.setState({ ["_error_" + key]: err });
     document.getElementById(key).setCustomValidity(err);

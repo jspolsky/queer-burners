@@ -1,19 +1,36 @@
-const campErrors = (camp) => {
-  // TODO check if it's even a plain string. (for the api)
+const fieldError = (key, value) => {
+  let err = "";
+  switch (key) {
+    case "name":
+      // TODO check if it's even a plain string. (for the api)
 
-  if (camp.name.length === 0)
-    return {
-      field: "name",
-      err: "Camp name is required",
-    };
+      if (value.length === 0) {
+        err = "Camp name is required";
+      } else if (value.length > 50) {
+        err = "Camp name is too long by " + (value.length - 50);
+      }
+      break;
+    default:
+  }
 
-  if (camp.name.length > 48)
-    return {
-      field: "name",
-      err: "Camp name must be 48 characters or less",
-    };
-
-  return null;
+  return err;
 };
 
-module.exports.campErrors = campErrors;
+const campErrors = (camp) => {
+  let errors = [];
+
+  let err = fieldError("name", camp.name);
+  if (err !== "") {
+    errors.push({
+      field: "name",
+      err: err,
+    });
+  }
+
+  return errors;
+};
+
+module.exports = {
+  fieldError: fieldError,
+  campErrors: campErrors,
+};

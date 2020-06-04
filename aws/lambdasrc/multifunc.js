@@ -1,9 +1,7 @@
 const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
-// TODO need to move this out to a shared module
 const campErrors = require("shared").campErrors;
-// const campErrors = () => "hi";
 
 const StandardResponse = (o) => ({
   statusCode: 200,
@@ -67,7 +65,8 @@ exports.campsPost = async (event) => {
   };
 
   const ce = campErrors(params.Item);
-  if (ce) {
+
+  if (ce.length > 0) {
     return StandardError(ce);
   }
 
