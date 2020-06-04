@@ -52,32 +52,26 @@ export default class SubmitBody extends React.Component {
   // TODO
   // This is working fine, but it needs to be sufficiently refactored
   // to rely on the shared javascript validation function instead of
-  // having it's own logic
-  //
-  // also it is spaghetti codes
+  // having its own logic
   //
 
   fieldValidator = (key, value) => {
-    let valid = true;
-    if (key === "name") {
-      if (value.length === 0) {
-        this.setState({ _error_name: "A camp name is required" });
-        document
-          .getElementById("name")
-          .setCustomValidity("A camp name is required"); //TODO this can be any text
-        valid = false;
-      } else if (value.length > 50) {
-        this.setState({ _error_name: "Maximum length 50 characters" });
-        document
-          .getElementById("name")
-          .setCustomValidity("Maximum length 50 characters");
-        valid = false;
-      } else {
-        this.setState({ _error_name: "" });
-        document.getElementById("name").setCustomValidity("");
-      }
+    let err = "";
+
+    switch (key) {
+      case "name":
+        if (value.length === 0) {
+          err = "Camp name is required";
+        } else if (value.length > 50) {
+          err = "Camp name is too long by " + (value.length - 50);
+        }
+        break;
+      default:
     }
-    return valid;
+
+    this.setState({ ["_error_" + key]: err });
+    document.getElementById(key).setCustomValidity(err);
+    return err === "";
   };
 
   changeHandler = (event) => {
@@ -191,7 +185,7 @@ export default class SubmitBody extends React.Component {
 
                 <Row>
                   <Col>
-                    <Form.Group controlId="frmFrontage">
+                    <Form.Group controlId="location.frontage">
                       <Form.Label>Frontage</Form.Label>
                       <Form.Control
                         name="location.frontage"
@@ -208,7 +202,7 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group controlId="frmIntersection">
+                    <Form.Group controlId="location.intersection">
                       <Form.Label>Intersection</Form.Label>
                       <Form.Control
                         name="location.intersection"
@@ -228,7 +222,7 @@ export default class SubmitBody extends React.Component {
 
                 <Row>
                   <Col>
-                    <Form.Group controlId="frmURL">
+                    <Form.Group controlId="url">
                       <Form.Label>Public web site</Form.Label>
                       <Form.Control
                         type="input"
@@ -243,7 +237,7 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group controlId="frmFacebook">
+                    <Form.Group controlId="facebook">
                       <Form.Label>Facebook</Form.Label>
                       <Form.Control
                         type="input"
@@ -261,7 +255,7 @@ export default class SubmitBody extends React.Component {
 
                 <Row>
                   <Col>
-                    <Form.Group controlId="frmEmail">
+                    <Form.Group controlId="email">
                       <Form.Label>Email</Form.Label>
                       <Form.Control
                         type="input"
@@ -274,7 +268,7 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group controlId="frmTwitter">
+                    <Form.Group controlId="twitter">
                       <Form.Label>Twitter</Form.Label>
                       <InputGroup>
                         <InputGroup.Prepend>
@@ -293,7 +287,7 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group controlId="frmInstagram">
+                    <Form.Group controlId="instagram">
                       <Form.Label>Instagram</Form.Label>
                       <InputGroup>
                         <InputGroup.Prepend>
@@ -313,9 +307,9 @@ export default class SubmitBody extends React.Component {
                   </Col>
                 </Row>
 
-                <Form.Group controlId="frmThumbnail">
+                <Form.Group controlId="thumbnail">
                   <Form.Label>Upload pictures of your camp here</Form.Label>
-                  <Form.File id="frm-file" label="Thumbnail Image" custom />
+                  <Form.File name="thumbname" label="Thumbnail Image" custom />
                   <Form.Text className="text-muted">
                     The first picture will appear on the front of your card on
                     the home page. Others will appear when people click through
@@ -323,17 +317,16 @@ export default class SubmitBody extends React.Component {
                   </Form.Text>
                 </Form.Group>
 
-                <Form.Group controlId="frmRecruiting">
+                <Form.Group controlId="join.open">
                   <Form.Label>Are you open to new members?</Form.Label>
                   <Form.Check
                     type="switch"
-                    id="custom-switch"
                     name="join.open"
                     label="Yes"
                     onChange={this.changeHandler}
                   />
                 </Form.Group>
-                <Form.Group controlId="frmRecruitingMessage">
+                <Form.Group controlId="join.message">
                   <Form.Label>Instructions</Form.Label>
                   <Form.Control
                     as="textarea"
