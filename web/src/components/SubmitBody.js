@@ -6,8 +6,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { campIdentifications, streets } from "../definitions.js";
+import { campIdentifications, streets, defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
+
+import axios from "axios";
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
@@ -25,28 +27,42 @@ export default class SubmitBody extends React.Component {
       },
 
       // state keys starting with '_' are Component state
-      // and form metadata, in other words, they will
-      // not be submitted to the API
+      // and form metadata which will never be submitted to the API
       _validated: false,
       _error_name: null,
     };
   }
 
-  submitHandler = (event) => {
-    var camp = {};
+  submitHandler = async (event) => {
+    event.preventDefault();
+    this.setState({ _validated: true });
+
+    var camp = {
+      year: defaultYear,
+    };
     for (var key in this.state) {
       if (!key.startsWith("_")) {
         camp[key] = this.state[key];
       }
     }
 
-    event.preventDefault();
-
-    if (this.fieldValidator("name", camp.name)) {
-      console.log(JSON.stringify(camp));
+    // TODO validate other fields besides name
+    if (!this.fieldValidator("name", camp.name)) {
+      return;
     }
 
-    this.setState({ _validated: true });
+    console.log("submitting");
+    console.log(JSON.stringify(camp));
+
+    try {
+      await axios.post(
+        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps",
+        camp
+      );
+    } catch (error) {
+      console.error(error);
+      console.error(error.response);
+    }
   };
 
   fieldValidator = (key, value) => {

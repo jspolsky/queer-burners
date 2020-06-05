@@ -23,6 +23,10 @@ const StandardError = (e) => ({
   body: JSON.stringify(e),
 });
 
+exports.Options = async (event) => {
+  return StandardResponse("Hello!");
+};
+
 // list of attributes which can be seen publically
 const publicAttributes = [
   "year",

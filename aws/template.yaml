@@ -11,6 +11,18 @@ Globals:
       app: queerburners
 
 Resources:
+  CampsOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-camps-options
+      Handler: multifunc.Options
+      Events:
+        CampsOptions:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: options
   CampsPost:
     Type: AWS::Serverless::Function
     Properties:
