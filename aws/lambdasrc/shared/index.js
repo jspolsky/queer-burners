@@ -10,6 +10,16 @@ const fieldError = (key, value) => {
         err = "Camp name is too long by " + (value.length - 50);
       }
       break;
+
+    case "identifies":
+      if (typeof value !== "string") {
+        err = "identifies is not a string";
+      } else if (value === "") {
+        err = "identifies is required (try LGBTQ)";
+      } else if (!campIdentifications.includes(value)) {
+        err = '"' + value + '" is not a valid camp identity (try LGBTQ)';
+      }
+      break;
     default:
   }
 
@@ -19,18 +29,29 @@ const fieldError = (key, value) => {
 const campErrors = (camp) => {
   let errors = [];
 
-  let err = fieldError("name", camp.name);
-  if (err !== "") {
-    errors.push({
-      field: "name",
-      err: err,
-    });
-  }
+  ["name", "identifies"].map((f) => {
+    let err = fieldError(f, camp[f]);
+    if (err !== "") {
+      errors.push({
+        field: f,
+        err: err,
+      });
+    }
+  });
 
   return errors;
 };
 
+const campIdentifications = [
+  "LGBTQ",
+  "Lesbian / Female Identified",
+  "Gay / Male Identified",
+  "Trans / GNC / Non-binary",
+  "Ally Camp",
+];
+
 module.exports = {
   fieldError: fieldError,
   campErrors: campErrors,
+  campIdentifications: campIdentifications,
 };

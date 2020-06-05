@@ -1,13 +1,3 @@
-// TODO  moved this all into shared
-
-export const campIdentifications = [
-  "LGBTQ",
-  "Lesbian / Female Identified",
-  "Gay / Male Identified",
-  "Trans / GNC / Non-binary",
-  "Ally Camp",
-];
-
 export const defaultYear = new Date().getFullYear();
 
 // TODO delete testData

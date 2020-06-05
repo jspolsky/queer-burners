@@ -12,9 +12,11 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import CampCard from "./CampCard.js";
 
 import { Link } from "react-router-dom";
-import { campIdentifications, defaultYear } from "../definitions.js";
+import { defaultYear } from "../definitions.js";
 
 import axios from "axios";
+
+const campIdentifications = [...require("shared").campIdentifications];
 
 export default class DirectoryBody extends React.Component {
   constructor(props) {

@@ -6,10 +6,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { campIdentifications, streets, defaultYear } from "../definitions.js";
+import { streets, defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
 
 import axios from "axios";
+
+const campIdentifications = [...require("shared").campIdentifications];
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
