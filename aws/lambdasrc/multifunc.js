@@ -34,9 +34,12 @@ const publicAttributes = [
   "name",
   "identifies",
   "about",
+  "location",
   "url",
   "facebook",
-  "location",
+  "email",
+  "twitter",
+  "instagram",
 ];
 
 const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
@@ -52,9 +55,12 @@ exports.campsPost = async (event) => {
     name: null,
     identifies: "",
     about: "",
+    location: { frontage: "Unknown", intersection: "Unknown" },
     url: "",
     facebook: "",
-    location: { frontage: "Unknown", intersection: "Unknown" },
+    email: "",
+    twitter: "",
+    instagram: "",
   };
 
   let jsonCamp = {};
@@ -200,8 +206,8 @@ exports.campsYearNamePut = async (event) => {
         "about",
         "placed",
         "location",
-        // UNDONE list all other fields here
-        // UNDONE deal with composite fields like address, social media, contact info, anything else we add.
+        // TODO this should use the same code as POST to compose the object to insert
+        // (and also do all the same nice error checking)
       ].includes(key)
     ) {
       update_expression += ", #" + key + " = :" + key;

@@ -29,16 +29,28 @@ export default class SubmitBody extends React.Component {
         frontage: streets[0],
         intersection: streets[0],
       },
+      url: "",
+      facebook: "",
+      email: "",
+      twitter: "",
+      instagram: "",
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API
       _validated: false,
       _error_name: null,
       _error_about: null,
+      _error_url: null,
+      _error_facebook: null,
+      _error_email: null,
+      _error_twitter: null,
+      _error_instagram: null,
     };
   }
 
   submitHandler = async (event) => {
+    // TODO strip extra whitespace for all input fields
+
     event.preventDefault();
     this.setState({ _validated: true });
 
@@ -51,7 +63,15 @@ export default class SubmitBody extends React.Component {
       }
     }
 
-    for (var x of ["name", "about"]) {
+    for (var x of [
+      "name",
+      "about",
+      "url",
+      "facebook",
+      "email",
+      "twitter",
+      "instagram",
+    ]) {
       if (!this.fieldValidator(x, camp[x])) {
         return null;
       }
@@ -248,9 +268,13 @@ export default class SubmitBody extends React.Component {
                       <Form.Control
                         type="input"
                         name="url"
+                        value={this.state.url}
                         placeholder="https://www.example.com"
                         onChange={this.changeHandler}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_url}
+                      </Form.Control.Feedback>
                       <Form.Text className="text-muted">
                         Your camp's public website, if any. Do not use a
                         Facebook URL here
@@ -263,9 +287,13 @@ export default class SubmitBody extends React.Component {
                       <Form.Control
                         type="input"
                         name="facebook"
+                        value={this.state.facebook}
                         placeholder="https://www.facebook.com/campname"
                         onChange={this.changeHandler}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_facebook}
+                      </Form.Control.Feedback>
                       <Form.Text className="text-muted">
                         Your camp's public Facebook page or group, if any.
                         Provide the full URL
@@ -281,10 +309,16 @@ export default class SubmitBody extends React.Component {
                       <Form.Control
                         type="input"
                         name="email"
+                        value={this.state.email}
                         placeholder="info@example.com"
+                        onChange={this.changeHandler}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_email}
+                      </Form.Control.Feedback>
                       <Form.Text className="text-muted">
-                        Email address for inquiries
+                        Public email address for inquiries (this will be visible
+                        in the directory to anyone!)
                       </Form.Text>
                     </Form.Group>
                   </Col>
@@ -298,9 +332,13 @@ export default class SubmitBody extends React.Component {
                         <Form.Control
                           type="input"
                           name="twitter"
+                          value={this.state.twitter}
                           placeholder="example"
                           onChange={this.changeHandler}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          {this.state._error_twitter}
+                        </Form.Control.Feedback>
                       </InputGroup>
                       <Form.Text className="text-muted">
                         Your Twitter feed, if any
@@ -317,9 +355,13 @@ export default class SubmitBody extends React.Component {
                         <Form.Control
                           type="input"
                           name="instagram"
+                          value={this.state.instagram}
                           placeholder="example"
                           onChange={this.changeHandler}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          {this.state._error_instagram}
+                        </Form.Control.Feedback>
                       </InputGroup>
                       <Form.Text className="text-muted">
                         Your Instagram feed, if any

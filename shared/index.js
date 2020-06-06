@@ -50,6 +50,58 @@ const fieldError = (key, value) => {
       }
       break;
 
+    case "url":
+      if (typeof value !== "string") {
+        err = "url is not a string";
+      } else if (value.length > 128) {
+        err = `url is too long by ${value.length - 128}`;
+      }
+      //TODO check URL validity
+      // and check that it's not facebook
+      break;
+
+    case "facebook":
+      if (typeof value !== "string") {
+        err = "facebook is not a string";
+      } else if (value.length > 128) {
+        err = `facebook is too long by ${value.length - 128}`;
+      }
+      // TODO check URL validity and
+      // check that it IS facebook
+      break;
+
+    case "email":
+      if (typeof value !== "string") {
+        err = "email is not a string";
+      } else if (value.length > 256) {
+        err = `email is too long by ${value.length - 256}`;
+      } else if (value.length > 0 && !validateEmail(value)) {
+        err = `'${value}' is not a valid email address`;
+      }
+      break;
+
+    case "twitter":
+      if (typeof value !== "string") {
+        err = "twitter is not a string";
+      } else if (value.length > 15) {
+        err = `twitter is too long by ${value.length - 15}`;
+      } else if (!/^[a-z0-9]*$/i.test(value)) {
+        err = "invalid twitter name";
+      }
+
+      break;
+
+    case "instagram":
+      if (typeof value !== "string") {
+        err = "instagram is not a string";
+      } else if (value.length > 30) {
+        err = `instagram is too long by ${value.length - 30}`;
+      } else if (!/^[a-z0-9._]*$/i.test(value)) {
+        err = "invalid instagram handle";
+      }
+
+      break;
+
     default:
   }
 
@@ -59,7 +111,18 @@ const fieldError = (key, value) => {
 const campErrors = (camp) => {
   let errors = [];
 
-  ["year", "name", "identifies", "about", "location"].map((f) => {
+  [
+    "year",
+    "name",
+    "identifies",
+    "about",
+    "location",
+    "url",
+    "facebook",
+    "email",
+    "twitter",
+    "instagram",
+  ].map((f) => {
     let err = fieldError(f, camp[f]);
     if (err !== "") {
       errors.push({
@@ -70,6 +133,33 @@ const campErrors = (camp) => {
   });
 
   return errors;
+};
+
+const tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+// Thanks to:
+// http://fightingforalostcause.net/misc/2006/compare-email-regex.php
+// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx
+// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378
+const validateEmail = (email) => {
+  if (!email) return false;
+
+  if (email.length > 256) return false;
+
+  if (!tester.test(email)) return false;
+
+  // Further checking of some things regex can't handle
+  const [account, address] = email.split("@");
+  if (account.length > 64) return false;
+
+  const domainParts = address.split(".");
+  if (
+    domainParts.some(function (part) {
+      return part.length > 63;
+    })
+  )
+    return false;
+
+  return true;
 };
 
 //

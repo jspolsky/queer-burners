@@ -53,7 +53,7 @@ function DisplayEmail(props) {
           src={require("../assets/social_email.svg")}
           style={{ width: "1.3rem", paddingRight: ".35rem" }}
         />
-        <a href="mailto:{props.email}">{props.email}</a>
+        <a href={"mailto:" + props.email}>{props.email}</a>
       </div>
     );
   } else {
@@ -85,8 +85,11 @@ const CampCard = (props) => {
         <DisplayEmail email={o.email} />
         {["facebook", "instagram", "twitter"].map((s) => {
           if (!o[s]) return null;
+          let url = o[s];
+          if (s === "twitter" || s === "instagram")
+            url = `https://${s}.com/${url}`;
           return (
-            <a href={o[s]} key={s}>
+            <a href={url} key={s}>
               <Image
                 src={require("../assets/social_" + s + ".svg")}
                 style={{ width: "1.8rem", paddingRight: ".35rem" }}
