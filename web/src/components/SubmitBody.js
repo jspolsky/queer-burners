@@ -60,7 +60,12 @@ export default class SubmitBody extends React.Component {
     console.log("submitting");
     console.log(JSON.stringify(camp));
 
+    // TODO if the API returns an error the user never finds out?
+
+    // TODO if the API returns success we should redirect to some kind of success page?
+
     try {
+      // TODO this URL should be in one place
       await axios.post(
         "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps",
         camp

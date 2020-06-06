@@ -1,6 +1,14 @@
 const fieldError = (key, value) => {
   let err = "";
   switch (key) {
+    case "year":
+      if (typeof value !== "number") {
+        err = "Year is not a number";
+      } else if (value < 2018 || value > 2199) {
+        err = "Year out of range";
+      }
+      break;
+
     case "name":
       if (typeof value !== "string") {
         err = "Camp name is not a string";
@@ -28,6 +36,20 @@ const fieldError = (key, value) => {
         err = `about is too long by ${value.length - 255}`;
       }
       break;
+
+    case "location":
+      if (
+        typeof value !== "object" ||
+        !value.frontage ||
+        !value.intersection ||
+        typeof value.frontage !== "string" ||
+        typeof value.intersection !== "string"
+      ) {
+        err =
+          "type error - location should be an object with frontage and intersection strings";
+      }
+      break;
+
     default:
   }
 
@@ -37,7 +59,7 @@ const fieldError = (key, value) => {
 const campErrors = (camp) => {
   let errors = [];
 
-  ["name", "identifies", "about"].map((f) => {
+  ["year", "name", "identifies", "about", "location"].map((f) => {
     let err = fieldError(f, camp[f]);
     if (err !== "") {
       errors.push({
@@ -69,6 +91,8 @@ const locationToString = (frontage, intersection) => {
   if (frontage === streets[0]) {
     return streets[0];
   } else if (frontage === "Rod's Road" || frontage === "Center Camp Plaza") {
+    // yeah. This is placement's convention because those circular streets
+    // don't really have intersections
     return `${frontage} @ ${intersection}`;
   } else {
     return `${frontage} & ${intersection}`;

@@ -47,35 +47,37 @@ const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
 const publicAttributesPE = publicAttributes.map((s) => "#" + s).join(",");
 
 exports.campsPost = async (event) => {
-  const {
-    year,
-    name,
-    identifies,
-    about,
-    url,
-    facebook,
-    location,
-    contact,
-  } = JSON.parse(event.body);
-  const params = {
-    TableName: "camps",
-    Item: {
-      year: year,
-      name: name,
-      identifies: identifies,
-      about: about,
-      url: url,
-      facebook: facebook,
-      location: {
-        ...location,
-        string: locationToString(location.frontage, location.intersection),
-      },
-      contact: contact,
-      created: new Date().toISOString(),
-    },
+  let camp = {
+    year: null,
+    name: null,
+    identifies: "",
+    about: "",
+    url: "",
+    facebook: "",
+    location: { frontage: "Unknown", intersection: "Unknown" },
   };
 
-  const ce = campErrors(params.Item);
+  let jsonCamp = {};
+
+  try {
+    jsonCamp = JSON.parse(event.body);
+  } catch (err) {
+    return StandardError("Error parsing JSON");
+  }
+
+  camp = { ...camp, ...jsonCamp };
+  camp.location.string = locationToString(
+    camp.location.frontage,
+    camp.location.intersection
+  );
+  camp.created = new Date().toISOString();
+
+  const params = {
+    TableName: "camps",
+    Item: camp,
+  };
+
+  const ce = campErrors(camp);
 
   if (ce.length > 0) {
     return StandardError(ce);
@@ -83,7 +85,7 @@ exports.campsPost = async (event) => {
 
   try {
     const data = await db.put(params).promise();
-    return StandardResponse(null);
+    return StandardResponse("Successfully created camp");
   } catch (e) {
     return StandardError(e);
   }
