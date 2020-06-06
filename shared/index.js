@@ -53,21 +53,29 @@ const fieldError = (key, value) => {
     case "url":
       if (typeof value !== "string") {
         err = "url is not a string";
+      } else if (value === "") {
+        err = "";
       } else if (value.length > 128) {
         err = `url is too long by ${value.length - 128}`;
+      } else if (!validateURL(value)) {
+        err = "invalid url";
+      } else if (isFacebookURL(value)) {
+        err = "use the Facebook field for a Facebook page";
       }
-      //TODO check URL validity
-      // and check that it's not facebook
       break;
 
     case "facebook":
       if (typeof value !== "string") {
         err = "facebook is not a string";
+      } else if (value === "") {
+        err = "";
       } else if (value.length > 128) {
         err = `facebook is too long by ${value.length - 128}`;
+      } else if (!validateURL(value)) {
+        err = "invalid facebook url";
+      } else if (!isFacebookURL(value)) {
+        err = `${value} is not a Facebook page/group`;
       }
-      // TODO check URL validity and
-      // check that it IS facebook
       break;
 
     case "email":
@@ -160,6 +168,32 @@ const validateEmail = (email) => {
     return false;
 
   return true;
+};
+
+const validateURL = (s) => {
+  let url;
+
+  try {
+    url = new URL(s);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+};
+
+const isFacebookURL = (s) => {
+  let url;
+
+  try {
+    url = new URL(s);
+  } catch (_) {
+    return false;
+  }
+
+  return ["facebook.com", "www.facebook.com", "m.facebook.com"].includes(
+    url.hostname
+  );
 };
 
 //
