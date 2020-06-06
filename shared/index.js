@@ -65,6 +65,18 @@ const crossStreets = (frontage) => {
   }
 };
 
+const locationToString = (frontage, intersection) => {
+  if (frontage === streets[0]) {
+    return streets[0];
+  } else if (frontage === "Rod's Road" || frontage === "Center Camp Plaza") {
+    // yeah. This is placement's convention because those circular streets
+    // don't really have intersections
+    return `${frontage} @ ${intersection}`;
+  } else {
+    return `${frontage} & ${intersection}`;
+  }
+};
+
 const campIdentifications = [
   "LGBTQ",
   "Lesbian / Female Identified",
@@ -132,4 +144,5 @@ module.exports = {
   campIdentifications: campIdentifications,
   streets: streets,
   crossStreets: crossStreets,
+  locationToString: locationToString,
 };

@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const db = new AWS.DynamoDB.DocumentClient();
 
 const campErrors = require("shared").campErrors;
+const locationToString = require("shared").locationToString;
 
 const StandardResponse = (o) => ({
   statusCode: 200,
@@ -65,7 +66,10 @@ exports.campsPost = async (event) => {
       about: about,
       url: url,
       facebook: facebook,
-      location: location,
+      location: {
+        ...location,
+        string: locationToString(location.frontage, location.intersection),
+      },
       contact: contact,
       created: new Date().toISOString(),
     },

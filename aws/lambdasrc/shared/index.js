@@ -50,6 +50,31 @@ const campErrors = (camp) => {
   return errors;
 };
 
+//
+// Encode a little bit of Burning Man cartography
+// If this function is confusing to you, look at a map of Black Rock City
+//
+const crossStreets = (frontage) => {
+  if (frontage === streets[0] /* unknown */) {
+    return [streets[0]];
+  }
+  if (frontage.includes(":")) {
+    return streets.filter((s) => s === "Esplanade" || s.length === 1);
+  } else {
+    return streets.filter((s) => s.includes(":"));
+  }
+};
+
+const locationToString = (frontage, intersection) => {
+  if (frontage === streets[0]) {
+    return streets[0];
+  } else if (frontage === "Rod's Road" || frontage === "Center Camp Plaza") {
+    return `${frontage} @ ${intersection}`;
+  } else {
+    return `${frontage} & ${intersection}`;
+  }
+};
+
 const campIdentifications = [
   "LGBTQ",
   "Lesbian / Female Identified",
@@ -58,8 +83,64 @@ const campIdentifications = [
   "Ally Camp",
 ];
 
+const streets = [
+  "Unknown",
+  "Esplanade",
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "Rod's Road",
+  "Center Camp Plaza",
+  "2:00",
+  "2:15",
+  "2:30",
+  "2:45",
+  "3:00",
+  "3:15",
+  "3:30",
+  "3:45",
+  "4:00",
+  "4:15",
+  "4:30",
+  "4:45",
+  "5:00",
+  "5:15",
+  "5:30",
+  "5:45",
+  "6:00",
+  "6:15",
+  "6:30",
+  "6:45",
+  "7:00",
+  "7:15",
+  "7:30",
+  "7:45",
+  "8:00",
+  "8:15",
+  "8:30",
+  "8:45",
+  "9:00",
+  "9:15",
+  "9:30",
+  "9:45",
+  "10:00",
+];
+
 module.exports = {
   fieldError: fieldError,
   campErrors: campErrors,
   campIdentifications: campIdentifications,
+  streets: streets,
+  crossStreets: crossStreets,
+  locationToString: locationToString,
 };
