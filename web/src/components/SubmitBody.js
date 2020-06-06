@@ -6,12 +6,14 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { streets, defaultYear } from "../definitions.js";
+import { defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
 
 import axios from "axios";
 
 const campIdentifications = [...require("shared").campIdentifications];
+const streets = [...require("shared").streets];
+const crossStreets = require("shared").crossStreets;
 
 export default class SubmitBody extends React.Component {
   constructor(props) {
@@ -24,14 +26,15 @@ export default class SubmitBody extends React.Component {
       identifies: campIdentifications[0],
       about: "",
       location: {
-        frontage: "",
-        intersection: "",
+        frontage: streets[0],
+        intersection: streets[0],
       },
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API
       _validated: false,
       _error_name: null,
+      _error_about: null,
     };
   }
 
@@ -48,9 +51,10 @@ export default class SubmitBody extends React.Component {
       }
     }
 
-    // TODO validate other fields besides name
-    if (!this.fieldValidator("name", camp.name)) {
-      return;
+    for (var x of ["name", "about"]) {
+      if (!this.fieldValidator(x, camp[x])) {
+        return null;
+      }
     }
 
     console.log("submitting");
@@ -110,6 +114,12 @@ export default class SubmitBody extends React.Component {
           },
         };
       });
+    }
+
+    if (x === "location") {
+      if (splitname[1] === "frontage") {
+        // constrain intersections to valid cross streets
+      }
     }
 
     this.fieldValidator(event.target.name, y);
@@ -182,6 +192,9 @@ export default class SubmitBody extends React.Component {
                     onChange={this.changeHandler}
                     value={this.state.about}
                   ></Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state._error_about}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Row>
@@ -192,6 +205,7 @@ export default class SubmitBody extends React.Component {
                         name="location.frontage"
                         as="select"
                         onChange={this.changeHandler}
+                        value={this.state.location.frontage}
                       >
                         {streets.map((s) => (
                           <option key={s}>{s}</option>
@@ -209,8 +223,9 @@ export default class SubmitBody extends React.Component {
                         name="location.intersection"
                         as="select"
                         onChange={this.changeHandler}
+                        value={this.state.location.intersection}
                       >
-                        {streets.map((s) => (
+                        {crossStreets(this.state.location.frontage).map((s) => (
                           <option key={s}>{s}</option>
                         ))}
                       </Form.Control>

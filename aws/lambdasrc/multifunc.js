@@ -32,6 +32,7 @@ const publicAttributes = [
   "year",
   "name",
   "identifies",
+  "about",
   "url",
   "facebook",
   "location",
@@ -49,6 +50,7 @@ exports.campsPost = async (event) => {
     year,
     name,
     identifies,
+    about,
     url,
     facebook,
     location,
@@ -60,6 +62,7 @@ exports.campsPost = async (event) => {
       year: year,
       name: name,
       identifies: identifies,
+      about: about,
       url: url,
       facebook: facebook,
       location: location,
@@ -188,6 +191,7 @@ exports.campsYearNamePut = async (event) => {
       [
         "since",
         "identifies",
+        "about",
         "placed",
         "location",
         // UNDONE list all other fields here

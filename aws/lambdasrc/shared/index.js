@@ -7,7 +7,7 @@ const fieldError = (key, value) => {
       } else if (value.length === 0) {
         err = "Camp name is required";
       } else if (value.length > 50) {
-        err = "Camp name is too long by " + (value.length - 50);
+        err = `Camp name is too long by ${value.length - 50}`;
       }
       break;
 
@@ -17,7 +17,15 @@ const fieldError = (key, value) => {
       } else if (value === "") {
         err = "identifies is required (try LGBTQ)";
       } else if (!campIdentifications.includes(value)) {
-        err = '"' + value + '" is not a valid camp identity (try LGBTQ)';
+        err = `${value} is not a valid camp identity (try LGBTQ)`;
+      }
+      break;
+
+    case "about":
+      if (typeof value !== "string") {
+        err = "about is not a string";
+      } else if (value.length > 255) {
+        err = `about is too long by ${value.length - 255}`;
       }
       break;
     default:
@@ -29,7 +37,7 @@ const fieldError = (key, value) => {
 const campErrors = (camp) => {
   let errors = [];
 
-  ["name", "identifies"].map((f) => {
+  ["name", "identifies", "about"].map((f) => {
     let err = fieldError(f, camp[f]);
     if (err !== "") {
       errors.push({
