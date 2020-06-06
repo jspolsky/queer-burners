@@ -49,8 +49,6 @@ export default class SubmitBody extends React.Component {
   }
 
   submitHandler = async (event) => {
-    // TODO strip extra whitespace for all input fields
-
     event.preventDefault();
     this.setState({ _validated: true });
 
@@ -60,6 +58,9 @@ export default class SubmitBody extends React.Component {
     for (var key in this.state) {
       if (!key.startsWith("_")) {
         camp[key] = this.state[key];
+        if (typeof camp[key] === "string") {
+          camp[key] = camp[key].trim();
+        }
       }
     }
 
