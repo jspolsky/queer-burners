@@ -119,20 +119,35 @@ exports.campsGet = async (event) => {
 };
 
 exports.campsPictureUploadURLGet = async (event) => {
-  console.log("campPictureUploadURLGet v2");
+  let {
+    pathParameters: { format },
+  } = event; // extract format from request path
 
-  const actionID = generateUUID();
+  if (format === "jpg") {
+    format = "jpeg";
+  }
+
   const s3params = {
     Bucket: "queerburnersdirectory.com-images",
-    Key: `${actionID}.jpg`,
-    ContentType: "image/jpeg",
+    Key: generateUUID(),
+    ContentType: `image/${format}`,
     CacheControl: "max-age=31104000",
     ACL: "public-read",
   };
 
+  let fileextension = format;
+  if (fileextension === "jpeg") {
+    fileextension = "jpg";
+  }
+
   try {
     const uploadURL = s3.getSignedUrl("putObject", s3params);
-    return StandardResponse(uploadURL);
+    return StandardResponse({
+      method: "PUT",
+      url: uploadURL,
+      fileName: `${s3params.Key}.${fileextension}`,
+      contentType: s3params.ContentType,
+    });
   } catch (e) {
     return StandardError(e);
   }

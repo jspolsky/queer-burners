@@ -59,7 +59,7 @@ Resources:
         CampsPictureUploadURLGet:
           Type: Api
           Properties:
-            Path: /camps/pictureuploadurl
+            Path: /camps/pictureuploadurl/{format}
             Method: get
   CampsYearGet:
     Type: AWS::Serverless::Function

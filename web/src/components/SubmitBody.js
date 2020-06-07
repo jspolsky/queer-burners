@@ -34,6 +34,7 @@ export default class SubmitBody extends React.Component {
       email: "",
       twitter: "",
       instagram: "",
+      thumbnail: "",
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API
@@ -105,6 +106,61 @@ export default class SubmitBody extends React.Component {
     return err === "";
   };
 
+  fileUploader = async (event) => {
+    if (event.target.files.length === 0) {
+      // no picture.
+      this.setState({ thumbnail: "" });
+      return;
+    }
+
+    const actualFile = event.target.files[0];
+    let ext = "";
+
+    if (actualFile.type === "image/jpeg" || actualFile.type === "image/jpg") {
+      ext = "jpg";
+    } else if (actualFile.type === "image/png") {
+      ext = "png";
+    } else {
+      // TODO ERROR MESSAGE PLZ
+      this.setState({
+        thumbnail: "",
+      });
+      return;
+    }
+
+    const fileName = event.target.files[0].name;
+    this.setState({
+      thumbnail: fileName,
+    });
+
+    console.log(`trying to upload ${actualFile.type}`);
+
+    // TODO huh?
+    const data = new FormData();
+    data.append("file", actualFile);
+
+    try {
+      const uploader = await axios.get(
+        `https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/pictureuploadurl/${ext}`
+      );
+      console.log(JSON.stringify(uploader.data));
+    } catch (error) {
+      console.error(error);
+      console.error(error.response);
+    }
+
+    // TODO - next thing to do is get a URL with permission to upload from s3
+    // we will have a new lambda function that does this
+    // see https://github.com/jbesw/askjames-s3uploader/blob/master/src/lambda/S3uploader.js
+    // the tutorial is at https://read.acloud.guru/how-to-add-file-upload-features-to-your-website-with-aws-lambda-and-s3-48bbe9b83eaa
+    //
+    // once you get this URL we can submit the file
+    //
+    // then we need a way to throw away files when the user never submits the form
+    // then we need a way to clear the file if the user doesn't want it
+    // then we need a progress indicator. axios is supposed to be able to do that
+  };
+
   changeHandler = (event) => {
     // if the name of the form control is a single
     // word like "identifies", this does a normal, simple
@@ -119,10 +175,14 @@ export default class SubmitBody extends React.Component {
 
     const splitname = event.target.name.split(".");
     const x = splitname[0];
-    const y =
-      event.target.type === "checkbox"
-        ? event.target.checked
-        : event.target.value;
+    let y;
+    switch (event.target.type) {
+      case "checkbox":
+        y = event.target.checked;
+        break;
+      default:
+        y = event.target.value;
+    }
 
     if (splitname.length === 1) {
       this.setState((state, props) => {
@@ -372,12 +432,19 @@ export default class SubmitBody extends React.Component {
                 </Row>
 
                 <Form.Group controlId="thumbnail">
-                  <Form.Label>Upload pictures of your camp here</Form.Label>
-                  <Form.File name="thumbname" label="Thumbnail Image" custom />
+                  <Form.Label>Upload a picture of your camp here</Form.Label>
+                  <Form.File
+                    name="thumbnail"
+                    label={this.state.thumbnail}
+                    custom
+                    onChange={this.fileUploader}
+                    accept="image/png|image/jpeg"
+                  />
+
                   <Form.Text className="text-muted">
-                    The first picture will appear on the front of your card on
-                    the home page. Others will appear when people click through
-                    to read about your camp
+                    This picture will appear in the Queer Burners directory.
+                    Submit a picture of your campers, your frontage, or
+                    something else fun, but please keep it SFW!
                   </Form.Text>
                 </Form.Group>
 
