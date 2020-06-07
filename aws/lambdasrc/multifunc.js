@@ -4,6 +4,7 @@ const db = new AWS.DynamoDB.DocumentClient();
 const campErrors = require("shared").campErrors;
 const locationToString = require("shared").locationToString;
 
+// TODO StandardResponse and StandardError should be collapsed into one function
 const StandardResponse = (o) => ({
   statusCode: 200,
   headers: {
@@ -182,7 +183,7 @@ exports.campsYearNamePut = async (event) => {
     pathParameters: { year, name },
   } = event; // extract unique id from the request path
 
-  // UNDONE should check if this item exists and fail if it doesn't
+  // TODO should check if this item exists and fail if it doesn't
 
   // extract new parameters, if present, out of the body:
   let update_expression = "set updated = :updated";
