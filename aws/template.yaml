@@ -49,6 +49,18 @@ Resources:
           Properties:
             Path: /camps
             Method: get
+  CampsPictureUploadURLGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Get a URL to upload a picture of a camp"
+      FunctionName: qb-camps-picture-upload-url-get
+      Handler: multifunc.campsPictureUploadURLGet
+      Events:
+        CampsPictureUploadURLGet:
+          Type: Api
+          Properties:
+            Path: /camps/pictureuploadurl
+            Method: get
   CampsYearGet:
     Type: AWS::Serverless::Function
     Properties:

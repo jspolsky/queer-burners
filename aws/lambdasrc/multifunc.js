@@ -1,5 +1,10 @@
 const AWS = require("aws-sdk");
+const crypto = require("crypto");
+// Generate unique id with no external dependencies
+const generateUUID = () => crypto.randomBytes(16).toString("hex");
+
 const db = new AWS.DynamoDB.DocumentClient();
+const s3 = new AWS.S3();
 
 const campErrors = require("shared").campErrors;
 const locationToString = require("shared").locationToString;
@@ -108,6 +113,26 @@ exports.campsGet = async (event) => {
   try {
     const data = await db.scan(params).promise();
     return StandardResponse(data.Items);
+  } catch (e) {
+    return StandardError(e);
+  }
+};
+
+exports.campsPictureUploadURLGet = async (event) => {
+  console.log("campPictureUploadURLGet v2");
+
+  const actionID = generateUUID();
+  const s3params = {
+    Bucket: "queerburnersdirectory.com-images",
+    Key: `${actionID}.jpg`,
+    ContentType: "image/jpeg",
+    CacheControl: "max-age=31104000",
+    ACL: "public-read",
+  };
+
+  try {
+    const uploadURL = s3.getSignedUrl("putObject", s3params);
+    return StandardResponse(uploadURL);
   } catch (e) {
     return StandardError(e);
   }
