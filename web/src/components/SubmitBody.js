@@ -188,8 +188,9 @@ export default class SubmitBody extends React.Component {
       console.error(error.response.request.response);
     }
 
-    // TODO throw away files when the user never submits the form
-    // TODO clear the file if the user doesn't want it
+    // TODO throw away files when the user never submits the form, or general s3 garbage collection
+    // TODO consider s3 based thumbnailing - reduce size of images to, I think, 318 pixels. (but maybe more for retina?)
+    //           here is how ---> https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
   };
 
   changeHandler = (event) => {
