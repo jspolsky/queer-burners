@@ -1,19 +1,18 @@
 import React from "react";
-import logo from "./assets/header_logo.png";
+import logo from "./assets/header_logo.jpg";
 
 import SubmitBody from "./components/SubmitBody.js";
 import DirectoryBody from "./components/DirectoryBody.js";
+import Container from "react-bootstrap/Container";
 
 import { Link } from "react-router-dom";
 
 import "./App.css";
 
 const Header = () => (
-  <header className="App-header">
-    <Link to="/">
-      <img src={logo} className="App-logo" alt="logo" />
-    </Link>
-  </header>
+  <Link to="/">
+    <img class="img-fluid w-100" src={logo} alt="placeholder 960" />
+  </Link>
 );
 
 export function Directory(props) {
