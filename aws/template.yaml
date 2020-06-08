@@ -55,6 +55,7 @@ Resources:
       Description: "Get a URL to upload a picture of a camp"
       FunctionName: qb-camps-picture-upload-url-get
       Handler: multifunc.campsPictureUploadURLGet
+      Policies: AmazonS3FullAccess
       Events:
         CampsPictureUploadURLGet:
           Type: Api

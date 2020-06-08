@@ -4,7 +4,6 @@ const crypto = require("crypto");
 const generateUUID = () => crypto.randomBytes(16).toString("hex");
 
 const db = new AWS.DynamoDB.DocumentClient();
-const s3 = new AWS.S3();
 
 const campErrors = require("shared").campErrors;
 const locationToString = require("shared").locationToString;
@@ -119,6 +118,8 @@ exports.campsGet = async (event) => {
 };
 
 exports.campsPictureUploadURLGet = async (event) => {
+  var s3 = new AWS.S3();
+
   let {
     pathParameters: { format },
   } = event; // extract format from request path
@@ -127,25 +128,25 @@ exports.campsPictureUploadURLGet = async (event) => {
     format = "jpeg";
   }
 
-  const s3params = {
-    Bucket: "queerburnersdirectory.com-images",
-    Key: generateUUID(),
-    ContentType: `image/${format}`,
-    CacheControl: "max-age=31104000",
-    ACL: "public-read",
-  };
-
   let fileextension = format;
   if (fileextension === "jpeg") {
     fileextension = "jpg";
   }
+
+  const s3params = {
+    Bucket: "queerburnersdirectory.com-images",
+    Key: `${generateUUID()}.${fileextension}`,
+    ContentType: `image/${format}`,
+    Expires: 900 /* 15 min */,
+    ACL: "public-read",
+  };
 
   try {
     const uploadURL = s3.getSignedUrl("putObject", s3params);
     return StandardResponse({
       method: "PUT",
       url: uploadURL,
-      fileName: `${s3params.Key}.${fileextension}`,
+      fileName: s3params.Key,
       contentType: s3params.ContentType,
     });
   } catch (e) {

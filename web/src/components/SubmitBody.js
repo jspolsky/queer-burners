@@ -133,32 +133,42 @@ export default class SubmitBody extends React.Component {
       thumbnail: fileName,
     });
 
-    console.log(`trying to upload ${actualFile.type}`);
-
-    // TODO huh?
-    const data = new FormData();
-    data.append("file", actualFile);
-
     try {
       const uploader = await axios.get(
         `https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/pictureuploadurl/${ext}`
       );
       console.log(JSON.stringify(uploader.data));
+
+      let image;
+      let reader = new FileReader();
+      reader.onload = async (e) => {
+        image = e.target.result;
+
+        let binary = atob(image.split(",")[1]);
+        let array = [];
+        for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+        }
+        let blobData = new Blob([new Uint8Array(array)], {
+          type: uploader.data.contentType,
+        });
+
+        await axios.put(uploader.data.url, blobData, {
+          headers: {
+            "Content-Type": uploader.data.contentType,
+          },
+        });
+      };
+
+      reader.readAsDataURL(actualFile);
     } catch (error) {
       console.error(error);
-      console.error(error.response);
+      console.error(error.response.request.response);
     }
 
-    // TODO - next thing to do is get a URL with permission to upload from s3
-    // we will have a new lambda function that does this
-    // see https://github.com/jbesw/askjames-s3uploader/blob/master/src/lambda/S3uploader.js
-    // the tutorial is at https://read.acloud.guru/how-to-add-file-upload-features-to-your-website-with-aws-lambda-and-s3-48bbe9b83eaa
-    //
-    // once you get this URL we can submit the file
-    //
-    // then we need a way to throw away files when the user never submits the form
-    // then we need a way to clear the file if the user doesn't want it
-    // then we need a progress indicator. axios is supposed to be able to do that
+    // TODO throw away files when the user never submits the form
+    // TODO clear the file if the user doesn't want it
+    // TODO progress indicator. axios is supposed to be able to do that
   };
 
   changeHandler = (event) => {
