@@ -5,6 +5,8 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 import { defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
@@ -46,6 +48,7 @@ export default class SubmitBody extends React.Component {
       _error_email: null,
       _error_twitter: null,
       _error_instagram: null,
+      _upload_progress: null,
     };
   }
 
@@ -109,7 +112,7 @@ export default class SubmitBody extends React.Component {
   fileUploader = async (event) => {
     if (event.target.files.length === 0) {
       // no picture.
-      this.setState({ thumbnail: "" });
+      this.setState({ thumbnail: "", _thumbnail_object_url: null });
       return;
     }
 
@@ -137,7 +140,6 @@ export default class SubmitBody extends React.Component {
       const uploader = await axios.get(
         `https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/pictureuploadurl/${ext}`
       );
-      console.log(JSON.stringify(uploader.data));
 
       let image;
       let reader = new FileReader();
@@ -157,6 +159,18 @@ export default class SubmitBody extends React.Component {
           headers: {
             "Content-Type": uploader.data.contentType,
           },
+          onUploadProgress: (pe) => {
+            this.setState({
+              _upload_progress: pe.lengthComputable
+                ? Math.floor((pe.loaded * 100) / pe.total)
+                : null,
+            });
+          },
+        });
+
+        this.setState({
+          _thumbnail_object_url: URL.createObjectURL(actualFile),
+          _upload_progress: null,
         });
       };
 
@@ -450,7 +464,13 @@ export default class SubmitBody extends React.Component {
                     onChange={this.fileUploader}
                     accept="image/png|image/jpeg"
                   />
-
+                  {this.state._upload_progress && (
+                    <ProgressBar
+                      striped
+                      now={this.state._upload_progress}
+                    ></ProgressBar>
+                  )}
+                  <Image src={this.state._thumbnail_object_url} fluid />
                   <Form.Text className="text-muted">
                     This picture will appear in the Queer Burners directory.
                     Submit a picture of your campers, your frontage, or
