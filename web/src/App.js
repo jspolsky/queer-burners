@@ -3,7 +3,6 @@ import logo from "./assets/header_logo.jpg";
 
 import SubmitBody from "./components/SubmitBody.js";
 import DirectoryBody from "./components/DirectoryBody.js";
-import Container from "react-bootstrap/Container";
 
 import { Link } from "react-router-dom";
 
