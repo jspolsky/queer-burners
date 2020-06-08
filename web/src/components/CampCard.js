@@ -8,11 +8,19 @@ import Image from "react-bootstrap/Image";
 
 function JoinButton(props) {
   const o = props.o;
-  if (o.join && o.join.open) {
+  if (o.joinOpen) {
     const popover = (
       <Popover id="popover-basic">
         <Popover.Title as="h3">Join our camp!</Popover.Title>
-        <Popover.Content>{o.join.message}</Popover.Content>
+        <Popover.Content>
+          {o.joinMessage}
+          {o.joinUrl && (
+            <div>
+              <hr></hr>
+              <a href={o.joinUrl}>Apply</a>
+            </div>
+          )}
+        </Popover.Content>
       </Popover>
     );
 

@@ -37,6 +37,9 @@ export default class SubmitBody extends React.Component {
       twitter: "",
       instagram: "",
       thumbnail: "",
+      joinOpen: false,
+      joinMessage: "",
+      joinUrl: "",
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API
@@ -48,6 +51,8 @@ export default class SubmitBody extends React.Component {
       _error_email: null,
       _error_twitter: null,
       _error_instagram: null,
+      _error_joinMessage: null,
+      _error_joinUrl: null,
       _upload_progress: null,
       _thumbnail_user_filename: "",
     };
@@ -69,7 +74,7 @@ export default class SubmitBody extends React.Component {
       }
     }
 
-    for (var x of [
+    var fieldsToValidate = [
       "name",
       "about",
       "url",
@@ -77,7 +82,12 @@ export default class SubmitBody extends React.Component {
       "email",
       "twitter",
       "instagram",
-    ]) {
+    ];
+    if (this.state.joinOpen) {
+      fieldsToValidate.push("joinMessage", "joinUrl");
+    }
+
+    for (var x of fieldsToValidate) {
       if (!this.fieldValidator(x, camp[x])) {
         return null;
       }
@@ -189,7 +199,7 @@ export default class SubmitBody extends React.Component {
     }
 
     // TODO throw away files when the user never submits the form, or general s3 garbage collection
-    // TODO consider s3 based thumbnailing - reduce size of images to, I think, 318 pixels. (but maybe more for retina?)
+    // TODO consider s3 based thumbnailing - reduce size of images to, I think, 318 pixels wide. (but maybe more for retina?)
     //           here is how ---> https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
   };
 
@@ -299,7 +309,6 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                 </Row>
-
                 <Form.Group controlId="about">
                   <Form.Label>About your camp</Form.Label>
                   <Form.Control
@@ -314,7 +323,6 @@ export default class SubmitBody extends React.Component {
                     {this.state._error_about}
                   </Form.Control.Feedback>
                 </Form.Group>
-
                 <Row>
                   <Col>
                     <Form.Group controlId="location.frontage">
@@ -353,7 +361,6 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                 </Row>
-
                 <Row>
                   <Col>
                     <Form.Group controlId="url">
@@ -394,7 +401,6 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                 </Row>
-
                 <Row>
                   <Col>
                     <Form.Group controlId="email">
@@ -462,7 +468,6 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                 </Row>
-
                 <Form.Group controlId="thumbnail">
                   <Form.Label>Upload a picture of your camp here</Form.Label>
                   <Form.File
@@ -501,31 +506,55 @@ export default class SubmitBody extends React.Component {
                     something else fun, but please keep it SFW!
                   </Form.Text>
                 </Form.Group>
-
-                <Form.Group controlId="join.open">
+                <Form.Group controlId="joinOpen">
                   <Form.Label>Are you open to new members?</Form.Label>
                   <Form.Check
                     type="switch"
-                    name="join.open"
+                    name="joinOpen"
+                    value={this.state.joinOpen}
                     label="Yes"
                     onChange={this.changeHandler}
                   />
                 </Form.Group>
-                <Form.Group controlId="join.message">
-                  <Form.Label>Instructions</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows="3"
-                    name="join.message"
-                    placeholder="Max 255 characters"
-                    onChange={this.changeHandler}
-                  ></Form.Control>
-                  <Form.Text className="text-muted">
-                    Provide brief instructions for people who are interested in
-                    joining your camp. What should they do next?
-                  </Form.Text>
-                </Form.Group>
-
+                {this.state.joinOpen && (
+                  <div>
+                    <Form.Group controlId="joinMessage">
+                      <Form.Label>Instructions</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows="3"
+                        name="joinMessage"
+                        value={this.state.joinMessage}
+                        placeholder="Max 255 characters"
+                        onChange={this.changeHandler}
+                      ></Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_joinMessage}
+                      </Form.Control.Feedback>
+                      <Form.Text className="text-muted">
+                        Provide brief instructions for people who are interested
+                        in joining your camp. What should they do next?
+                      </Form.Text>
+                    </Form.Group>
+                    <Form.Group controlId="joinUrl">
+                      <Form.Label>URL for application form</Form.Label>
+                      <Form.Control
+                        type="input"
+                        name="joinUrl"
+                        value={this.state.joinUrl}
+                        placeholder="https://www.example.com"
+                        onChange={this.changeHandler}
+                      ></Form.Control>{" "}
+                      <Form.Control.Feedback type="invalid">
+                        {this.state._error_joinUrl}
+                      </Form.Control.Feedback>
+                      <Form.Text className="text-muted">
+                        Provide a link to an application form or information
+                        about joining.
+                      </Form.Text>
+                    </Form.Group>
+                  </div>
+                )}
                 <Button variant="primary" type="submit">
                   Submit
                 </Button>

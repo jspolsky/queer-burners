@@ -114,8 +114,7 @@ export default class DirectoryBody extends React.Component {
                       (onecamp) =>
                         this.state.filter === "all" ||
                         (this.state.filter === "Seeking new members" &&
-                          onecamp.join &&
-                          onecamp.join.open) ||
+                          onecamp.joinOpen) ||
                         this.state.filter === onecamp.identifies
                     )
                     .map((onecamp) => (

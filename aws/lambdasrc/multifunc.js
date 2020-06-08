@@ -46,6 +46,9 @@ const publicAttributes = [
   "twitter",
   "instagram",
   "thumbnail",
+  "joinOpen",
+  "joinMessage",
+  "joinUrl",
 ];
 
 const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {

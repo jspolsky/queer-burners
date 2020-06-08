@@ -96,7 +96,6 @@ const fieldError = (key, value) => {
       } else if (!/^[a-z0-9]*$/i.test(value)) {
         err = "invalid twitter name";
       }
-
       break;
 
     case "instagram":
@@ -107,7 +106,26 @@ const fieldError = (key, value) => {
       } else if (!/^[a-z0-9._]*$/i.test(value)) {
         err = "invalid instagram handle";
       }
+      break;
 
+    case "joinMessage":
+      if (typeof value !== "string") {
+        err = "Joining information (joinMessage) is not a string";
+      } else if (value.length > 255) {
+        err = `Joining information is too long by ${value.length - 255}`;
+      }
+      break;
+
+    case "joinUrl":
+      if (typeof value !== "string") {
+        err = "Joining URL (joinUrl) is not a string";
+      } else if (value === "") {
+        err = "";
+      } else if (value.length > 128) {
+        err = `Joining URL is too long by ${value.length - 128}`;
+      } else if (!validateURL(value)) {
+        err = "invalid URL for joining";
+      }
       break;
 
     default:
