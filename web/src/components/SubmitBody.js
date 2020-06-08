@@ -49,6 +49,7 @@ export default class SubmitBody extends React.Component {
       _error_twitter: null,
       _error_instagram: null,
       _upload_progress: null,
+      _thumbnail_user_filename: "",
     };
   }
 
@@ -112,7 +113,11 @@ export default class SubmitBody extends React.Component {
   fileUploader = async (event) => {
     if (event.target.files.length === 0) {
       // no picture.
-      this.setState({ thumbnail: "", _thumbnail_object_url: null });
+      this.setState({
+        thumbnail: "",
+        _thumbnail_object_url: null,
+        _thumbnail_user_filename: "",
+      });
       return;
     }
 
@@ -127,13 +132,15 @@ export default class SubmitBody extends React.Component {
       // TODO ERROR MESSAGE PLZ
       this.setState({
         thumbnail: "",
+        _thumbnail_object_url: null,
+        _thumbnail_user_filename: "",
       });
       return;
     }
 
     const fileName = event.target.files[0].name;
     this.setState({
-      thumbnail: fileName,
+      _thumbnail_user_filename: fileName,
     });
 
     try {
@@ -170,6 +177,7 @@ export default class SubmitBody extends React.Component {
 
         this.setState({
           _thumbnail_object_url: URL.createObjectURL(actualFile),
+          thumbnail: uploader.data.fileName,
           _upload_progress: null,
         });
       };
@@ -182,7 +190,6 @@ export default class SubmitBody extends React.Component {
 
     // TODO throw away files when the user never submits the form
     // TODO clear the file if the user doesn't want it
-    // TODO progress indicator. axios is supposed to be able to do that
   };
 
   changeHandler = (event) => {
@@ -459,7 +466,7 @@ export default class SubmitBody extends React.Component {
                   <Form.Label>Upload a picture of your camp here</Form.Label>
                   <Form.File
                     name="thumbnail"
-                    label={this.state.thumbnail}
+                    label={this.state._thumbnail_user_filename}
                     custom
                     onChange={this.fileUploader}
                     accept="image/png|image/jpeg"

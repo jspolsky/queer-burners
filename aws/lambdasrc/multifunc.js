@@ -45,6 +45,7 @@ const publicAttributes = [
   "email",
   "twitter",
   "instagram",
+  "thumbnail",
 ];
 
 const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
@@ -66,6 +67,7 @@ exports.campsPost = async (event) => {
     email: "",
     twitter: "",
     instagram: "",
+    thumbnail: "",
   };
 
   let jsonCamp = {};

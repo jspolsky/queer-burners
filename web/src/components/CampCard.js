@@ -65,10 +65,12 @@ const CampCard = (props) => {
   const o = props.o;
   return (
     <Card style={{ width: "20rem" }} bg="light">
-      {
-        // UNDONE THE IMAGE IS PROBABLY NOT THERE
-        // <Card.Img variant="top" src={require("../camp_images/" + o.image)} />
-      }
+      {o.thumbnail && (
+        <Card.Img
+          variant="top"
+          src={`https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/${o.thumbnail}`}
+        />
+      )}
       <Card.Header>
         <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
           {o.name}
