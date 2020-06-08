@@ -477,7 +477,23 @@ export default class SubmitBody extends React.Component {
                       now={this.state._upload_progress}
                     ></ProgressBar>
                   )}
-                  <Image src={this.state._thumbnail_object_url} fluid />
+                  {this.state._thumbnail_object_url && (
+                    <div>
+                      <Image src={this.state._thumbnail_object_url} fluid />
+                      <Button
+                        variant="outline-danger"
+                        onClick={() =>
+                          this.setState({
+                            thumbnail: "",
+                            _thumbnail_object_url: null,
+                            _thumbnail_user_filename: "",
+                          })
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
                   <Form.Text className="text-muted">
                     This picture will appear in the Queer Burners directory.
                     Submit a picture of your campers, your frontage, or
