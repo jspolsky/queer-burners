@@ -1,15 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { Directory, Submit, PrivacyPolicy } from "./App";
+import { Directory, Submit, PrivacyPolicy, Year } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
-
-function Year(props) {
-  return <Directory year={props.match.params.year} />;
-}
 
 ReactDOM.render(
   <Router>

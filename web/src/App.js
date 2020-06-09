@@ -31,6 +31,10 @@ const googleLogout = () => {
   console.log("Google logout");
 };
 
+export function Year(props) {
+  return <Directory year={props.match.params.year} />;
+}
+
 export function Directory(props) {
   return (
     <div className="App">
