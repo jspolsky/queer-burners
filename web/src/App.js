@@ -11,7 +11,7 @@ import "./App.css";
 
 const Header = () => (
   <Link to="/">
-    <img class="img-fluid w-100" src={logo} alt="placeholder 960" />
+    <img className="img-fluid w-100" src={logo} alt="placeholder 960" />
   </Link>
 );
 
