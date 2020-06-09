@@ -10,6 +10,7 @@ import { GoogleLogin, GoogleLogout } from "react-google-login";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Image from "react-bootstrap/Image";
 
 import "./App.css";
 
@@ -18,13 +19,19 @@ class Header extends React.Component {
     super(props);
     this.state = {
       loggedin: false,
+      user_name: "",
+      user_image: null,
     };
   }
 
   googleLoginSuccess = (response) => {
     console.log("Google Login Success");
     console.log(response);
-    this.setState({ loggedin: true });
+    this.setState({
+      loggedin: true,
+      user_name: response.profileObj.name,
+      user_image: response.profileObj.imageUrl,
+    });
   };
 
   googleLoginFailure = (response) => {
@@ -68,11 +75,22 @@ class Header extends React.Component {
             />
           )}
           {this.state.loggedin && (
-            <GoogleLogout
-              clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
-              buttonText="Logout"
-              onLogoutSuccess={this.googleLogout}
-            />
+            <Nav>
+              <Image
+                roundedCircle
+                src={this.state.user_image}
+                style={{ maxHeight: "2rem" }}
+              ></Image>
+              <NavDropdown title={this.state.user_name}>
+                <NavDropdown.Item>
+                  <GoogleLogout
+                    clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
+                    buttonText="Logout"
+                    onLogoutSuccess={this.googleLogout}
+                  />
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
           )}
         </Navbar>
         <Link to="/">
