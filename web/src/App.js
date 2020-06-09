@@ -3,6 +3,7 @@ import logo from "./assets/header_logo.jpg";
 
 import SubmitBody from "./components/SubmitBody.js";
 import DirectoryBody from "./components/DirectoryBody.js";
+import PrivacyBody from "./components/PrivacyBody.js";
 
 import { Link } from "react-router-dom";
 
@@ -28,6 +29,15 @@ export function Submit() {
     <div className="App">
       <Header />
       <SubmitBody />
+    </div>
+  );
+}
+
+export function PrivacyPolicy() {
+  return (
+    <div className="App">
+      <Header />
+      <PrivacyBody />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { Directory, Submit } from "./App";
+import { Directory, Submit, PrivacyPolicy } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -16,6 +16,7 @@ ReactDOM.render(
     <Route exact path="/" component={Directory} />
     <Route path="/submit" component={Submit} />
     <Route path="/year/:year" component={Year} />
+    <Route path="/privacy" component={PrivacyPolicy} />
   </Router>,
   document.getElementById("root")
 );
