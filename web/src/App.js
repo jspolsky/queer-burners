@@ -7,29 +7,81 @@ import PrivacyBody from "./components/PrivacyBody.js";
 
 import { Link } from "react-router-dom";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
-import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 import "./App.css";
 
-const Header = () => (
-  <Link to="/">
-    <img className="img-fluid w-100" src={logo} alt="placeholder 960" />
-  </Link>
-);
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedin: false,
+    };
+  }
 
-const googleLoginSuccess = (response) => {
-  console.log("Google Login Success");
-  console.log(response);
-};
+  googleLoginSuccess = (response) => {
+    console.log("Google Login Success");
+    console.log(response);
+    this.setState({ loggedin: true });
+  };
 
-const googleLoginFailure = (response) => {
-  console.log("Google Login Failure");
-  console.log(response);
-};
+  googleLoginFailure = (response) => {
+    console.log("Google Login Failure");
+    console.log(response);
+    this.setState({ loggedin: false });
+  };
 
-const googleLogout = () => {
-  console.log("Google logout");
-};
+  googleLogout = () => {
+    console.log("Google logout");
+    this.setState({ loggedin: false });
+  };
+
+  render() {
+    return (
+      <div>
+        <Navbar bg="dark" variant="dark">
+          <Navbar.Brand href="http://queerburners.com/">
+            Queer Burners
+          </Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Link href="/">Directory</Nav.Link>
+            <Nav.Link href="/submit">Submit</Nav.Link>
+            <NavDropdown title="Past Years" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="/year/2019">
+                2019 Metamorphoses
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/year/2020">
+                2020 The Multiverse
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          {!this.state.loggedin && (
+            <GoogleLogin
+              clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={this.googleLoginSuccess}
+              onFailure={this.googleLoginFailure}
+              cookiePolicy={"single_host_origin"}
+              isSignedIn={true}
+            />
+          )}
+          {this.state.loggedin && (
+            <GoogleLogout
+              clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
+              buttonText="Logout"
+              onLogoutSuccess={this.googleLogout}
+            />
+          )}
+        </Navbar>
+        <Link to="/">
+          <img className="img-fluid w-100" src={logo} alt="placeholder 960" />
+        </Link>
+      </div>
+    );
+  }
+}
 
 export function Year(props) {
   return <Directory year={props.match.params.year} />;
@@ -40,21 +92,6 @@ export function Directory(props) {
     <div className="App">
       <Header />
       <DirectoryBody year={props.year} />
-      <Container>
-        <GoogleLogin
-          clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
-          buttonText="Login"
-          onSuccess={googleLoginSuccess}
-          onFailure={googleLoginFailure}
-          cookiePolicy={"single_host_origin"}
-          isSignedIn={true}
-        />
-        <GoogleLogout
-          clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
-          buttonText="Logout"
-          onSuccess={googleLogout}
-        />
-      </Container>
     </div>
   );
 }
