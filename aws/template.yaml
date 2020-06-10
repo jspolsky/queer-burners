@@ -9,6 +9,8 @@ Globals:
     CodeUri: lambdasrc/
     Tags:
       app: queerburners
+    Layers:
+      - !Ref NodeModulesLayer
 
 Resources:
   CampsOptions:
@@ -23,6 +25,7 @@ Resources:
           Properties:
             Path: /camps
             Method: options
+
   CampsPost:
     Type: AWS::Serverless::Function
     Properties:
@@ -36,6 +39,7 @@ Resources:
           Properties:
             Path: /camps
             Method: post
+
   CampsGet:
     Type: AWS::Serverless::Function
     Properties:
@@ -49,6 +53,7 @@ Resources:
           Properties:
             Path: /camps
             Method: get
+
   CampsPictureUploadURLGet:
     Type: AWS::Serverless::Function
     Properties:
@@ -62,6 +67,7 @@ Resources:
           Properties:
             Path: /camps/pictureuploadurl/{format}
             Method: get
+
   CampsYearGet:
     Type: AWS::Serverless::Function
     Properties:
@@ -75,6 +81,7 @@ Resources:
           Properties:
             Path: /camps/{year}
             Method: get
+
   CampsYearNameGet:
     Type: AWS::Serverless::Function
     Properties:
@@ -88,6 +95,7 @@ Resources:
           Properties:
             Path: /camps/{year}/{name}
             Method: get
+
   CampsYearNameDelete:
     Type: AWS::Serverless::Function
     Properties:
@@ -101,6 +109,7 @@ Resources:
           Properties:
             Path: /camps/{year}/{name}
             Method: delete
+
   CampsYearNamePut:
     Type: AWS::Serverless::Function
     Properties:
@@ -114,3 +123,13 @@ Resources:
           Properties:
             Path: /camps/{year}/{name}
             Method: put
+
+  NodeModulesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: full set of function dependencies
+      ContentUri: lambdalayer/
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: "Not applicable"
+      RetentionPolicy: Retain

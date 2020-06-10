@@ -3,6 +3,7 @@
 # dependencies
 /web/node_modules
 /aws/node_modules
+/aws/lambdalayer/nodejs/node_modules
 /.pnp
 .pnp.js
 

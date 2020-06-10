@@ -1,5 +1,7 @@
 const AWS = require("aws-sdk");
 const crypto = require("crypto");
+const { OAuth2Client } = require("google-auth-library");
+
 // Generate unique id with no external dependencies
 const generateUUID = () => crypto.randomBytes(16).toString("hex");
 
