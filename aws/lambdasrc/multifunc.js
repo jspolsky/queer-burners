@@ -90,6 +90,31 @@ exports.campsPost = async (event) => {
   );
   camp.created = new Date().toISOString();
 
+  //
+  // AUTH!
+  //
+
+  // TODO is there a better place to store 'secrets' in lambda? (this isn't really secret but still)
+  const CLIENT_ID =
+    "1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com";
+
+  try {
+    const client = new OAuth2Client(CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: camp.tokenId,
+      audience: CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    camp.contact = {
+      google_user_id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+    };
+  } catch (e) {
+    // TODO figure out how to make this prettier
+    return StandardError(e);
+  }
+
   const params = {
     TableName: "camps",
     Item: camp,

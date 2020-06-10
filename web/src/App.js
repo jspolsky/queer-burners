@@ -14,35 +14,45 @@ import Image from "react-bootstrap/Image";
 
 import "./App.css";
 
+const noUser = {
+  loggedin: false,
+  username: "",
+  user_image: null,
+  googleId: null,
+  tokenId: null,
+};
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loggedin: false,
-      user_name: "",
-      user_image: null,
-    };
+    this.state = noUser;
   }
 
   googleLoginSuccess = (response) => {
     console.log("Google Login Success");
     console.log(response);
-    this.setState({
+    const newState = {
       loggedin: true,
-      user_name: response.profileObj.name,
+      username: response.profileObj.name,
       user_image: response.profileObj.imageUrl,
-    });
+      googleId: response.profileObj.googleId,
+      tokenId: response.tokenId,
+    };
+    this.setState(newState);
+    this.props.onUserChange(newState);
   };
 
   googleLoginFailure = (response) => {
     console.log("Google Login Failure");
     console.log(response);
-    this.setState({ loggedin: false });
+    this.setState(noUser);
+    this.props.onUserChange(noUser);
   };
 
   googleLogout = () => {
     console.log("Google logout");
-    this.setState({ loggedin: false });
+    this.setState(noUser);
+    this.props.onUserChange(noUser);
   };
 
   render() {
@@ -81,7 +91,7 @@ class Header extends React.Component {
                 src={this.state.user_image}
                 style={{ maxHeight: "2rem" }}
               ></Image>
-              <NavDropdown title={this.state.user_name}>
+              <NavDropdown title={this.state.username}>
                 <NavDropdown.Item>
                   <GoogleLogout
                     clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
@@ -114,13 +124,27 @@ export function Directory(props) {
   );
 }
 
-export function Submit() {
-  return (
-    <div className="App">
-      <Header />
-      <SubmitBody />
-    </div>
-  );
+export class Submit extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  userChange = (newUserState) => {
+    this.setState(newUserState);
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <Header onUserChange={(x) => this.userChange(x)} />
+        <SubmitBody
+          loggedin={this.state.loggedin}
+          tokenId={this.state.tokenId}
+        />
+      </div>
+    );
+  }
 }
 
 export function PrivacyPolicy() {
