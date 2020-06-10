@@ -40,6 +40,8 @@ class Header extends React.Component {
     };
     this.setState(newState);
     this.props.onUserChange(newState);
+    // TODO this ^^ is making errors on fresh loads
+    // the prop must not be set or something, or it is not set yet
   };
 
   googleLoginFailure = (response) => {
