@@ -11,6 +11,9 @@ Globals:
       app: queerburners
     Layers:
       - !Ref NodeModulesLayer
+    Environment:
+      Variables:
+        googleClientId: 1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com
 
 Resources:
   CampsOptions:

@@ -94,15 +94,11 @@ exports.campsPost = async (event) => {
   // AUTH!
   //
 
-  // TODO is there a better place to store 'secrets' in lambda? (this isn't really secret but still)
-  const CLIENT_ID =
-    "1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com";
-
   try {
-    const client = new OAuth2Client(CLIENT_ID);
+    const client = new OAuth2Client(process.env.googleClientId);
     const ticket = await client.verifyIdToken({
       idToken: camp.tokenId,
-      audience: CLIENT_ID,
+      audience: process.env.googleClientId,
     });
     const payload = ticket.getPayload();
     camp.contact = {
