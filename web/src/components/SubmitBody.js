@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -7,7 +8,8 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import Alert from "react-bootstrap/Alert"
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 import { defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
@@ -57,14 +59,18 @@ export default class SubmitBody extends React.Component {
       _error_submit: null,
       _upload_progress: null,
       _thumbnail_user_filename: "",
-
+      _submit_in_progress: false,
+      _submit_successful: false,
     };
   }
 
   submitHandler = async (event) => {
     event.preventDefault();
-    this.setState({ _validated: true,
-    _error_submit: null, });
+    this.setState({
+      _validated: true,
+      _error_submit: null,
+      _submit_in_progress: true,
+    });
 
     var camp = {
       year: defaultYear,
@@ -93,6 +99,7 @@ export default class SubmitBody extends React.Component {
 
     for (var x of fieldsToValidate) {
       if (!this.fieldValidator(x, camp[x])) {
+        this.setState({ _submit_in_progress: false });
         return null;
       }
     }
@@ -102,30 +109,26 @@ export default class SubmitBody extends React.Component {
     console.log("submitting");
     console.log(JSON.stringify(camp));
 
-    // TODO if the API returns success we should redirect to some kind of success page?
-
     try {
       // TODO this URL should be in one place
       await axios.post(
         "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps",
         camp
       );
+      this.setState({ _submit_successful: true, _submit_in_progress: false });
     } catch (error) {
-
       let msg = "";
       if (error.response) {
         // server returned error
         msg = `Error ${error.response.status}: ${error.response.data}`;
-      }
-      else if (error.request) {
+      } else if (error.request) {
         msg = "Error: Network error (no response received)";
-      }
-      else {
+      } else {
         msg = error.message;
       }
       console.error(msg);
       console.error(error);
-      this.setState( {_error_submit: msg });
+      this.setState({ _error_submit: msg, _submit_in_progress: false });
     }
   };
 
@@ -273,7 +276,9 @@ export default class SubmitBody extends React.Component {
   render() {
     let result = "";
 
-    if (!this.props.loggedin) {
+    if (this.state._submit_successful) {
+      result = <Redirect to="/" />;
+    } else if (!this.props.loggedin) {
       result = (
         <Container>
           <Row>
@@ -613,18 +618,32 @@ export default class SubmitBody extends React.Component {
                       </Form.Group>
                     </div>
                   )}
-                  { this.state._error_submit && 
-                    <Alert variant="danger" dismissible onClose={()=>this.setState({_error_submit:null})}>
+                  {this.state._error_submit && (
+                    <Alert
+                      variant="danger"
+                      dismissible
+                      onClose={() => this.setState({ _error_submit: null })}
+                    >
                       <Alert.Heading>Error</Alert.Heading>
-                      <p>An error occurred and your camp information was not submitted.<hr />
-                        <strong>{ this.state._error_submit }</strong>
+                      <p>
+                        An error occurred and your camp information was not
+                        submitted.
+                      </p>
+                      <p>
+                        <strong>{this.state._error_submit}</strong>
                       </p>
                     </Alert>
-                  }
-             
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
+                  )}
+
+                  {this.state._submit_in_progress ? (
+                    <Spinner animation="border" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </Spinner>
+                  ) : (
+                    <Button variant="primary" type="submit">
+                      Submit
+                    </Button>
+                  )}
                 </Form>
               </Col>
             </Row>
