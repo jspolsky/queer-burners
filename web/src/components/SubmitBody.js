@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import Alert from "react-bootstrap/Alert"
 
 import { defaultYear } from "../definitions.js";
 import { fieldError } from "shared";
@@ -53,14 +54,17 @@ export default class SubmitBody extends React.Component {
       _error_instagram: null,
       _error_joinMessage: null,
       _error_joinUrl: null,
+      _error_submit: null,
       _upload_progress: null,
       _thumbnail_user_filename: "",
+
     };
   }
 
   submitHandler = async (event) => {
     event.preventDefault();
-    this.setState({ _validated: true });
+    this.setState({ _validated: true,
+    _error_submit: null, });
 
     var camp = {
       year: defaultYear,
@@ -98,9 +102,6 @@ export default class SubmitBody extends React.Component {
     console.log("submitting");
     console.log(JSON.stringify(camp));
 
-    // TODO if the API returns an error the user never finds out?
-    // in fact the console just has a mess, too.
-
     // TODO if the API returns success we should redirect to some kind of success page?
 
     try {
@@ -110,8 +111,21 @@ export default class SubmitBody extends React.Component {
         camp
       );
     } catch (error) {
+
+      let msg = "";
+      if (error.response) {
+        // server returned error
+        msg = `Error ${error.response.status}: ${error.response.data}`;
+      }
+      else if (error.request) {
+        msg = "Error: Network error (no response received)";
+      }
+      else {
+        msg = error.message;
+      }
+      console.error(msg);
       console.error(error);
-      console.error(error.response);
+      this.setState( {_error_submit: msg });
     }
   };
 
@@ -599,6 +613,15 @@ export default class SubmitBody extends React.Component {
                       </Form.Group>
                     </div>
                   )}
+                  { this.state._error_submit && 
+                    <Alert variant="danger" dismissible onClose={()=>this.setState({_error_submit:null})}>
+                      <Alert.Heading>Error</Alert.Heading>
+                      <p>An error occurred and your camp information was not submitted.<hr />
+                        <strong>{ this.state._error_submit }</strong>
+                      </p>
+                    </Alert>
+                  }
+             
                   <Button variant="primary" type="submit">
                     Submit
                   </Button>

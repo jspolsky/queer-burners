@@ -80,7 +80,7 @@ exports.campsPost = async (event) => {
   try {
     jsonCamp = JSON.parse(event.body);
   } catch (err) {
-    return StandardError("Error parsing JSON");
+    return StandardError("Unable to parse JSON");
   }
 
   camp = { ...camp, ...jsonCamp };
@@ -108,8 +108,7 @@ exports.campsPost = async (event) => {
     };
     delete camp.tokenId;  // don't need to keep this around
   } catch (e) {
-    // TODO figure out how to make this prettier
-    return StandardError(e);
+    return StandardError("Invalid login token. Try logging out and logging in again.");
   }
 
   const params = {
@@ -120,14 +119,14 @@ exports.campsPost = async (event) => {
   const ce = campErrors(camp);
 
   if (ce.length > 0) {
-    return StandardError(ce);
+    return StandardError(JSON.stringify(ce));
   }
 
   try {
     const data = await db.put(params).promise();
     return StandardResponse("Successfully created camp");
   } catch (e) {
-    return StandardError(e);
+    return StandardError("Error updating database");
   }
 };
 
