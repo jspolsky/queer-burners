@@ -30,7 +30,6 @@ class Header extends React.Component {
 
   googleLoginSuccess = (response) => {
     console.log("Google Login Success");
-    console.log(response);
     const newState = {
       loggedin: true,
       username: response.profileObj.name,
@@ -39,21 +38,21 @@ class Header extends React.Component {
       tokenId: response.tokenId,
     };
     this.setState(newState);
+    this.props.onUserChange && 
     this.props.onUserChange(newState);
-    // TODO this ^^ is making errors on fresh loads
-    // the prop must not be set or something, or it is not set yet
   };
 
   googleLoginFailure = (response) => {
     console.log("Google Login Failure");
-    console.log(response);
     this.setState(noUser);
+    this.props.onUserChange && 
     this.props.onUserChange(noUser);
   };
 
   googleLogout = () => {
     console.log("Google logout");
     this.setState(noUser);
+    this.props.onUserChange && 
     this.props.onUserChange(noUser);
   };
 
