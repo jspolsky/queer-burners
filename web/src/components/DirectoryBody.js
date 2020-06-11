@@ -8,6 +8,9 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
 
 import CampCard from "./CampCard.js";
 
@@ -23,6 +26,7 @@ export default class DirectoryBody extends React.Component {
     super(props);
     this.state = {
       filter: "all",
+      search: "",
       data: null,
       year:
         props.year && props.year >= 1996 && props.year < 3000
@@ -43,6 +47,10 @@ export default class DirectoryBody extends React.Component {
     }
   }
 
+  onSearchChange = (event) => {
+    this.setState({ search: event.target.value });
+  };
+
   render() {
     let filterButtonString = this.state.filter;
     if (this.state.filter === "all") {
@@ -54,23 +62,16 @@ export default class DirectoryBody extends React.Component {
         <Container>
           <Row>
             <Col style={{ marginTop: "2rem", marginBottom: "1rem" }}>
-              <h2>
-                Camp Directory {this.state.year}
-                <Link to="/submit">
-                  <Button
-                    size="sm"
-                    variant="outline-success"
-                    style={{ marginLeft: "2rem" }}
-                  >
-                    Submit your camp!
-                  </Button>
-                </Link>
+              <h2>Camp Directory {this.state.year}</h2>
+            </Col>
+            <Col md="auto" style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+              <Form inline={1}>
                 <DropdownButton
                   as={ButtonGroup}
                   id="dropdown-basic-button"
                   title={filterButtonString}
                   size="sm"
-                  style={{ marginLeft: "2rem" }}
+                  style={{ marginRight: "2rem" }}
                 >
                   {campIdentifications.map((s) => (
                     <Dropdown.Item
@@ -92,13 +93,32 @@ export default class DirectoryBody extends React.Component {
                   <Button
                     size="sm"
                     variant="outline-primary"
-                    style={{ marginLeft: ".5rem" }}
+                    style={{ marginRight: "2rem" }}
                     onClick={() => this.setState({ filter: "all" })}
                   >
                     Clear Filter
                   </Button>
                 )}
-              </h2>
+                <InputGroup size="sm" style={{ width: "20rem" }}>
+                  <FormControl
+                    autoFocus
+                    placeholder="Search"
+                    aria-label="Search"
+                    onChange={this.onSearchChange}
+                    value={this.state.search}
+                  />
+                  {this.state.search.length > 0 && (
+                    <InputGroup.Append>
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => this.setState({ search: "" })}
+                      >
+                        Clear
+                      </Button>
+                    </InputGroup.Append>
+                  )}
+                </InputGroup>
+              </Form>
             </Col>
           </Row>
           <Row>
@@ -112,10 +132,19 @@ export default class DirectoryBody extends React.Component {
                   this.state.data
                     .filter(
                       (onecamp) =>
-                        this.state.filter === "all" ||
-                        (this.state.filter === "Seeking new members" &&
-                          onecamp.joinOpen) ||
-                        this.state.filter === onecamp.identifies
+                        (this.state.filter === "all" ||
+                          (this.state.filter === "Seeking new members" &&
+                            onecamp.joinOpen) ||
+                          this.state.filter === onecamp.identifies) &&
+                        (this.state.search.length === 0 ||
+                          (this.state.search.length === 1 &&
+                            onecamp.name
+                              .toLowerCase()
+                              .startsWith(this.state.search.toLowerCase())) ||
+                          (this.state.search.length > 1 &&
+                            onecamp.name
+                              .toLowerCase()
+                              .includes(this.state.search.toLowerCase())))
                     )
                     .map((onecamp) => (
                       <CampCard
@@ -126,6 +155,9 @@ export default class DirectoryBody extends React.Component {
                 )}
               </CardColumns>
             </Col>
+          </Row>
+          <Row style={{ marginBottom: "4rem" }}>
+            Don't see your camp here?&nbsp; <Link to="/submit">Submit it!</Link>
           </Row>
         </Container>
       </div>
