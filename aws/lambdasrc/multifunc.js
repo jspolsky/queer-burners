@@ -110,6 +110,7 @@ exports.campsPost = async (event) => {
       email: payload.email,
       name: payload.name,
     };
+    delete camp.tokenId;  // don't need to keep this around
   } catch (e) {
     // TODO figure out how to make this prettier
     return StandardError(e);
