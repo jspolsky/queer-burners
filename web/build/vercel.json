@@ -3,6 +3,6 @@
     { "src": "/submit", "dest": "/" },
     { "src": "/privacy", "dest": "/" },
     { "src": "/year/\\d+", "dest": "/" }
-    { "src": "/edit/\\d+/*", "dest": "/" }
+    { "src": "/edit/(.*)", "dest": "/" }
   ]
 }
