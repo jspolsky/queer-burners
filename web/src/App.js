@@ -40,11 +40,13 @@ export class Directory extends React.Component {
 export class Edit extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loaded: false,
+    };
   }
 
   userChange = (newUserState) => {
-    this.setState(newUserState);
+    this.setState({ ...newUserState, loaded: true });
   };
 
   render() {
@@ -55,14 +57,14 @@ export class Edit extends React.Component {
     return (
       <div className="App">
         <Header onUserChange={(x) => this.userChange(x)} />
-        <div>
+        {this.state.loaded && (
           <SubmitBody
             loggedin={this.state.loggedin}
             tokenId={this.state.tokenId}
             year={this.props.match.params.year}
             camp={camp}
           />
-        </div>
+        )}
       </div>
     );
   }
@@ -71,23 +73,27 @@ export class Edit extends React.Component {
 export class Submit extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loaded: false,
+    };
   }
 
   userChange = (newUserState) => {
-    this.setState(newUserState);
+    this.setState({ ...newUserState, loaded: true });
   };
 
   render() {
     return (
       <div className="App">
         <Header onUserChange={(x) => this.userChange(x)} />
-        <SubmitBody
-          loggedin={this.state.loggedin}
-          tokenId={this.state.tokenId}
-          year={null}
-          camp={null}
-        />
+        {this.state.loaded && (
+          <SubmitBody
+            loggedin={this.state.loggedin}
+            tokenId={this.state.tokenId}
+            year={null}
+            camp={null}
+          />
+        )}
       </div>
     );
   }

@@ -277,12 +277,8 @@ export default class SubmitBody extends React.Component {
     return (
       <Container>
         <Row>
-          <Col style={{ marginTop: "2rem", marginBottom: "1rem" }}>
-            <h2>Submit your camp to the Queer Burners directory!</h2>
-          </Col>
-        </Row>
-        <Row>
           <Col>
+            <h2>Submit your camp to the Queer Burners directory!</h2>
             <p>
               Welcome! We're building a comprehensive list of queer and ally
               theme camps that will participate in Burning Man in {defaultYear}.
@@ -341,9 +337,6 @@ export default class SubmitBody extends React.Component {
     } else
       return (
         <Container>
-          <Row>
-            <Col style={{ marginTop: "2rem", marginBottom: "1rem" }}> </Col>
-          </Row>
           <Row>
             <Col>
               {this.Instructions()}

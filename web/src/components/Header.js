@@ -24,7 +24,6 @@ class Header extends React.Component {
   }
 
   googleLoginSuccess = (response) => {
-    console.log("Google Login Success");
     const newState = {
       loggedin: true,
       username: response.profileObj.name,
@@ -38,14 +37,16 @@ class Header extends React.Component {
   };
 
   googleLoginFailure = (response) => {
-    console.log("Google Login Failure");
     this.setState(noUser);
     this.props.onUserChange && this.props.onUserChange(noUser);
   };
 
   googleLogout = () => {
-    console.log("Google logout");
     this.setState(noUser);
+    this.props.onUserChange && this.props.onUserChange(noUser);
+  };
+
+  googleAutoloadFinished = () => {
     this.props.onUserChange && this.props.onUserChange(noUser);
   };
 
@@ -76,6 +77,7 @@ class Header extends React.Component {
               onFailure={this.googleLoginFailure}
               cookiePolicy={"single_host_origin"}
               isSignedIn={true}
+              onAutoLoadFinished={this.googleAutoloadFinished}
             />
           )}
           {this.state.loggedin && (
