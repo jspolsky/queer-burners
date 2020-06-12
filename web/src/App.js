@@ -159,7 +159,12 @@ export class Edit extends React.Component {
       <div className="App">
         <Header onUserChange={(x) => this.userChange(x)} />
         <div>
-          Editing a camp from {this.props.match.params.year} named {camp}{" "}
+          <SubmitBody
+            loggedin={this.state.loggedin}
+            tokenId={this.state.tokenId}
+            year={this.props.match.params.year}
+            camp={camp}
+          />
         </div>
       </div>
     );
@@ -183,6 +188,8 @@ export class Submit extends React.Component {
         <SubmitBody
           loggedin={this.state.loggedin}
           tokenId={this.state.tokenId}
+          year={null}
+          camp={null}
         />
       </div>
     );
