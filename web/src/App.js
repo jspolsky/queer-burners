@@ -5,6 +5,7 @@ import SubmitBody from "./components/SubmitBody.js";
 import DirectoryBody from "./components/DirectoryBody.js";
 import PrivacyBody from "./components/PrivacyBody.js";
 
+import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import Navbar from "react-bootstrap/Navbar";
@@ -134,6 +135,32 @@ export class Directory extends React.Component {
           loggedin={this.state.loggedin}
           hashEmail={this.state.hashEmail}
         />
+      </div>
+    );
+  }
+}
+
+export class Edit extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  userChange = (newUserState) => {
+    this.setState(newUserState);
+  };
+
+  render() {
+    const camp = new URLSearchParams(this.props.location.search).get("camp");
+
+    if (!camp) return <Redirect to="/" />;
+
+    return (
+      <div className="App">
+        <Header onUserChange={(x) => this.userChange(x)} />
+        <div>
+          Editing a camp from {this.props.match.params.year} named {camp}{" "}
+        </div>
       </div>
     );
   }

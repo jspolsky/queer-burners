@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { Directory, Submit, PrivacyPolicy, Year } from "./App";
+import { Directory, Edit, Submit, PrivacyPolicy, Year } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -13,6 +13,7 @@ ReactDOM.render(
     <Route path="/submit" component={Submit} />
     <Route path="/year/:year" component={Year} />
     <Route path="/privacy" component={PrivacyPolicy} />
+    <Route path="/edit/:year" component={Edit} />
   </Router>,
   document.getElementById("root")
 );

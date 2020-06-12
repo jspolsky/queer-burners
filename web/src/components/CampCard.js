@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
+import { Link } from "react-router-dom";
 
 function JoinButton(props) {
   const o = props.o;
@@ -72,14 +73,18 @@ function DisplayEmail(props) {
 const CampCard = (props) => {
   const o = props.o;
   return (
-    <Card style={{ width: "20rem" }} bg="light">
+    <Card
+      style={{ width: "20rem" }}
+      bg="light"
+      border={props.ismine ? "success" : "light"}
+    >
       {o.thumbnail && (
         <Card.Img
           variant="top"
           src={`https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/${o.thumbnail}`}
         />
       )}
-      <Card.Header>
+      <Card.Header as="h5">
         <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
           {o.name}
         </span>
@@ -89,11 +94,6 @@ const CampCard = (props) => {
         <Card.Subtitle className="mb-2 text-muted">
           {o.identifies}
           {o.location && o.location.string && <div>{o.location.string}</div>}
-          {
-            props.ismine && (
-              <div>This is your camp - you can edit it!</div>
-            ) /* TODO OR CAN YOU */
-          }
         </Card.Subtitle>
         <Card.Text>{o.about}</Card.Text>
         <DisplayURL url={o.url} />
@@ -113,6 +113,16 @@ const CampCard = (props) => {
           );
         })}
       </Card.Body>
+      {
+        props.ismine && (
+          <Card.Footer>
+            This is your camp - you can&nbsp;
+            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+              edit it!
+            </Link>
+          </Card.Footer>
+        ) /* TODO OR CAN YOU */
+      }
     </Card>
   );
 };
