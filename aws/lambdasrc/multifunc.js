@@ -237,7 +237,7 @@ exports.campsYearNameGet = async (event) => {
   };
   try {
     const data = await db.get(params).promise();
-    return StandardResponse(filterPrivateInfo([data.Item])[0]);
+    return StandardResponse(filterPrivateInfo([data.Item]));
   } catch (e) {
     return StandardError(e);
   }
