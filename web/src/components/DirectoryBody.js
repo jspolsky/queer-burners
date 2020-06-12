@@ -150,6 +150,7 @@ export default class DirectoryBody extends React.Component {
                       <CampCard
                         o={onecamp}
                         key={onecamp.year + " " + onecamp.name}
+                        ismine={this.props.hashEmail === onecamp.hashEmail}
                       />
                     ))
                 )}

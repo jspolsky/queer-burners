@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 const fieldError = (key, value) => {
   let err = "";
   switch (key) {
@@ -302,6 +304,15 @@ const streets = [
   "10:00",
 ];
 
+const hashEmail = (email) => {
+  if (email.length === 0) {
+    return "";
+  }
+  const hash = crypto.createHash("sha256");
+  hash.update(email);
+  return hash.digest("base64");
+};
+
 module.exports = {
   fieldError: fieldError,
   campErrors: campErrors,
@@ -309,4 +320,5 @@ module.exports = {
   streets: streets,
   crossStreets: crossStreets,
   locationToString: locationToString,
+  hashEmail: hashEmail,
 };

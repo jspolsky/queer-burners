@@ -89,6 +89,11 @@ const CampCard = (props) => {
         <Card.Subtitle className="mb-2 text-muted">
           {o.identifies}
           {o.location && o.location.string && <div>{o.location.string}</div>}
+          {
+            props.ismine && (
+              <div>This is your camp - you can edit it!</div>
+            ) /* TODO OR CAN YOU */
+          }
         </Card.Subtitle>
         <Card.Text>{o.about}</Card.Text>
         <DisplayURL url={o.url} />

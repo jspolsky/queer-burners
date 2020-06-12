@@ -20,6 +20,7 @@ const noUser = {
   user_image: null,
   googleId: null,
   tokenId: null,
+  hashEmail: "",
 };
 
 class Header extends React.Component {
@@ -36,24 +37,22 @@ class Header extends React.Component {
       user_image: response.profileObj.imageUrl,
       googleId: response.profileObj.googleId,
       tokenId: response.tokenId,
+      hashEmail: require("shared").hashEmail(response.profileObj.email),
     };
     this.setState(newState);
-    this.props.onUserChange && 
-    this.props.onUserChange(newState);
+    this.props.onUserChange && this.props.onUserChange(newState);
   };
 
   googleLoginFailure = (response) => {
     console.log("Google Login Failure");
     this.setState(noUser);
-    this.props.onUserChange && 
-    this.props.onUserChange(noUser);
+    this.props.onUserChange && this.props.onUserChange(noUser);
   };
 
   googleLogout = () => {
     console.log("Google logout");
     this.setState(noUser);
-    this.props.onUserChange && 
-    this.props.onUserChange(noUser);
+    this.props.onUserChange && this.props.onUserChange(noUser);
   };
 
   render() {
@@ -116,13 +115,28 @@ export function Year(props) {
   return <Directory year={props.match.params.year} />;
 }
 
-export function Directory(props) {
-  return (
-    <div className="App">
-      <Header />
-      <DirectoryBody year={props.year} />
-    </div>
-  );
+export class Directory extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  userChange = (newUserState) => {
+    this.setState(newUserState);
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <Header onUserChange={(x) => this.userChange(x)} />
+        <DirectoryBody
+          year={this.props.year}
+          loggedin={this.state.loggedin}
+          hashEmail={this.state.hashEmail}
+        />
+      </div>
+    );
+  }
 }
 
 export class Submit extends React.Component {

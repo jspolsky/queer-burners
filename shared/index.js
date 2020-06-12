@@ -1,3 +1,7 @@
+// TODO  eliminate the "file copy" method, which is error prone and dangerous to programmers, and use lambda layers
+
+const crypto = require("crypto");
+
 const fieldError = (key, value) => {
   let err = "";
   switch (key) {
@@ -192,6 +196,8 @@ const validateURL = (s) => {
   let url;
 
   try {
+    // TODO This is error on lambda because URL is unrecognized.
+    // No idea how we got this far tho
     url = new URL(s);
   } catch (_) {
     return false;
@@ -302,6 +308,15 @@ const streets = [
   "10:00",
 ];
 
+const hashEmail = (email) => {
+  if (email.length === 0) {
+    return "";
+  }
+  const hash = crypto.createHash("sha256");
+  hash.update(email);
+  return hash.digest("base64");
+};
+
 module.exports = {
   fieldError: fieldError,
   campErrors: campErrors,
@@ -309,4 +324,5 @@ module.exports = {
   streets: streets,
   crossStreets: crossStreets,
   locationToString: locationToString,
+  hashEmail: hashEmail,
 };

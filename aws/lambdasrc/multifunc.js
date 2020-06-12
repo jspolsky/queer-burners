@@ -9,6 +9,7 @@ const db = new AWS.DynamoDB.DocumentClient();
 
 const campErrors = require("shared").campErrors;
 const locationToString = require("shared").locationToString;
+const hashEmail = require("shared").hashEmail;
 
 // TODO StandardResponse and StandardError should be collapsed into one function
 const StandardResponse = (o) => ({
@@ -35,8 +36,8 @@ exports.Options = async (event) => {
   return StandardResponse("Hello!");
 };
 
-// list of attributes which can be seen publically
-const publicAttributes = [
+// list of attributes to pull from database
+const queryAttributes = [
   "year",
   "name",
   "identifies",
@@ -51,14 +52,27 @@ const publicAttributes = [
   "joinOpen",
   "joinMessage",
   "joinUrl",
+  "contact", // careful, this is private data
 ];
 
-const publicAttributesEAN = publicAttributes.reduce((res, it, i) => {
+const queryAttributesEAN = queryAttributes.reduce((res, it, i) => {
   res["#" + it] = it;
   return res;
 }, {});
 
-const publicAttributesPE = publicAttributes.map((s) => "#" + s).join(",");
+const queryAttributesPE = queryAttributes.map((s) => "#" + s).join(",");
+
+const filterPrivateInfo = (arrayOfCamps) => {
+  return arrayOfCamps.map((camp) => {
+    if (camp.contact) {
+      if (camp.contact.email) {
+        camp.hashEmail = hashEmail(camp.contact.email);
+      }
+      delete camp.contact;
+    }
+    return camp;
+  });
+};
 
 exports.campsPost = async (event) => {
   let camp = {
@@ -106,9 +120,11 @@ exports.campsPost = async (event) => {
       email: payload.email,
       name: payload.name,
     };
-    delete camp.tokenId;  // don't need to keep this around
+    delete camp.tokenId; // don't need to keep this around
   } catch (e) {
-    return StandardError("Invalid login token. Try logging out and logging in again.");
+    return StandardError(
+      "Invalid login token. Try logging out and logging in again."
+    );
   }
 
   const params = {
@@ -133,13 +149,13 @@ exports.campsPost = async (event) => {
 exports.campsGet = async (event) => {
   const params = {
     TableName: "camps",
-    ExpressionAttributeNames: publicAttributesEAN,
-    ProjectionExpression: publicAttributesPE,
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
   };
 
   try {
     const data = await db.scan(params).promise();
-    return StandardResponse(data.Items);
+    return StandardResponse(filterPrivateInfo(data.Items));
   } catch (e) {
     return StandardError(e);
   }
@@ -190,8 +206,8 @@ exports.campsYearGet = async (event) => {
   const params = {
     TableName: "camps",
     KeyConditionExpression: "#year = :year",
-    ExpressionAttributeNames: publicAttributesEAN,
-    ProjectionExpression: publicAttributesPE,
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
     ExpressionAttributeValues: {
       ":year": Number(year),
     },
@@ -199,7 +215,7 @@ exports.campsYearGet = async (event) => {
 
   try {
     const data = await db.query(params).promise();
-    return StandardResponse(data.Items);
+    return StandardResponse(filterPrivateInfo(data.Items));
   } catch (e) {
     return StandardError(e);
   }
@@ -216,12 +232,12 @@ exports.campsYearNameGet = async (event) => {
       year: Number(year),
       name: decodeURIComponent(name),
     },
-    ExpressionAttributeNames: publicAttributesEAN,
-    ProjectionExpression: publicAttributesPE,
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
   };
   try {
     const data = await db.get(params).promise();
-    return StandardResponse(data.Item);
+    return StandardResponse(filterPrivateInfo([data.Item])[0]);
   } catch (e) {
     return StandardError(e);
   }
