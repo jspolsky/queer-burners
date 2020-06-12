@@ -1,5 +1,3 @@
-// TODO  eliminate the "file copy" method, which is error prone and dangerous to programmers, and use lambda layers
-
 const crypto = require("crypto");
 
 const fieldError = (key, value) => {

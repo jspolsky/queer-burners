@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "google-auth-library": "^6.0.1"
+    "google-auth-library": "^6.0.1",
+    "shared": "file:../../../shared"
   }
 }
