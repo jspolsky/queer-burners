@@ -61,10 +61,10 @@ export default class DirectoryBody extends React.Component {
       <div>
         <Container>
           <Row>
-            <Col style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+            <Col>
               <h2>Camp Directory {this.state.year}</h2>
             </Col>
-            <Col md="auto" style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+            <Col md="auto">
               <Form inline={1}>
                 <DropdownButton
                   as={ButtonGroup}

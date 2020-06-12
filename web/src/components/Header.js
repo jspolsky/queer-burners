@@ -100,7 +100,12 @@ class Header extends React.Component {
           )}
         </Navbar>
         <Link to="/">
-          <img className="img-fluid w-100" src={logo} alt="placeholder 960" />
+          <img
+            className="img-fluid w-100"
+            src={logo}
+            alt="placeholder 960"
+            style={{ marginBottom: "2rem" }}
+          />
         </Link>
       </div>
     );
