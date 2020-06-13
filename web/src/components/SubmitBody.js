@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -660,9 +660,12 @@ export default class SubmitBody extends React.Component {
                     <span className="sr-only">Loading...</span>
                   </Spinner>
                 ) : (
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
+                  <span>
+                    <Button variant="primary" type="submit">
+                      Submit
+                    </Button>{" "}
+                    {this.props.year && this.props.camp && <DeleteButton />}
+                  </span>
                 )}
               </Form>
             </Col>
@@ -671,3 +674,32 @@ export default class SubmitBody extends React.Component {
       );
   }
 }
+
+const DeleteButton = () => {
+  const [show, setShow] = useState(false);
+
+  return (
+    <>
+      <Button variant="danger" onClick={() => setShow(!show)}>
+        Delete
+      </Button>
+      <Alert show={show} variant="danger" style={{ marginTop: "1rem" }}>
+        <Alert.Heading>Delete this camp?</Alert.Heading>
+        <p>
+          Are you sure you want to permanently delete this theme camp from the
+          Queer Burners Directory?
+        </p>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button onClick={() => setShow(false)} variant="danger">
+            Yes, permanently delete it
+          </Button>
+          &nbsp;
+          <Button onClick={() => setShow(false)} variant="outline-success">
+            Cancel
+          </Button>
+        </div>
+      </Alert>
+    </>
+  );
+};
