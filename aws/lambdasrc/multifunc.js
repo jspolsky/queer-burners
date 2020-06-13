@@ -140,6 +140,11 @@ exports.campsPost = async (event) => {
   let newCamp = false;
   let oldcampdata = null;
 
+  // TODO if camp.name !== camp.originalName they are renaming a camp
+  // we gotta make sure that they own camp.originalName because it
+  // will go away, AND we need to make sure that camp.name doesn't
+  // exist because it will get clobbered
+
   try {
     oldcampdata = await db.get(params).promise();
   } catch (e) {
@@ -177,8 +182,24 @@ exports.campsPost = async (event) => {
     return StandardError(JSON.stringify(ce));
   }
 
+  // Is this a name change?
+  let campToDelete = "";
+  if (!!camp.originalName && camp.originalName !== camp.name) {
+    campToDelete = camp.originalName;
+  }
+
   try {
     const data = await db.put(params).promise();
+
+    if (campToDelete.length > 0) {
+      // this was a name change; delete the original camp
+      params.Key = {
+        year: Number(camp.year),
+        name: campToDelete,
+      };
+      await db.delete(params).promise();
+    }
+
     return StandardResponse("Successfully created camp");
   } catch (e) {
     return StandardError("Error updating database");

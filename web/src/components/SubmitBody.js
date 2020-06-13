@@ -321,11 +321,14 @@ export default class SubmitBody extends React.Component {
       return;
     }
     try {
+      // TODO when user is editing a camp, the submit form initially
+      // appears empty and then flashes. Try to prevent that.
+
       const response = await axios.get(
         `${api}/camps/${this.state.year}/${encodeURIComponent(this.state.name)}`
       );
       const data = response.data[0];
-      this.setState(data);
+      this.setState({ ...data, originalName: data.name });
       if (data.thumbnail && data.thumbnail.length > 0) {
         this.setState({
           _thumbnail_object_url: `${s3images}/${data.thumbnail}`,
