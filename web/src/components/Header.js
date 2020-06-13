@@ -8,6 +8,10 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Image from "react-bootstrap/Image";
 
+import { api } from "../definitions.js";
+
+import axios from "axios";
+
 const noUser = {
   loggedin: false,
   username: "",
@@ -23,14 +27,24 @@ class Header extends React.Component {
     this.state = noUser;
   }
 
-  googleLoginSuccess = (response) => {
+  googleLoginSuccess = async (response) => {
+    let isadmin = false;
+    try {
+      const adminRes = await axios.get(`${api}/isadmin/${response.tokenId}`);
+      if (adminRes.data) isadmin = true;
+    } catch (error) {
+      console.log(error);
+    }
+
     const newState = {
       loggedin: true,
       username: response.profileObj.name,
+      email: response.profileObj.email,
       user_image: response.profileObj.imageUrl,
       googleId: response.profileObj.googleId,
       tokenId: response.tokenId,
       hashEmail: require("shared").hashEmail(response.profileObj.email),
+      isadmin: isadmin,
     };
     this.setState(newState);
     this.props.onUserChange && this.props.onUserChange(newState);
@@ -87,7 +101,10 @@ class Header extends React.Component {
                 src={this.state.user_image}
                 style={{ maxHeight: "2rem" }}
               ></Image>
-              <NavDropdown title={this.state.username}>
+              <NavDropdown alignRight title={this.state.username}>
+                <NavDropdown.Item>
+                  Logged on as {this.state.email}
+                </NavDropdown.Item>
                 <NavDropdown.Item>
                   <GoogleLogout
                     clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
@@ -95,6 +112,9 @@ class Header extends React.Component {
                     onLogoutSuccess={this.googleLogout}
                   />
                 </NavDropdown.Item>
+                {this.state.loggedin && this.state.isadmin && (
+                  <NavDropdown.Item>(admin)</NavDropdown.Item>
+                )}
               </NavDropdown>
             </Nav>
           )}

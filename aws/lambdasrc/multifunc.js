@@ -342,6 +342,7 @@ exports.isAdmin = async (event) => {
       email: payload.email,
       name: payload.name,
     };
+    // TODO query the database maybe for a list of admins
     return StandardResponse(remoteUser.email === "joel@spolsky.com");
   } catch (e) {
     return StandardError(
