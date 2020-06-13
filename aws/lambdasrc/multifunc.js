@@ -84,6 +84,12 @@ const isEmailAdmin = (email) => {
 
 exports.campsPost = async (event) => {
   //
+  // camp - the camp as submitted
+  // originalcamp - if camp.originalName exists and is !== camp.name, we are renaming. This is the original camp
+  // clobberedcamp - if camp.originalName exists and is !== camp.name, we are renaming; this is the camp that would be clobbered
+  //                  .... which won't be permitted
+  //
+
   // Gather submitted camp data
   //
   let jsonCamp = {};
@@ -130,6 +136,10 @@ exports.campsPost = async (event) => {
     );
   }
 
+  const renaming = !!camp.originalName && camp.originalName !== camp.name;
+
+  // TODO noclobber -- if renaming, load the NEW NAME camp and it  BETTER NOT EXIST
+
   //
   // Find out if this camp already exists and if so, who is
   // authorized to edit it
@@ -139,36 +149,31 @@ exports.campsPost = async (event) => {
     TableName: "camps",
     Key: {
       year: Number(camp.year),
-      name: camp.name,
+      name: renaming ? camp.originalName : camp.name,
     },
     ExpressionAttributeNames: queryAttributesEAN,
     ProjectionExpression: queryAttributesPE,
   };
 
   let newCamp = false;
-  let oldcampdata = null;
-
-  // TODO if camp.name !== camp.originalName they are renaming a camp
-  // we gotta make sure that they own camp.originalName because it
-  // will go away, AND we need to make sure that camp.name doesn't
-  // exist because it will get clobbered
+  let originalcamp = null;
 
   try {
-    oldcampdata = await db.get(params).promise();
+    originalcamp = await db.get(params).promise();
   } catch (e) {
     newCamp = true;
   }
 
-  if (!oldcampdata || Object.keys(oldcampdata).length === 0) newCamp = true;
+  if (!originalcamp || Object.keys(originalcamp).length === 0) newCamp = true;
 
   if (newCamp) {
     camp.created = new Date().toISOString();
     camp.contact = remoteUser;
   } else {
     if (
-      !oldcampdata.Item.contact ||
-      (oldcampdata.Item.contact.google_user_id !== remoteUser.google_user_id &&
-        oldcampdata.Item.contact.email !== remoteUser.email &&
+      !originalcamp.Item.contact ||
+      (originalcamp.Item.contact.google_user_id !== remoteUser.google_user_id &&
+        originalcamp.Item.contact.email !== remoteUser.email &&
         !isadmin)
     ) {
       return StandardError(
@@ -176,8 +181,8 @@ exports.campsPost = async (event) => {
       );
     }
     camp.updated = new Date().toISOString();
-    camp.created = oldcampdata.Item.created;
-    camp.contact = oldcampdata.Item.contact;
+    camp.created = originalcamp.Item.created;
+    camp.contact = originalcamp.Item.contact;
   }
 
   params = {
@@ -193,7 +198,7 @@ exports.campsPost = async (event) => {
 
   // Is this a name change?
   let campToDelete = "";
-  if (!!camp.originalName && camp.originalName !== camp.name) {
+  if (renaming) {
     campToDelete = camp.originalName;
   }
 
