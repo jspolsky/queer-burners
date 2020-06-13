@@ -11,7 +11,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
-import { defaultYear } from "../definitions.js";
+import { defaultYear, api, s3images } from "../definitions.js";
 import { fieldError } from "shared";
 
 import axios from "axios";
@@ -23,6 +23,7 @@ const crossStreets = require("shared").crossStreets;
 export default class SubmitBody extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       // The state object is just a standard
       // camp directory object, which can be submitted to the
@@ -59,9 +60,19 @@ export default class SubmitBody extends React.Component {
       _error_submit: null,
       _upload_progress: null,
       _thumbnail_user_filename: "",
+      _thumbnail_object_url: null,
       _submit_in_progress: false,
       _submit_successful: false,
     };
+
+    // if the "camp" prop is present, we are editing an existing camp and camp has
+    // the name and year. Let the current data override defaults.
+    if (props.camp) {
+      this.state = {
+        ...this.state,
+        ...props.camp,
+      };
+    }
   }
 
   submitHandler = async (event) => {
@@ -110,11 +121,7 @@ export default class SubmitBody extends React.Component {
     console.log(JSON.stringify(camp));
 
     try {
-      // TODO this URL should be in one place
-      await axios.post(
-        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps",
-        camp
-      );
+      await axios.post(`${api}/camps`, camp);
       this.setState({ _submit_successful: true, _submit_in_progress: false });
     } catch (error) {
       let msg = "";
@@ -174,9 +181,7 @@ export default class SubmitBody extends React.Component {
     });
 
     try {
-      const uploader = await axios.get(
-        `https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/pictureuploadurl/${ext}`
-      );
+      const uploader = await axios.get(`${api}/camps/pictureuploadurl/${ext}`);
 
       let image;
       let reader = new FileReader();
@@ -304,7 +309,7 @@ export default class SubmitBody extends React.Component {
     if (this.props.year && this.props.camp) {
       return (
         <div>
-          <h2>{this.props.camp}</h2>
+          <h2>{this.props.camp.name}</h2>
           <p>
             Edit any changes in the information for your camp in{" "}
             {this.props.year} and hit Submit.
@@ -327,12 +332,32 @@ export default class SubmitBody extends React.Component {
     }
   }
 
+  async componentDidMount() {
+    // TODO set something in state so that we remember that we have to submit CHANGE
+
+    if (this.state.name.length === 0) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${api}/camps/${this.state.year}/${encodeURIComponent(this.state.name)}`
+      );
+      const data = response.data[0];
+      this.setState(data);
+      if (data.thumbnail && data.thumbnail.length > 0) {
+        this.setState({
+          _thumbnail_object_url: `${s3images}/${data.thumbnail}`,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     if (this.state._submit_successful) {
       return <Redirect to="/" />;
     } else if (!this.props.loggedin) {
-      // TODO don't let it render until we're finished waiting for
-      // google login, to avoid Flash of Unlogged In Content
       return this.NotLoggedIn();
     } else
       return (
@@ -584,7 +609,7 @@ export default class SubmitBody extends React.Component {
                   <Form.Check
                     type="switch"
                     name="joinOpen"
-                    value={this.state.joinOpen}
+                    checked={this.state.joinOpen}
                     label="Yes"
                     onChange={this.changeHandler}
                   />

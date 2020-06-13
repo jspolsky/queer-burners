@@ -6,6 +6,7 @@ import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
+import { s3images } from "../definitions.js";
 
 function JoinButton(props) {
   const o = props.o;
@@ -79,10 +80,7 @@ const CampCard = (props) => {
       border={props.ismine ? "success" : "light"}
     >
       {o.thumbnail && (
-        <Card.Img
-          variant="top"
-          src={`https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/${o.thumbnail}`}
-        />
+        <Card.Img variant="top" src={`${s3images}/${o.thumbnail}`} />
       )}
       <Card.Header as="h5">
         <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>

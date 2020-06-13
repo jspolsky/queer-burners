@@ -15,7 +15,7 @@ import FormControl from "react-bootstrap/FormControl";
 import CampCard from "./CampCard.js";
 
 import { Link } from "react-router-dom";
-import { defaultYear } from "../definitions.js";
+import { defaultYear, api } from "../definitions.js";
 
 import axios from "axios";
 
@@ -37,10 +37,7 @@ export default class DirectoryBody extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get(
-        "https://l374cc62kc.execute-api.us-east-2.amazonaws.com/Prod/camps/" +
-          this.state.year
-      );
+      const response = await axios.get(`${api}/camps/${this.state.year}`);
       this.setState({ data: response.data });
     } catch (error) {
       console.log(error);

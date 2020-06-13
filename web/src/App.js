@@ -50,9 +50,16 @@ export class Edit extends React.Component {
   };
 
   render() {
-    const camp = new URLSearchParams(this.props.location.search).get("camp");
+    const campName = new URLSearchParams(this.props.location.search).get(
+      "camp"
+    );
 
-    if (!camp) return <Redirect to="/" />;
+    if (!campName) return <Redirect to="/" />;
+
+    const camp = {
+      name: campName,
+      year: this.props.match.params.year,
+    };
 
     return (
       <div className="App">
