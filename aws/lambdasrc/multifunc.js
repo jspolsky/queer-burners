@@ -33,6 +33,7 @@ const StandardError = (e) => ({
   body: JSON.stringify(e),
 });
 
+// for preflight CORS:
 exports.Options = async (event) => {
   return StandardResponse("Hello!");
 };
@@ -76,6 +77,11 @@ const filterPrivateInfo = (arrayOfCamps) => {
   });
 };
 
+const isEmailAdmin = (email) => {
+  //TODO check db
+  return email === "joel@spolsky.com";
+};
+
 exports.campsPost = async (event) => {
   //
   // Gather submitted camp data
@@ -102,6 +108,7 @@ exports.campsPost = async (event) => {
   //
 
   let remoteUser = null;
+  let isadmin = false;
 
   try {
     const client = new OAuth2Client(process.env.googleClientId);
@@ -115,6 +122,7 @@ exports.campsPost = async (event) => {
       email: payload.email,
       name: payload.name,
     };
+    isadmin = isEmailAdmin(payload.email);
     delete camp.tokenId; // don't need to keep this around
   } catch (e) {
     return StandardError(
@@ -159,7 +167,8 @@ exports.campsPost = async (event) => {
     if (
       !oldcampdata.Item.contact ||
       (oldcampdata.Item.contact.google_user_id !== remoteUser.google_user_id &&
-        oldcampdata.Item.contact.email !== remoteUser.email)
+        oldcampdata.Item.contact.email !== remoteUser.email &&
+        !isadmin)
     ) {
       return StandardError(
         "Current logged-in user is not the creator of this camp and can't edit it"
@@ -169,7 +178,11 @@ exports.campsPost = async (event) => {
     camp.created = oldcampdata.Item.created;
   }
 
-  camp.contact = remoteUser;
+  if (isadmin) {
+    camp.contact = oldcampdata.Item.contact;
+  } else {
+    camp.contact = remoteUser; // REFRESH the camp owner with currently logged on user in case they have updated their google account
+  }
 
   params = {
     TableName: "camps",
@@ -342,8 +355,8 @@ exports.isAdmin = async (event) => {
       email: payload.email,
       name: payload.name,
     };
-    // TODO query the database maybe for a list of admins
-    return StandardResponse(remoteUser.email === "joel@spolsky.com");
+
+    return StandardResponse(isEmailAdmin(remoteUser.email));
   } catch (e) {
     return StandardError(
       "Invalid login token. Try logging out and logging in again."
