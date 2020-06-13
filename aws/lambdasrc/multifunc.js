@@ -163,6 +163,7 @@ exports.campsPost = async (event) => {
 
   if (newCamp) {
     camp.created = new Date().toISOString();
+    camp.contact = remoteUser;
   } else {
     if (
       !oldcampdata.Item.contact ||
@@ -176,12 +177,7 @@ exports.campsPost = async (event) => {
     }
     camp.updated = new Date().toISOString();
     camp.created = oldcampdata.Item.created;
-  }
-
-  if (isadmin) {
     camp.contact = oldcampdata.Item.contact;
-  } else {
-    camp.contact = remoteUser; // REFRESH the camp owner with currently logged on user in case they have updated their google account
   }
 
   params = {
