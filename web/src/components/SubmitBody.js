@@ -12,7 +12,7 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
 import { defaultYear, api, s3images } from "../definitions.js";
-import { fieldError } from "shared";
+import { fieldError, emptyCamp } from "shared";
 
 import axios from "axios";
 
@@ -28,22 +28,8 @@ export default class SubmitBody extends React.Component {
       // The state object is just a standard
       // camp directory object, which can be submitted to the
       // API and stored in the database.
-      name: "",
-      identifies: campIdentifications[0],
-      about: "",
-      location: {
-        frontage: streets[0],
-        intersection: streets[0],
-      },
-      url: "",
-      facebook: "",
-      email: "",
-      twitter: "",
-      instagram: "",
-      thumbnail: "",
-      joinOpen: false,
-      joinMessage: "",
-      joinUrl: "",
+      ...emptyCamp,
+      year: defaultYear,
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API
@@ -83,9 +69,7 @@ export default class SubmitBody extends React.Component {
       _submit_in_progress: true,
     });
 
-    var camp = {
-      year: defaultYear,
-    };
+    let camp = {};
     for (var key in this.state) {
       if (!key.startsWith("_")) {
         camp[key] = this.state[key];
@@ -117,8 +101,7 @@ export default class SubmitBody extends React.Component {
 
     camp.tokenId = this.props.tokenId;
 
-    console.log("submitting");
-    console.log(JSON.stringify(camp));
+    // console.log(JSON.stringify(camp));
 
     try {
       await axios.post(`${api}/camps`, camp);
@@ -333,8 +316,6 @@ export default class SubmitBody extends React.Component {
   }
 
   async componentDidMount() {
-    // TODO set something in state so that we remember that we have to submit CHANGE
-
     if (this.state.name.length === 0) {
       return;
     }

@@ -306,6 +306,26 @@ const streets = [
   "10:00",
 ];
 
+const emptyCamp = {
+  name: "",
+  year: null,
+  identifies: campIdentifications[0],
+  about: "",
+  location: {
+    frontage: streets[0],
+    intersection: streets[0],
+  },
+  url: "",
+  facebook: "",
+  email: "",
+  twitter: "",
+  instagram: "",
+  thumbnail: "",
+  joinOpen: false,
+  joinMessage: "",
+  joinUrl: "",
+};
+
 const hashEmail = (email) => {
   if (email.length === 0) {
     return "";
@@ -323,4 +343,5 @@ module.exports = {
   crossStreets: crossStreets,
   locationToString: locationToString,
   hashEmail: hashEmail,
+  emptyCamp: emptyCamp,
 };

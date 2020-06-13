@@ -10,6 +10,7 @@ const db = new AWS.DynamoDB.DocumentClient();
 const campErrors = require("shared").campErrors;
 const locationToString = require("shared").locationToString;
 const hashEmail = require("shared").hashEmail;
+const emptyCamp = require("shared").emptyCamp;
 
 // TODO StandardResponse and StandardError should be collapsed into one function
 const StandardResponse = (o) => ({
@@ -75,20 +76,6 @@ const filterPrivateInfo = (arrayOfCamps) => {
 };
 
 exports.campsPost = async (event) => {
-  let camp = {
-    year: null,
-    name: null,
-    identifies: "",
-    about: "",
-    location: { frontage: "Unknown", intersection: "Unknown" },
-    url: "",
-    facebook: "",
-    email: "",
-    twitter: "",
-    instagram: "",
-    thumbnail: "",
-  };
-
   let jsonCamp = {};
 
   try {
@@ -97,7 +84,7 @@ exports.campsPost = async (event) => {
     return StandardError("Unable to parse JSON");
   }
 
-  camp = { ...camp, ...jsonCamp };
+  let camp = { ...emptyCamp, ...jsonCamp };
   camp.location.string = locationToString(
     camp.location.frontage,
     camp.location.intersection
@@ -107,6 +94,13 @@ exports.campsPost = async (event) => {
   //
   // AUTH!
   //
+
+  // TODO this is going to overwrite the camp if it already exists
+  // or create a new one if it doesn't
+  //
+  // If the camp exists, we should be checking that the user
+  // has permission to update instead of just updating and
+  // overwriting the user.
 
   try {
     const client = new OAuth2Client(process.env.googleClientId);
