@@ -113,6 +113,20 @@ Resources:
             Path: /camps/{year}/{name}
             Method: delete
 
+  IsAdmin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Checks if logged in user is an admin"
+      FunctionName: qb-isadmin
+      Handler: multifunc.isAdmin
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        IsAdmin:
+          Type: Api
+          Properties:
+            Path: /isadmin/{idToken}
+            Method: get
+
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:

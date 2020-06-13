@@ -322,3 +322,30 @@ exports.campsYearNameDelete = async (event) => {
     return StandardError(e);
   }
 };
+
+exports.isAdmin = async (event) => {
+  const {
+    pathParameters: { idToken },
+  } = event; // extract idToken from request path
+
+  let remoteUser = null;
+
+  try {
+    const client = new OAuth2Client(process.env.googleClientId);
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: process.env.googleClientId,
+    });
+    const payload = ticket.getPayload();
+    remoteUser = {
+      google_user_id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+    };
+    return StandardResponse(remoteUser.email === "joel@spolsky.com");
+  } catch (e) {
+    return StandardError(
+      "Invalid login token. Try logging out and logging in again."
+    );
+  }
+};
