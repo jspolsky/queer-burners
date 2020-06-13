@@ -111,16 +111,21 @@ const CampCard = (props) => {
           );
         })}
       </Card.Body>
-      {
-        props.ismine && (
-          <Card.Footer>
-            This is your camp - you can&nbsp;
-            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
-              edit it!
-            </Link>
-          </Card.Footer>
-        ) /* TODO OR CAN YOU */
-      }
+      {props.ismine && (
+        <Card.Footer>
+          This is your camp - you can&nbsp;
+          <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            edit it!
+          </Link>
+        </Card.Footer>
+      )}
+      {!props.ismine && props.isadmin && (
+        <Card.Footer>
+          <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            Edit
+          </Link>
+        </Card.Footer>
+      )}
     </Card>
   );
 };

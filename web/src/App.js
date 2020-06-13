@@ -31,6 +31,7 @@ export class Directory extends React.Component {
           year={this.props.year}
           loggedin={this.state.loggedin}
           hashEmail={this.state.hashEmail}
+          isadmin={this.state.isadmin}
         />
       </div>
     );
