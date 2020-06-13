@@ -18,7 +18,7 @@ const StandardResponse = (o) => ({
   headers: {
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET,DELETE",
   },
   body: JSON.stringify(o),
 });
@@ -314,8 +314,34 @@ exports.campsYearNameGet = async (event) => {
 
 exports.campsYearNameDelete = async (event) => {
   const {
-    pathParameters: { year, name },
-  } = event; // extract unique id from the request path
+    pathParameters: { year, name, idToken },
+  } = event; // extract unique id and permissions from the request path
+
+  let remoteUser = null;
+
+  // TODO this remote user code is repeated too many times. make it a function
+  try {
+    const client = new OAuth2Client(process.env.googleClientId);
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: process.env.googleClientId,
+    });
+    const payload = ticket.getPayload();
+    remoteUser = {
+      google_user_id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+    };
+
+    if (!isEmailAdmin(remoteUser.email)) {
+      // TODO also let people delete their own camp
+      return StandardError(`Only admins can delete for now`);
+    }
+  } catch (e) {
+    return StandardError(
+      "Invalid login token. Try logging out and logging in again."
+    );
+  }
 
   const params = {
     TableName: "camps",

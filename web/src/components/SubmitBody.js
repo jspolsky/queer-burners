@@ -579,7 +579,7 @@ export default class SubmitBody extends React.Component {
                           })
                         }
                       >
-                        Delete
+                        Delete this picture
                       </Button>
                     </div>
                   )}
@@ -664,7 +664,13 @@ export default class SubmitBody extends React.Component {
                     <Button variant="primary" type="submit">
                       Submit
                     </Button>{" "}
-                    {this.props.year && this.props.camp && <DeleteButton />}
+                    {this.props.year && this.props.camp && (
+                      <DeleteButton
+                        year={this.state.year}
+                        name={this.state.name}
+                        tokenId={this.props.tokenId}
+                      />
+                    )}
                   </span>
                 )}
               </Form>
@@ -675,12 +681,12 @@ export default class SubmitBody extends React.Component {
   }
 }
 
-const DeleteButton = () => {
+const DeleteButton = (props) => {
   const [show, setShow] = useState(false);
 
   return (
     <>
-      <Button variant="danger" onClick={() => setShow(!show)}>
+      <Button variant="outline-danger" onClick={() => setShow(!show)}>
         Delete
       </Button>
       <Alert show={show} variant="danger" style={{ marginTop: "1rem" }}>
@@ -691,7 +697,27 @@ const DeleteButton = () => {
         </p>
         <hr />
         <div className="d-flex justify-content-end">
-          <Button onClick={() => setShow(false)} variant="danger">
+          <Button
+            onClick={async () => {
+              setShow(false);
+              console.log(
+                `${api}/camps/${props.year}/${encodeURIComponent(props.name)}/${
+                  props.tokenId
+                }`
+              );
+              await axios({
+                method: "delete",
+                url: `${api}/camps/${props.year}/${encodeURIComponent(
+                  props.name
+                )}/${props.tokenId}`,
+              });
+              // TODO redirect to home page
+
+              // TODO make sure the alert is scrolled into view so
+              // people see it
+            }}
+            variant="danger"
+          >
             Yes, permanently delete it
           </Button>
           &nbsp;
