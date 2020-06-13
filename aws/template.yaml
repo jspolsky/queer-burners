@@ -113,20 +113,6 @@ Resources:
             Path: /camps/{year}/{name}
             Method: delete
 
-  CampsYearNamePut:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: "Updates data for a single camp"
-      FunctionName: qb-camps-year-name-put
-      Handler: multifunc.campsYearNamePut
-      Policies: AmazonDynamoDBFullAccess
-      Events:
-        CampsYearNamePut:
-          Type: Api
-          Properties:
-            Path: /camps/{year}/{name}
-            Method: put
-
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:

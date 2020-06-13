@@ -41,6 +41,7 @@ exports.Options = async (event) => {
 const queryAttributes = [
   "year",
   "name",
+  "created",
   "identifies",
   "about",
   "location",
@@ -76,6 +77,9 @@ const filterPrivateInfo = (arrayOfCamps) => {
 };
 
 exports.campsPost = async (event) => {
+  //
+  // Gather submitted camp data
+  //
   let jsonCamp = {};
 
   try {
@@ -89,18 +93,15 @@ exports.campsPost = async (event) => {
     camp.location.frontage,
     camp.location.intersection
   );
-  camp.created = new Date().toISOString();
 
   //
-  // AUTH!
+  // Find out who the remote user is -- it has been
+  // passed to us through camp.tokenId, which is
+  // an opaque Google token we can use to get real
+  // information about the user
   //
 
-  // TODO this is going to overwrite the camp if it already exists
-  // or create a new one if it doesn't
-  //
-  // If the camp exists, we should be checking that the user
-  // has permission to update instead of just updating and
-  // overwriting the user.
+  let remoteUser = null;
 
   try {
     const client = new OAuth2Client(process.env.googleClientId);
@@ -109,7 +110,7 @@ exports.campsPost = async (event) => {
       audience: process.env.googleClientId,
     });
     const payload = ticket.getPayload();
-    camp.contact = {
+    remoteUser = {
       google_user_id: payload.sub,
       email: payload.email,
       name: payload.name,
@@ -121,7 +122,51 @@ exports.campsPost = async (event) => {
     );
   }
 
-  const params = {
+  //
+  // Find out if this camp already exists and if so, who is
+  // authorized to edit it
+  //
+
+  let params = {
+    TableName: "camps",
+    Key: {
+      year: Number(camp.year),
+      name: camp.name,
+    },
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
+  };
+
+  let newCamp = false;
+  let oldcampdata = null;
+
+  try {
+    oldcampdata = await db.get(params).promise();
+  } catch (e) {
+    newCamp = true;
+  }
+
+  if (!oldcampdata || Object.keys(oldcampdata).length === 0) newCamp = true;
+
+  if (newCamp) {
+    camp.created = new Date().toISOString();
+  } else {
+    if (
+      !oldcampdata.Item.contact ||
+      (oldcampdata.Item.contact.google_user_id !== remoteUser.google_user_id &&
+        oldcampdata.Item.contact.email !== remoteUser.email)
+    ) {
+      return StandardError(
+        "Current logged-in user is not the creator of this camp and can't edit it"
+      );
+    }
+    camp.updated = new Date().toISOString();
+    camp.created = oldcampdata.Item.created;
+  }
+
+  camp.contact = remoteUser;
+
+  params = {
     TableName: "camps",
     Item: camp,
   };
@@ -254,68 +299,5 @@ exports.campsYearNameDelete = async (event) => {
     return StandardResponse(null);
   } catch (e) {
     return StandardError(e);
-  }
-};
-
-exports.campsYearNamePut = async (event) => {
-  const {
-    pathParameters: { year, name },
-  } = event; // extract unique id from the request path
-
-  // TODO should check if this item exists and fail if it doesn't
-
-  // extract new parameters, if present, out of the body:
-  let update_expression = "set updated = :updated";
-  let expression_map = {
-    ":updated": new Date().toISOString(),
-    ":name": decodeURIComponent(name),
-    ":year": Number(year),
-  };
-  let expression_attribute_names = {
-    "#year": "year",
-    "#name": "name",
-  };
-
-  const a = JSON.parse(event.body);
-
-  for (var key of Object.keys(a)) {
-    if (
-      [
-        "since",
-        "identifies",
-        "about",
-        "placed",
-        "location",
-        // TODO this should use the same code as POST to compose the object to insert
-        // (and also do all the same nice error checking)
-      ].includes(key)
-    ) {
-      update_expression += ", #" + key + " = :" + key;
-      expression_map[":" + key] = a[key];
-      expression_attribute_names["#" + key] = key;
-    }
-  }
-
-  const params = {
-    TableName: "camps",
-    Key: {
-      year: Number(year),
-      name: decodeURIComponent(name),
-    },
-    UpdateExpression: update_expression,
-    ExpressionAttributeValues: expression_map,
-    ConditionExpression: "#year = :year and #name = :name",
-    ExpressionAttributeNames: expression_attribute_names,
-  };
-  try {
-    await db.update(params).promise();
-    return StandardResponse(null);
-  } catch (e) {
-    if (e.code === "ConditionalCheckFailedException")
-      return {
-        statusCode: 500,
-        body: "That camp doesn't exist",
-      };
-    else return StandardError(e);
   }
 };
