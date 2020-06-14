@@ -95,7 +95,7 @@ const fieldError = (key, value) => {
         err = "twitter is not a string";
       } else if (value.length > 15) {
         err = `twitter is too long by ${value.length - 15}`;
-      } else if (!/^[a-z0-9]*$/i.test(value)) {
+      } else if (!/^[a-z0-9_]*$/i.test(value)) {
         err = "invalid twitter name";
       }
       break;
