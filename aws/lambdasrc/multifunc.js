@@ -289,7 +289,10 @@ exports.campsYearGet = async (event) => {
 
   try {
     const data = await db.query(params).promise();
-    return StandardResponse(filterPrivateInfo(data.Items));
+    const camps = filterPrivateInfo(data.Items).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    return StandardResponse(camps);
   } catch (e) {
     return StandardError(e);
   }
