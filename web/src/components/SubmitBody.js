@@ -706,11 +706,6 @@ const DeleteButton = (props) => {
           <Button
             onClick={async () => {
               setShow(false);
-              console.log(
-                `${api}/camps/${props.year}/${encodeURIComponent(props.name)}/${
-                  props.tokenId
-                }`
-              );
               await axios({
                 method: "delete",
                 url: `${api}/camps/${props.year}/${encodeURIComponent(
