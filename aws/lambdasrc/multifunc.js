@@ -12,7 +12,6 @@ const locationToString = require("shared").locationToString;
 const hashEmail = require("shared").hashEmail;
 const emptyCamp = require("shared").emptyCamp;
 
-// TODO StandardResponse and StandardError should be collapsed into one function
 const StandardResponse = (o) => ({
   statusCode: 200,
   headers: {
