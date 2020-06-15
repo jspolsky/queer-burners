@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Redirect } from "react-router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -694,47 +694,69 @@ export default class SubmitBody extends React.Component {
 
 const DeleteButton = (props) => {
   const [show, setShow] = useState(false);
+  const [needsScroll, setNeedsScroll] = useState(false);
+  const alertEl = useRef(null);
+
+  useEffect(() => {
+    if (needsScroll) {
+      alertEl.current.scrollIntoView({
+        block: "end",
+        behavior: "smooth",
+      });
+      setNeedsScroll(false);
+    }
+  }, [needsScroll]);
 
   return (
     <>
-      <Button variant="outline-danger" onClick={() => setShow(!show)}>
+      <Button
+        variant="outline-danger"
+        onClick={() => {
+          if (!show) setNeedsScroll(true);
+          setShow(!show);
+        }}
+      >
         Delete
       </Button>
-      <Alert show={show} variant="danger" style={{ marginTop: "1rem" }}>
-        <Alert.Heading>Delete this camp?</Alert.Heading>
-        <p>
-          Are you sure you want to permanently delete this theme camp from the
-          Queer Burners Directory?
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button
-            onClick={async () => {
-              setShow(false);
-              await axios.delete(
-                `${api}/camps/${props.year}/${encodeURIComponent(props.name)}`,
-                {
-                  auth: {
-                    username: props.tokenId,
-                    password: "",
-                  },
-                }
-              );
-              // TODO redirect to home page
+      <div ref={alertEl}>
+        <Alert show={show} variant="danger" style={{ marginTop: "1rem" }}>
+          <Alert.Heading>Delete this camp?</Alert.Heading>
+          <p>
+            Are you sure you want to permanently delete this theme camp from the
+            Queer Burners Directory?
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button
+              onClick={async () => {
+                setShow(false);
+                await axios.delete(
+                  `${api}/camps/${props.year}/${encodeURIComponent(
+                    props.name
+                  )}`,
+                  {
+                    auth: {
+                      username: props.tokenId,
+                      password: "",
+                    },
+                  }
+                );
+                // TODO redirect to home page
 
-              // TODO make sure the alert is scrolled into view so
-              // people see it
-            }}
-            variant="danger"
-          >
-            Yes, permanently delete it
-          </Button>
-          &nbsp;
-          <Button onClick={() => setShow(false)} variant="outline-success">
-            Cancel
-          </Button>
-        </div>
-      </Alert>
+                // TODO make sure the alert is scrolled into view so
+                // people see it
+              }}
+              variant="danger"
+            >
+              Yes, permanently delete it
+            </Button>
+            &nbsp;
+            <Button onClick={() => setShow(false)} variant="outline-success">
+              Cancel
+            </Button>
+          </div>
+        </Alert>
+      </div>
     </>
   );
 };
