@@ -25,3 +25,4 @@ yarn-debug.log*
 yarn-error.log*
 aws/packaged.yaml
 web/src/camp_images/*
+aws/templatelocal.yaml
