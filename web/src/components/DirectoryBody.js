@@ -37,10 +37,24 @@ export default class DirectoryBody extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get(`${api}/camps/${this.state.year}`);
+      const response = await axios.get(`${api}/camps/${this.state.year}`, {
+        auth: { username: this.props.tokenId, password: "" },
+      });
       this.setState({ data: response.data });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async componentDidUpdate(prevProps) {
+    // if user turns out to be admin, reload because the admin gets to see
+    // more stuff
+
+    //
+    // TODO find out why user logging out doesn't trigger this?
+    // (logging in DOES)
+    if (this.props.isadmin !== prevProps.isadmin) {
+      this.componentDidMount();
     }
   }
 

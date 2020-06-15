@@ -32,6 +32,7 @@ export class Directory extends React.Component {
           loggedin={this.state.loggedin}
           hashEmail={this.state.hashEmail}
           isadmin={this.state.isadmin}
+          tokenId={this.state.tokenId}
         />
       </div>
     );

@@ -121,13 +121,21 @@ const CampCard = (props) => {
       )}
       {!props.ismine && props.isadmin && (
         <Card.Footer>
-          <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+          <a href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
             Edit
-          </Link>
+          </a>
+          {o.contact && o.contact.email && o.contact.name && (
+            <div>
+              Submitted by {o.contact.name}{" "}
+              <a href={`mailto:${o.contact.email}`}>{o.contact.email}</a>
+            </div>
+          )}
         </Card.Footer>
       )}
     </Card>
   );
 };
+
+// TODO the admin footer should use a smaller font
 
 export default CampCard;

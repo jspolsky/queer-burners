@@ -85,6 +85,19 @@ Resources:
             Path: /camps/{year}
             Method: get
 
+  CampsYearOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-camps-year-options
+      Handler: multifunc.Options
+      Events:
+        CampsYearNameOptions:
+          Type: Api
+          Properties:
+            Path: /camps/{year}
+            Method: options
+
   CampsYearNameGet:
     Type: AWS::Serverless::Function
     Properties:

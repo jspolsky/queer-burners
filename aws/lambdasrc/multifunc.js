@@ -286,6 +286,8 @@ exports.campsYearGet = async (event) => {
     pathParameters: { year },
   } = event; // extract year from the request path
 
+  const remoteUser = await GetRemoteUser(event);
+
   const params = {
     TableName: "camps",
     KeyConditionExpression: "#year = :year",
@@ -298,9 +300,10 @@ exports.campsYearGet = async (event) => {
 
   try {
     const data = await db.query(params).promise();
-    const camps = filterPrivateInfo(data.Items).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+    let camps = data.Items.sort((a, b) => a.name.localeCompare(b.name));
+    if (!remoteUser || !remoteUser.isadmin) {
+      camps = filterPrivateInfo(camps);
+    }
     return StandardResponse(camps);
   } catch (e) {
     return StandardError(e);
