@@ -355,7 +355,5 @@ exports.isAdmin = async (event) => {
   } = event; // extract idToken from request path
 
   const remoteUser = await GetRemoteUser(idToken);
-  console.log("remote user evaluated");
-  console.log(remoteUser);
   return StandardResponse(remoteUser && remoteUser.isadmin);
 };
