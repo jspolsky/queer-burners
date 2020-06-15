@@ -16,7 +16,7 @@ const emptyCamp = require("shared").emptyCamp;
 const StandardResponse = (o) => ({
   statusCode: 200,
   headers: {
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type,Authorization",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "OPTIONS,POST,GET,DELETE",
   },
@@ -82,11 +82,22 @@ const isEmailAdmin = (email) => {
   return email === "joel@spolsky.com";
 };
 
-const GetRemoteUser = async (tokenId) => {
+const GetRemoteUser = async (event) => {
+  if (
+    !event.headers.Authorization ||
+    !event.headers.Authorization.startsWith("Basic ")
+  ) {
+    return null;
+  }
+
+  const base64src = event.headers.Authorization.substring(6);
+  const up = Buffer.from(base64src, "base64").toString("ascii");
+  const idToken = up.split(":")[0];
+
   try {
     const client = new OAuth2Client(process.env.googleClientId);
     const ticket = await client.verifyIdToken({
-      idToken: tokenId,
+      idToken: idToken,
       audience: process.env.googleClientId,
     });
     const payload = ticket.getPayload();
@@ -126,14 +137,10 @@ exports.campsPost = async (event) => {
   );
 
   //
-  // Find out who the remote user is -- it has been
-  // passed to us through camp.tokenId, which is
-  // an opaque Google token we can use to get real
-  // information about the user
+  // Find out who the remote user is
   //
 
-  const remoteUser = await GetRemoteUser(camp.tokenId);
-  delete camp.tokenId;
+  const remoteUser = await GetRemoteUser(event);
   if (!remoteUser) {
     return StandardError("You must be logged on to create or edit a camp");
   }
@@ -324,12 +331,12 @@ exports.campsYearNameGet = async (event) => {
 
 exports.campsYearNameDelete = async (event) => {
   const {
-    pathParameters: { year, name, idToken },
+    pathParameters: { year, name },
   } = event; // extract unique id and permissions from the request path
 
-  const remoteUser = await GetRemoteUser(idToken);
+  const remoteUser = await GetRemoteUser(event);
 
-  if (!remoteUser.isadmin) {
+  if (!remoteUser || !remoteUser.isadmin) {
     // TODO also let people delete their own camp
     return StandardError(`Only admins can delete for now`);
   }
@@ -350,10 +357,6 @@ exports.campsYearNameDelete = async (event) => {
 };
 
 exports.isAdmin = async (event) => {
-  const {
-    pathParameters: { idToken },
-  } = event; // extract idToken from request path
-
-  const remoteUser = await GetRemoteUser(idToken);
+  const remoteUser = await GetRemoteUser(event);
   return StandardResponse(remoteUser && remoteUser.isadmin);
 };

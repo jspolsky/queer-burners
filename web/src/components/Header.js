@@ -30,7 +30,9 @@ class Header extends React.Component {
   googleLoginSuccess = async (response) => {
     let isadmin = false;
     try {
-      const adminRes = await axios.get(`${api}/isadmin/${response.tokenId}`);
+      const adminRes = await axios.get(`${api}/isadmin`, {
+        auth: { username: response.tokenId, password: "" },
+      });
       if (adminRes.data) isadmin = true;
     } catch (error) {
       console.log(error);

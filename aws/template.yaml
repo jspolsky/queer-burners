@@ -110,20 +110,20 @@ Resources:
         CampsYearNameDelete:
           Type: Api
           Properties:
-            Path: /camps/{year}/{name}/{idToken}
+            Path: /camps/{year}/{name}
             Method: delete
 
-  CampsYearNameDeleteOptions:
+  CampsYearNameOptions:
     Type: AWS::Serverless::Function
     Properties:
       Description: "CORS pre-flight check"
-      FunctionName: qb-camps-year-name-delete-options
+      FunctionName: qb-camps-year-name-options
       Handler: multifunc.Options
       Events:
-        CampsOptions:
+        CampsYearNameOptions:
           Type: Api
           Properties:
-            Path: /camps/{year}/{name}/{idToken}
+            Path: /camps/{year}/{name}
             Method: options
 
   IsAdmin:
@@ -137,8 +137,21 @@ Resources:
         IsAdmin:
           Type: Api
           Properties:
-            Path: /isadmin/{idToken}
+            Path: /isadmin
             Method: get
+
+  IsAdminOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-isadmin-options
+      Handler: multifunc.Options
+      Events:
+        IsAdminOptions:
+          Type: Api
+          Properties:
+            Path: /isadmin
+            Method: options
 
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion

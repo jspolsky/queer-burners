@@ -104,7 +104,12 @@ export default class SubmitBody extends React.Component {
     // console.log(JSON.stringify(camp));
 
     try {
-      await axios.post(`${api}/camps`, camp);
+      await axios.post(`${api}/camps`, camp, {
+        auth: {
+          username: this.props.tokenId,
+          password: "",
+        },
+      });
       this.setState({ _submit_successful: true, _submit_in_progress: false });
     } catch (error) {
       let msg = "";
@@ -706,12 +711,15 @@ const DeleteButton = (props) => {
           <Button
             onClick={async () => {
               setShow(false);
-              await axios({
-                method: "delete",
-                url: `${api}/camps/${props.year}/${encodeURIComponent(
-                  props.name
-                )}/${props.tokenId}`,
-              });
+              await axios.delete(
+                `${api}/camps/${props.year}/${encodeURIComponent(props.name)}`,
+                {
+                  auth: {
+                    username: props.tokenId,
+                    password: "",
+                  },
+                }
+              );
               // TODO redirect to home page
 
               // TODO make sure the alert is scrolled into view so
