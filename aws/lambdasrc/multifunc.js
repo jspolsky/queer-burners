@@ -82,6 +82,25 @@ const isEmailAdmin = (email) => {
   return email === "joel@spolsky.com";
 };
 
+const GetRemoteUser = async (tokenId) => {
+  try {
+    const client = new OAuth2Client(process.env.googleClientId);
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.googleClientId,
+    });
+    const payload = ticket.getPayload();
+    return {
+      google_user_id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      isadmin: isEmailAdmin(payload.email),
+    };
+  } catch (e) {
+    return null;
+  }
+};
+
 exports.campsPost = async (event) => {
   //
   // camp - the camp as submitted
@@ -113,27 +132,10 @@ exports.campsPost = async (event) => {
   // information about the user
   //
 
-  let remoteUser = null;
-  let isadmin = false;
-
-  try {
-    const client = new OAuth2Client(process.env.googleClientId);
-    const ticket = await client.verifyIdToken({
-      idToken: camp.tokenId,
-      audience: process.env.googleClientId,
-    });
-    const payload = ticket.getPayload();
-    remoteUser = {
-      google_user_id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-    };
-    isadmin = isEmailAdmin(payload.email);
-    delete camp.tokenId; // don't need to keep this around
-  } catch (e) {
-    return StandardError(
-      "Invalid login token. Try logging out and logging in again."
-    );
+  const remoteUser = await GetRemoteUser(camp.tokenId);
+  delete camp.tokenId;
+  if (!remoteUser) {
+    return StandardError("You must be logged on to create or edit a camp");
   }
 
   const renaming = !!camp.originalName && camp.originalName !== camp.name;
@@ -174,7 +176,7 @@ exports.campsPost = async (event) => {
       !originalcamp.Item.contact ||
       (originalcamp.Item.contact.google_user_id !== remoteUser.google_user_id &&
         originalcamp.Item.contact.email !== remoteUser.email &&
-        !isadmin)
+        !remoteUser.isadmin)
     ) {
       return StandardError(
         "Current logged-in user is not the creator of this camp and can't edit it"
@@ -325,30 +327,11 @@ exports.campsYearNameDelete = async (event) => {
     pathParameters: { year, name, idToken },
   } = event; // extract unique id and permissions from the request path
 
-  let remoteUser = null;
+  const remoteUser = await GetRemoteUser(idToken);
 
-  // TODO this remote user code is repeated too many times. make it a function
-  try {
-    const client = new OAuth2Client(process.env.googleClientId);
-    const ticket = await client.verifyIdToken({
-      idToken: idToken,
-      audience: process.env.googleClientId,
-    });
-    const payload = ticket.getPayload();
-    remoteUser = {
-      google_user_id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-    };
-
-    if (!isEmailAdmin(remoteUser.email)) {
-      // TODO also let people delete their own camp
-      return StandardError(`Only admins can delete for now`);
-    }
-  } catch (e) {
-    return StandardError(
-      "Invalid login token. Try logging out and logging in again."
-    );
+  if (!remoteUser.isadmin) {
+    // TODO also let people delete their own camp
+    return StandardError(`Only admins can delete for now`);
   }
 
   const params = {
@@ -371,25 +354,8 @@ exports.isAdmin = async (event) => {
     pathParameters: { idToken },
   } = event; // extract idToken from request path
 
-  let remoteUser = null;
-
-  try {
-    const client = new OAuth2Client(process.env.googleClientId);
-    const ticket = await client.verifyIdToken({
-      idToken: idToken,
-      audience: process.env.googleClientId,
-    });
-    const payload = ticket.getPayload();
-    remoteUser = {
-      google_user_id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-    };
-
-    return StandardResponse(isEmailAdmin(remoteUser.email));
-  } catch (e) {
-    return StandardError(
-      "Invalid login token. Try logging out and logging in again."
-    );
-  }
+  const remoteUser = await GetRemoteUser(idToken);
+  console.log("remote user evaluated");
+  console.log(remoteUser);
+  return StandardResponse(remoteUser && remoteUser.isadmin);
 };
