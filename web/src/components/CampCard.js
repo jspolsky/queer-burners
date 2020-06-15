@@ -125,7 +125,7 @@ const CampCard = (props) => {
             Edit
           </a>
           {o.contact && o.contact.email && o.contact.name && (
-            <div>
+            <div style={{ fontSize: "0.8rem" }}>
               Submitted by {o.contact.name}{" "}
               <a href={`mailto:${o.contact.email}`}>{o.contact.email}</a>
             </div>
@@ -135,7 +135,5 @@ const CampCard = (props) => {
     </Card>
   );
 };
-
-// TODO the admin footer should use a smaller font
 
 export default CampCard;
