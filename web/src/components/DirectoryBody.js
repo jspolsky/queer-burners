@@ -77,6 +77,13 @@ export default class DirectoryBody extends React.Component {
             </Col>
             <Col md="auto">
               <Form inline={1}>
+                {/* this fake submit button is here to block Enter "submitting" the search (which does nothing) */}
+                <Button
+                  type="submit"
+                  disabled
+                  style={{ display: "none" }}
+                  aria-hidden="true"
+                />
                 <DropdownButton
                   as={ButtonGroup}
                   id="dropdown-basic-button"
