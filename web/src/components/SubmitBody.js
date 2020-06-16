@@ -755,9 +755,6 @@ const DeleteButton = (props) => {
                   }
                 );
                 // TODO redirect to home page
-
-                // TODO make sure the alert is scrolled into view so
-                // people see it
               }}
               variant="danger"
             >
