@@ -70,8 +70,8 @@ export default class DirectoryBody extends React.Component {
 
     return (
       <div>
-        <Container>
-          <Row>
+        <Container fluid className="pl-5 pr-5">
+          <Row className="pb-4">
             <Col>
               <h2>Camp Directory {this.state.year}</h2>
             </Col>
