@@ -44,9 +44,6 @@ export default class SubmitBody extends React.Component {
       _error_joinMessage: null,
       _error_joinUrl: null,
       _error_submit: null,
-      _upload_progress: null,
-      _thumbnail_user_filename: "",
-      _thumbnail_object_url: null,
       _submit_in_progress: false,
       _submit_successful: false,
     };
@@ -133,88 +130,6 @@ export default class SubmitBody extends React.Component {
     this.setState({ ["_error_" + key]: err });
     document.getElementById(key).setCustomValidity(err);
     return err === "";
-  };
-
-  fileUploader = async (event) => {
-    if (event.target.files.length === 0) {
-      // no picture.
-      this.setState({
-        thumbnail: "",
-        _thumbnail_object_url: null,
-        _thumbnail_user_filename: "",
-      });
-      return;
-    }
-
-    const actualFile = event.target.files[0];
-    let ext = "";
-
-    if (actualFile.type === "image/jpeg" || actualFile.type === "image/jpg") {
-      ext = "jpg";
-    } else if (actualFile.type === "image/png") {
-      ext = "png";
-    } else {
-      // TODO ERROR MESSAGE PLZ
-      this.setState({
-        thumbnail: "",
-        _thumbnail_object_url: null,
-        _thumbnail_user_filename: "",
-      });
-      return;
-    }
-
-    const fileName = event.target.files[0].name;
-    this.setState({
-      _thumbnail_user_filename: fileName,
-    });
-
-    try {
-      const uploader = await axios.get(`${api}/camps/pictureuploadurl/${ext}`);
-
-      let image;
-      let reader = new FileReader();
-      reader.onload = async (e) => {
-        image = e.target.result;
-
-        let binary = atob(image.split(",")[1]);
-        let array = [];
-        for (var i = 0; i < binary.length; i++) {
-          array.push(binary.charCodeAt(i));
-        }
-        let blobData = new Blob([new Uint8Array(array)], {
-          type: uploader.data.contentType,
-        });
-
-        await axios.put(uploader.data.url, blobData, {
-          headers: {
-            "Content-Type": uploader.data.contentType,
-          },
-          onUploadProgress: (pe) => {
-            this.setState({
-              _upload_progress: pe.lengthComputable
-                ? Math.floor((pe.loaded * 100) / pe.total)
-                : null,
-            });
-          },
-        });
-
-        this.setState({
-          _thumbnail_object_url: URL.createObjectURL(actualFile),
-          thumbnail: uploader.data.fileName,
-          _upload_progress: null,
-        });
-      };
-
-      reader.readAsDataURL(actualFile);
-    } catch (error) {
-      console.error(error);
-      console.error(error.response.request.response);
-    }
-
-    // TODO bug! if user submits too fast, the image is lost. Need to disable Submit while uploading
-    // TODO throw away files when the user never submits the form, or general s3 garbage collection
-    // TODO consider s3 based thumbnailing - reduce size of images to, I think, 318 pixels wide. (but maybe more for retina?)
-    //           here is how ---> https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
   };
 
   changeHandler = (event) => {
@@ -334,11 +249,6 @@ export default class SubmitBody extends React.Component {
       );
       const data = response.data[0];
       this.setState({ ...data, originalName: data.name });
-      if (data.thumbnail && data.thumbnail.length > 0) {
-        this.setState({
-          _thumbnail_object_url: `${s3images}/${data.thumbnail}`,
-        });
-      }
     } catch (error) {
       console.log(error);
     }
@@ -562,44 +472,14 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group controlId="thumbnail">
-                  <Form.Label>Upload a picture of your camp here</Form.Label>
-                  <Form.File
-                    name="thumbnail"
-                    label={this.state._thumbnail_user_filename}
-                    custom
-                    onChange={this.fileUploader}
-                    accept="image/png|image/jpeg"
-                  />
-                  {this.state._upload_progress && (
-                    <ProgressBar
-                      striped
-                      now={this.state._upload_progress}
-                    ></ProgressBar>
-                  )}
-                  {this.state._thumbnail_object_url && (
-                    <div>
-                      <Image src={this.state._thumbnail_object_url} fluid />
-                      <Button
-                        variant="outline-danger"
-                        onClick={() =>
-                          this.setState({
-                            thumbnail: "",
-                            _thumbnail_object_url: null,
-                            _thumbnail_user_filename: "",
-                          })
-                        }
-                      >
-                        Delete this picture
-                      </Button>
-                    </div>
-                  )}
-                  <Form.Text className="text-muted">
-                    This picture will appear in the Queer Burners directory.
-                    Submit a picture of your campers, your frontage, or
-                    something else fun, but please keep it SFW!
-                  </Form.Text>
-                </Form.Group>
+
+                <ImageUploader
+                  thumbnail={this.state.thumbnail}
+                  onChange={(thumbnail) => {
+                    this.setState({ thumbnail: thumbnail });
+                  }}
+                />
+
                 <Form.Group controlId="joinOpen">
                   <Form.Label>Are you open to new members?</Form.Label>
                   <Form.Check
@@ -691,6 +571,126 @@ export default class SubmitBody extends React.Component {
       );
   }
 }
+
+const ImageUploader = (props) => {
+  // TODO bug! if user submits too fast, the image is lost. Need to disable Submit while uploading
+  // TODO throw away files when the user never submits the form, or general s3 garbage collection
+  // TODO consider s3 based thumbnailing - reduce size of images to, I think, 318 pixels wide. (but maybe more for retina?)
+  //           here is how ---> https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
+
+  const [objectUrl, setObjectUrl] = useState(""); // URL of the image
+  const [userFilename, setUserFilename] = useState(""); // what the user thinks the file is called
+  const [uploadProgress, setUploadProgress] = useState(null);
+
+  useEffect(() => {
+    if (props.thumbnail.length > 0 && objectUrl.length === 0) {
+      setObjectUrl(`${s3images}/${props.thumbnail}`);
+    }
+  }, [props.thumbnail, objectUrl.length]);
+
+  const startUpload = async (event) => {
+    if (event.target.files.length === 0) {
+      // no picture.
+      setUserFilename("");
+      return;
+    }
+
+    const actualFile = event.target.files[0];
+
+    let ext = "";
+    if (["image/jpeg", "image/jpg"].includes(actualFile.type)) {
+      ext = "jpg";
+    } else if (actualFile.type === "image/png") {
+      ext = "png";
+    } else {
+      // TODO ERROR PLZ
+      setObjectUrl("");
+      setUserFilename("");
+      props.onChange("");
+      return;
+    }
+
+    setUserFilename(actualFile.name);
+
+    try {
+      const uploader = await axios.get(`${api}/camps/pictureuploadurl/${ext}`);
+
+      let image;
+      let reader = new FileReader();
+      reader.onload = async (e) => {
+        image = e.target.result;
+
+        let binary = atob(image.split(",")[1]);
+        let array = [];
+        for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+        }
+        let blobData = new Blob([new Uint8Array(array)], {
+          type: uploader.data.contentType,
+        });
+
+        await axios.put(uploader.data.url, blobData, {
+          headers: {
+            "Content-Type": uploader.data.contentType,
+          },
+          onUploadProgress: (pe) => {
+            setUploadProgress(
+              pe.lengthComputable
+                ? Math.floor((pe.loaded * 100) / pe.total)
+                : null
+            );
+          },
+        });
+
+        setObjectUrl(URL.createObjectURL(actualFile));
+        props.onChange(uploader.data.fileName);
+        setUploadProgress(null);
+      };
+
+      reader.readAsDataURL(actualFile);
+    } catch (error) {
+      console.error(error);
+      console.error(error.response.request.response);
+    }
+  };
+
+  return (
+    <Form.Group controlId="thumbnail">
+      <Form.Label>Upload a picture of your camp here</Form.Label>
+      <Form.File
+        name="thumbnail"
+        label={userFilename}
+        custom
+        accept="image/png|image/jpeg"
+        onChange={startUpload}
+      />
+      {uploadProgress && (
+        <ProgressBar striped now={uploadProgress}></ProgressBar>
+      )}
+      {objectUrl && (
+        <div>
+          <Image src={objectUrl} fluid />
+          <Button
+            variant="outline-danger"
+            onClick={() => {
+              props.onChange("");
+              setObjectUrl("");
+              setUserFilename("");
+            }}
+          >
+            Delete this picture
+          </Button>
+        </div>
+      )}
+
+      <Form.Text className="text-muted">
+        This picture will appear in the Queer Burners directory. Submit a
+        picture of your campers, your frontage, or something else fun, but
+        please keep it SFW!
+      </Form.Text>
+    </Form.Group>
+  );
+};
 
 const DeleteButton = (props) => {
   const [show, setShow] = useState(false);
