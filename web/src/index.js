@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { Directory, Edit, Submit, PrivacyPolicy, Year } from "./App";
 import * as serviceWorker from "./serviceWorker";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "./custom.scss";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
 
