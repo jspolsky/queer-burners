@@ -69,57 +69,61 @@ class Header extends React.Component {
   render() {
     return (
       <div>
-        <Navbar bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
           <Navbar.Brand href="http://queerburners.com/">
             Queer Burners
           </Navbar.Brand>
-          <Nav className="mr-auto">
-            <Nav.Link href="/">Directory</Nav.Link>
-            <Nav.Link href="/submit">Submit</Nav.Link>
-            <NavDropdown title="Past Years" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/year/2019">
-                2019 Metamorphoses
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/year/2020">
-                2020 The Multiverse
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          {!this.state.loggedin && (
-            <GoogleLogin
-              clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={this.googleLoginSuccess}
-              onFailure={this.googleLoginFailure}
-              cookiePolicy={"single_host_origin"}
-              isSignedIn={true}
-              onAutoLoadFinished={this.googleAutoloadFinished}
-            />
-          )}
-          {this.state.loggedin && (
-            <Nav>
-              <Image
-                roundedCircle
-                src={this.state.user_image}
-                style={{ maxHeight: "2rem" }}
-              ></Image>
-              <NavDropdown alignRight title={this.state.username}>
-                <NavDropdown.Item>
-                  Logged on as {this.state.email}
+
+          <Navbar.Toggle aria-contols="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/">Directory</Nav.Link>
+              <Nav.Link href="/submit">Submit</Nav.Link>
+              <NavDropdown title="Past Years" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/year/2019">
+                  2019 Metamorphoses
                 </NavDropdown.Item>
-                <NavDropdown.Item>
-                  <GoogleLogout
-                    clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
-                    buttonText="Logout"
-                    onLogoutSuccess={this.googleLogout}
-                  />
+                <NavDropdown.Item href="/year/2020">
+                  2020 The Multiverse
                 </NavDropdown.Item>
-                {this.state.loggedin && this.state.isadmin && (
-                  <NavDropdown.Item>(admin)</NavDropdown.Item>
-                )}
               </NavDropdown>
             </Nav>
-          )}
+            {!this.state.loggedin && (
+              <GoogleLogin
+                clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={this.googleLoginSuccess}
+                onFailure={this.googleLoginFailure}
+                cookiePolicy={"single_host_origin"}
+                isSignedIn={true}
+                onAutoLoadFinished={this.googleAutoloadFinished}
+              />
+            )}
+            {this.state.loggedin && (
+              <Nav>
+                <Image
+                  roundedCircle
+                  src={this.state.user_image}
+                  style={{ maxHeight: "2rem", maxWidth: "2rem" }}
+                ></Image>
+                <NavDropdown alignRight title={this.state.username}>
+                  <NavDropdown.Item>
+                    Logged on as {this.state.email}
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <GoogleLogout
+                      clientId="1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com"
+                      buttonText="Logout"
+                      onLogoutSuccess={this.googleLogout}
+                    />
+                  </NavDropdown.Item>
+                  {this.state.loggedin && this.state.isadmin && (
+                    <NavDropdown.Item>(admin)</NavDropdown.Item>
+                  )}
+                </NavDropdown>
+              </Nav>
+            )}
+          </Navbar.Collapse>
         </Navbar>
         <Link to="/">
           <img
