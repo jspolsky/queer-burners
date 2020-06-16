@@ -74,11 +74,7 @@ function DisplayEmail(props) {
 const CampCard = (props) => {
   const o = props.o;
   return (
-    <Card
-      style={{ width: "20rem" }}
-      bg="light"
-      border={props.ismine ? "success" : "light"}
-    >
+    <Card bg="light" border={props.ismine ? "success" : "light"}>
       {o.thumbnail && (
         <Card.Img variant="top" src={`${s3images}/${o.thumbnail}`} />
       )}
