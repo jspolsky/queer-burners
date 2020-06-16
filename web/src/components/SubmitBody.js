@@ -581,12 +581,24 @@ const ImageUploader = (props) => {
   const [objectUrl, setObjectUrl] = useState(""); // URL of the image
   const [userFilename, setUserFilename] = useState(""); // what the user thinks the file is called
   const [uploadProgress, setUploadProgress] = useState(null);
+  const [needsScroll, setNeedsScroll] = useState(false);
+  const imageEl = useRef(null);
 
   useEffect(() => {
     if (props.thumbnail.length > 0 && objectUrl.length === 0) {
       setObjectUrl(`${s3images}/${props.thumbnail}`);
     }
-  }, [props.thumbnail, objectUrl.length]);
+
+    if (needsScroll) {
+      setTimeout(() => {
+        imageEl.current.scrollIntoView({
+          block: "end",
+          behavior: "smooth",
+        });
+      }, 100);
+      setNeedsScroll(false);
+    }
+  }, [props.thumbnail, objectUrl.length, needsScroll]);
 
   const startUpload = async (event) => {
     if (event.target.files.length === 0) {
@@ -645,7 +657,7 @@ const ImageUploader = (props) => {
         setObjectUrl(URL.createObjectURL(actualFile));
         props.onChange(uploader.data.fileName);
         setUploadProgress(null);
-        // TODO scroll the new picture into view
+        setNeedsScroll(true);
       };
 
       reader.readAsDataURL(actualFile);
@@ -669,7 +681,7 @@ const ImageUploader = (props) => {
         <ProgressBar striped now={uploadProgress}></ProgressBar>
       )}
       {objectUrl && (
-        <div>
+        <div ref={imageEl}>
           <Image src={objectUrl} fluid />
           <Button
             variant="outline-danger"
