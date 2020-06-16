@@ -645,6 +645,7 @@ const ImageUploader = (props) => {
         setObjectUrl(URL.createObjectURL(actualFile));
         props.onChange(uploader.data.fileName);
         setUploadProgress(null);
+        // TODO scroll the new picture into view
       };
 
       reader.readAsDataURL(actualFile);
