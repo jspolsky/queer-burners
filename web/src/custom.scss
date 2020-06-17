@@ -11,3 +11,11 @@
     column-count: 4;
   }
 }
+
+.GoogleUserPicture {
+  max-height: 2rem;
+  max-width: 2rem;
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}

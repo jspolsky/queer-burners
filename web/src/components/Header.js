@@ -69,12 +69,12 @@ class Header extends React.Component {
   render() {
     return (
       <div>
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
           <Navbar.Brand href="http://queerburners.com/">
             Queer Burners
           </Navbar.Brand>
 
-          <Navbar.Toggle aria-contols="responsive-navbar-nav" />
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/">Directory</Nav.Link>
@@ -104,7 +104,7 @@ class Header extends React.Component {
                 <Image
                   roundedCircle
                   src={this.state.user_image}
-                  style={{ maxHeight: "2rem", maxWidth: "2rem" }}
+                  className="GoogleUserPicture"
                 ></Image>
                 <NavDropdown alignRight title={this.state.username}>
                   <NavDropdown.Item>
