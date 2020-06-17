@@ -267,7 +267,7 @@ export default class SubmitBody extends React.Component {
       return this.NotLoggedIn();
     } else
       return (
-        <Container fluid="lg" className="pl-5 pr-5">
+        <Container fluid="lg" className="pl-4 pr-4">
           <Row>
             <Col>
               {this.Instructions()}
