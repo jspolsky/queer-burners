@@ -278,7 +278,7 @@ export default class SubmitBody extends React.Component {
                 onSubmit={this.submitHandler}
               >
                 <Row>
-                  <Col xs={7}>
+                  <Col xs={12} md={8}>
                     <Form.Group controlId="name">
                       <Form.Label>Camp Name</Form.Label>
                       <Form.Control
@@ -297,7 +297,7 @@ export default class SubmitBody extends React.Component {
                       </Form.Text>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} md={4}>
                     <Form.Group controlId="identifies">
                       <Form.Label>Identification</Form.Label>
                       <Form.Control
@@ -366,7 +366,7 @@ export default class SubmitBody extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col>
+                  <Col xs={12} md={6}>
                     <Form.Group controlId="url">
                       <Form.Label>Public web site</Form.Label>
                       <Form.Control
@@ -385,7 +385,7 @@ export default class SubmitBody extends React.Component {
                       </Form.Text>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} md={6}>
                     <Form.Group controlId="facebook">
                       <Form.Label>Facebook</Form.Label>
                       <Form.Control
@@ -406,7 +406,7 @@ export default class SubmitBody extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col>
+                  <Col xs={12} md={4}>
                     <Form.Group controlId="email">
                       <Form.Label>Email</Form.Label>
                       <Form.Control
@@ -425,7 +425,7 @@ export default class SubmitBody extends React.Component {
                       </Form.Text>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} md={4}>
                     <Form.Group controlId="twitter">
                       <Form.Label>Twitter</Form.Label>
                       <InputGroup>
@@ -448,7 +448,7 @@ export default class SubmitBody extends React.Component {
                       </Form.Text>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} md={4}>
                     <Form.Group controlId="instagram">
                       <Form.Label>Instagram</Form.Label>
                       <InputGroup>
