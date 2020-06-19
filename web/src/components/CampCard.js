@@ -72,6 +72,7 @@ function DisplayEmail(props) {
 }
 
 const CampCard = (props) => {
+  // TODO CLICK ON SMALL PICTURE TO SEE BIG PICTURE
   const o = props.o;
   return (
     <Card bg="light" border={props.ismine ? "success" : "light"}>

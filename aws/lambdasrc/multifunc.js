@@ -1,5 +1,7 @@
 const AWS = require("aws-sdk");
 const crypto = require("crypto");
+const sharp = require("sharp");
+
 const { OAuth2Client } = require("google-auth-library");
 
 // Generate unique id with no external dependencies
@@ -51,6 +53,7 @@ const queryAttributes = [
   "twitter",
   "instagram",
   "thumbnail",
+  "fullSizeImage",
   "joinOpen",
   "joinMessage",
   "joinUrl",
@@ -111,6 +114,100 @@ const GetRemoteUser = async (event) => {
   }
 };
 
+//
+// this function takes a camp where the thumbnail has been uploaded to s3,
+// but is probably too large, and resizes the thumbnail to something reasonable.
+// The fullSizeImage field is set to the original image as submitted.
+//
+const makeThumbnail = async (camp) => {
+  console.log(
+    `thumbnail = ${camp.thumbnail} and fullSizeImage = ${camp.fullSizeImage}`
+  );
+
+  if (!camp.thumbnail) return;
+  if (camp.thumbnail.startsWith("thumb")) return;
+
+  try {
+    const s3 = new AWS.S3();
+
+    console.log("going to s3...");
+
+    const params = {
+      Bucket: "queerburnersdirectory.com-images", // TODO move to constant
+      Key: camp.thumbnail,
+    };
+    const origimage = await s3.getObject(params).promise();
+    console.log(
+      `an image was loaded of size ${origimage.ContentLength} type ${origimage.ContentType}`
+    );
+
+    var buffer = await sharp(origimage.Body).resize({ width: 960 }).toBuffer();
+
+    // Upload the thumbnail image to the destination bucket
+    const destparams = {
+      Bucket: "queerburnersdirectory.com-images", // TODO move to constant,
+      Key: `thumb${camp.thumbnail}`,
+      Body: buffer,
+      ContentType: origimage.ContentType,
+      ACL: "public-read",
+    };
+
+    const putResult = await s3.putObject(destparams).promise();
+    console.log("Successfully resized");
+
+    // Update the database
+
+    console.log(JSON.stringify(queryAttributesEAN));
+
+    const updateParams = {
+      TableName: "camps",
+      Key: {
+        year: Number(camp.year),
+        name: camp.name,
+      },
+      UpdateExpression:
+        "set fullSizeImage = :fullSizeImage, thumbnail = :thumbnail",
+      ExpressionAttributeValues: {
+        ":thumbnail": destparams.Key,
+        ":fullSizeImage": camp.thumbnail,
+      },
+    };
+
+    await db.update(updateParams).promise();
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
+
+//
+// Call makeThumbnail for a single camp
+//
+exports.campsYearNameThumbnail = async (event) => {
+  const params = {
+    TableName: "camps",
+    Key: {
+      year: Number(event.year),
+      name: event.name,
+    },
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
+  };
+  try {
+    const data = await db.get(params).promise();
+    const dtStart = new Date();
+    await makeThumbnail(data.Item);
+    console.log(
+      `Created thumbnail for ${event.year} ${event.name} in ${
+        new Date() - dtStart
+      } ms`
+    );
+    return StandardResponse("Created thumbnail");
+  } catch (e) {
+    return StandardError(e);
+  }
+};
+
 exports.campsPost = async (event) => {
   //
   // camp - the camp as submitted
@@ -146,7 +243,7 @@ exports.campsPost = async (event) => {
 
   const renaming = !!camp.originalName && camp.originalName !== camp.name;
 
-  // TODO noclobber -- if renaming, load the NEW NAME camp and it  BETTER NOT EXIST
+  // TODO noclobber -- if renaming, load the NEW NAME camp and it BETTER NOT EXIST
 
   //
   // Find out if this camp already exists and if so, who is
@@ -222,8 +319,19 @@ exports.campsPost = async (event) => {
       await db.delete(params).promise();
     }
 
+    const lambda = new AWS.Lambda();
+
+    const lambdaParams = {
+      FunctionName: "qb-camps-year-name-thumbnail",
+      InvocationType: "Event",
+      Payload: JSON.stringify({ year: camp.year, name: camp.name }),
+    };
+
+    await lambda.invoke(lambdaParams).promise();
+
     return StandardResponse("Successfully created camp");
   } catch (e) {
+    console.error(e);
     return StandardError("Error updating database");
   }
 };

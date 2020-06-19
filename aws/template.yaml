@@ -35,7 +35,14 @@ Resources:
       Description: "Creates a new camp"
       FunctionName: qb-camps-post
       Handler: multifunc.campsPost
-      Policies: AmazonDynamoDBFullAccess
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "lambda:InvokeFunction"
+              Resource:
+                - "*"
       Events:
         CampsPost:
           Type: Api
@@ -111,6 +118,18 @@ Resources:
           Properties:
             Path: /camps/{year}/{name}
             Method: get
+
+  CampsYearNameThumbnail:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Updates a camp thumbnail."
+      FunctionName: qb-camps-year-name-thumbnail
+      Handler: multifunc.campsYearNameThumbnail
+      Timeout: 10
+      MemorySize: 512
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
 
   CampsYearNameDelete:
     Type: AWS::Serverless::Function
