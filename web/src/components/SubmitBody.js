@@ -96,8 +96,6 @@ export default class SubmitBody extends React.Component {
       }
     }
 
-    camp.tokenId = this.props.tokenId;
-
     // console.log(JSON.stringify(camp));
 
     try {
