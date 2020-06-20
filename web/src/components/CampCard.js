@@ -111,6 +111,7 @@ const CampCard = (props) => {
       <Card bg="light" border={props.ismine ? "success" : "light"}>
         {o.thumbnail && (
           <Card.Img
+            role="button"
             variant="top"
             src={`${s3images}/${o.thumbnail}`}
             onClick={() => {
