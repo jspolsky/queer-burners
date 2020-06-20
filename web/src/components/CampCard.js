@@ -82,7 +82,7 @@ const Lightbox = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>{props.name}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ padding: 0 }}>
         <Image src={props.image} fluid></Image>
       </Modal.Body>
       {props.about && props.about.length > 0 && (
