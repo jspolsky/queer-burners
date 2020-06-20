@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
+import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
 
@@ -71,65 +72,104 @@ function DisplayEmail(props) {
   }
 }
 
-const CampCard = (props) => {
-  // TODO CLICK ON SMALL PICTURE TO SEE BIG PICTURE
-  const o = props.o;
+const Lightbox = (props) => {
   return (
-    <Card bg="light" border={props.ismine ? "success" : "light"}>
-      {o.thumbnail && (
-        <Card.Img variant="top" src={`${s3images}/${o.thumbnail}`} />
+    <Modal
+      show={props.show}
+      dialogClassName="modal-80w"
+      onHide={() => props.setShow(false)}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{props.name}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Image src={props.image} fluid></Image>
+      </Modal.Body>
+      {props.about && props.about.length > 0 && (
+        <Modal.Footer style={{ justifyContent: "flex-start" }}>
+          {props.about}
+        </Modal.Footer>
       )}
-      <Card.Header as="h5">
-        <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
-          {o.name}
-        </span>
-        <JoinButton o={o} />
-      </Card.Header>
-      <Card.Body>
-        <Card.Subtitle className="mb-2 text-muted">
-          {o.identifies}
-          {o.location && o.location.string && <div>{o.location.string}</div>}
-        </Card.Subtitle>
-        <Card.Text>{o.about}</Card.Text>
-        <DisplayURL url={o.url} />
-        <DisplayEmail email={o.email} />
-        {["facebook", "instagram", "twitter"].map((s) => {
-          if (!o[s]) return null;
-          let url = o[s];
-          if (s === "twitter" || s === "instagram")
-            url = `https://${s}.com/${url}`;
-          return (
-            <a href={url} key={s}>
-              <Image
-                src={require("../assets/social_" + s + ".svg")}
-                style={{ width: "1.8rem", paddingRight: ".35rem" }}
-              />
+    </Modal>
+  );
+};
+
+const CampCard = (props) => {
+  const [showLightbox, setShowLightbox] = useState(false);
+  const o = props.o;
+
+  return (
+    <>
+      <Lightbox
+        show={showLightbox}
+        setShow={setShowLightbox}
+        image={`${s3images}/${o.fullSizeImage}`}
+        name={o.name}
+        about={o.about}
+        centered
+      ></Lightbox>
+      <Card bg="light" border={props.ismine ? "success" : "light"}>
+        {o.thumbnail && (
+          <Card.Img
+            variant="top"
+            src={`${s3images}/${o.thumbnail}`}
+            onClick={() => {
+              setShowLightbox(!!o.fullSizeImage); // only show lightbox if fullSizeImage present
+            }}
+          />
+        )}
+        <Card.Header as="h5">
+          <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
+            {o.name}
+          </span>
+          <JoinButton o={o} />
+        </Card.Header>
+        <Card.Body>
+          <Card.Subtitle className="mb-2 text-muted">
+            {o.identifies}
+            {o.location && o.location.string && <div>{o.location.string}</div>}
+          </Card.Subtitle>
+          <Card.Text>{o.about}</Card.Text>
+          <DisplayURL url={o.url} />
+          <DisplayEmail email={o.email} />
+          {["facebook", "instagram", "twitter"].map((s) => {
+            if (!o[s]) return null;
+            let url = o[s];
+            if (s === "twitter" || s === "instagram")
+              url = `https://${s}.com/${url}`;
+            return (
+              <a href={url} key={s}>
+                <Image
+                  src={require("../assets/social_" + s + ".svg")}
+                  style={{ width: "1.8rem", paddingRight: ".35rem" }}
+                />
+              </a>
+            );
+          })}
+        </Card.Body>
+        {props.ismine && (
+          <Card.Footer>
+            This is your camp - you can&nbsp;
+            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+              edit it!
+            </Link>
+          </Card.Footer>
+        )}
+        {!props.ismine && props.isadmin && (
+          <Card.Footer>
+            <a href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+              Edit
             </a>
-          );
-        })}
-      </Card.Body>
-      {props.ismine && (
-        <Card.Footer>
-          This is your camp - you can&nbsp;
-          <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
-            edit it!
-          </Link>
-        </Card.Footer>
-      )}
-      {!props.ismine && props.isadmin && (
-        <Card.Footer>
-          <a href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
-            Edit
-          </a>
-          {o.contact && o.contact.email && o.contact.name && (
-            <div style={{ fontSize: "0.8rem" }}>
-              Submitted by {o.contact.name}{" "}
-              <a href={`mailto:${o.contact.email}`}>{o.contact.email}</a>
-            </div>
-          )}
-        </Card.Footer>
-      )}
-    </Card>
+            {o.contact && o.contact.email && o.contact.name && (
+              <div style={{ fontSize: "0.8rem" }}>
+                Submitted by {o.contact.name}{" "}
+                <a href={`mailto:${o.contact.email}`}>{o.contact.email}</a>
+              </div>
+            )}
+          </Card.Footer>
+        )}
+      </Card>
+    </>
   );
 };
 
