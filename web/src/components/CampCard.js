@@ -6,6 +6,7 @@ import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
+import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
 
@@ -147,6 +148,51 @@ const CampCard = (props) => {
               </a>
             );
           })}
+          <h4>
+            {o.offerShowers && (
+              <OverlayTrigger
+                key="shower"
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-shower">Camp provides showers</Tooltip>
+                }
+              >
+                <span role="img" aria-label="Camp provides showers">
+                  🚿{" "}
+                </span>
+              </OverlayTrigger>
+            )}
+            {o.offerMeals && (
+              <OverlayTrigger
+                key="meal"
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-meal">
+                    Camp provides some or all meals
+                  </Tooltip>
+                }
+              >
+                <span role="img" aria-label="Camp provides some or all meals">
+                  🍽{" "}
+                </span>
+              </OverlayTrigger>
+            )}
+            {o.campFee && (
+              <OverlayTrigger
+                key="fee"
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-fee">
+                    There is a fee to camp with us
+                  </Tooltip>
+                }
+              >
+                <span role="img" aria-label="There is a fee to camp with us">
+                  💲{" "}
+                </span>
+              </OverlayTrigger>
+            )}
+          </h4>
         </Card.Body>
         {props.ismine && (
           <Card.Footer>

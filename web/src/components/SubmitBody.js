@@ -491,6 +491,39 @@ export default class SubmitBody extends React.Component {
 
             <Row>
               <Col>
+                <Form.Group controlId="offerMeals">
+                  <Form.Label>Features</Form.Label>
+                  <Form.Check
+                    type="switch"
+                    name="offerMeals"
+                    checked={this.state.offerMeals}
+                    label="Camp provides some or all meals"
+                    onChange={this.changeHandler}
+                  />
+                </Form.Group>
+                <Form.Group controlId="offerShowers">
+                  <Form.Check
+                    type="switch"
+                    name="offerShowers"
+                    checked={this.state.offerShowers}
+                    label="Camp provides showers"
+                    onChange={this.changeHandler}
+                  />
+                </Form.Group>
+                <Form.Group controlId="campFee">
+                  <Form.Check
+                    type="switch"
+                    name="campFee"
+                    checked={this.state.campFee}
+                    label="There is a fee to camp with us"
+                    onChange={this.changeHandler}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
                 <Form.Group controlId="joinOpen">
                   <Form.Label>Are you open to new members?</Form.Label>
                   <Form.Check
