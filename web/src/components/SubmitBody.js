@@ -413,7 +413,7 @@ export default class SubmitBody extends React.Component {
             <Row>
               <Col xs={12} md={4}>
                 <Form.Group controlId="email">
-                  <Form.Label>Email</Form.Label>
+                  <Form.Label>Public Email</Form.Label>
                   <Form.Control
                     type="input"
                     name="email"
