@@ -296,7 +296,7 @@ export default class SubmitBody extends React.Component {
               </Col>
               <Col xs={12} md={4}>
                 <Form.Group controlId="identifies">
-                  <Form.Label>Identification</Form.Label>
+                  <Form.Label>Primary Identification</Form.Label>
                   <Form.Control
                     as="select"
                     name="identifies"
