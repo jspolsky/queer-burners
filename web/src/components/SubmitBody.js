@@ -265,52 +265,54 @@ export default class SubmitBody extends React.Component {
       return this.NotLoggedIn();
     } else
       return (
-        <Container fluid="lg" className="pl-4 pr-4">
-          <Row>
-            <Col>
-              {this.Instructions()}
+        <Form
+          noValidate
+          validated={this.state._validated}
+          onSubmit={this.submitHandler}
+        >
+          <Container fluid="lg" className="pl-4 pr-4 pb-4">
+            <Row>
+              <Col>{this.Instructions()}</Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={8}>
+                <Form.Group controlId="name">
+                  <Form.Label>Camp Name</Form.Label>
+                  <Form.Control
+                    type="input"
+                    placeholder="404 Camp Not Found"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.changeHandler}
+                  ></Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state._error_name}
+                  </Form.Control.Feedback>
+                  <Form.Text className="text-muted">
+                    If your camp is registered with placement, make sure this
+                    name matches exactly.
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={4}>
+                <Form.Group controlId="identifies">
+                  <Form.Label>Identification</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="identifies"
+                    value={this.state.identifies}
+                    onChange={this.changeHandler}
+                  >
+                    {campIdentifications.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+            </Row>
 
-              <Form
-                noValidate
-                validated={this.state._validated}
-                onSubmit={this.submitHandler}
-              >
-                <Row>
-                  <Col xs={12} md={8}>
-                    <Form.Group controlId="name">
-                      <Form.Label>Camp Name</Form.Label>
-                      <Form.Control
-                        type="input"
-                        placeholder="404 Camp Not Found"
-                        name="name"
-                        value={this.state.name}
-                        onChange={this.changeHandler}
-                      ></Form.Control>
-                      <Form.Control.Feedback type="invalid">
-                        {this.state._error_name}
-                      </Form.Control.Feedback>
-                      <Form.Text className="text-muted">
-                        If your camp is registered with placement, make sure
-                        this name matches exactly.
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <Form.Group controlId="identifies">
-                      <Form.Label>Identification</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="identifies"
-                        value={this.state.identifies}
-                        onChange={this.changeHandler}
-                      >
-                        {campIdentifications.map((s) => (
-                          <option key={s}>{s}</option>
-                        ))}
-                      </Form.Control>
-                    </Form.Group>
-                  </Col>
-                </Row>
+            <Row>
+              <Col>
                 <Form.Group controlId="about">
                   <Form.Label>About your camp</Form.Label>
                   <Form.Control
@@ -325,159 +327,170 @@ export default class SubmitBody extends React.Component {
                     {this.state._error_about}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Row>
-                  <Col>
-                    <Form.Group controlId="location.frontage">
-                      <Form.Label>Frontage</Form.Label>
-                      <Form.Control
-                        name="location.frontage"
-                        as="select"
-                        onChange={this.changeHandler}
-                        value={this.state.location.frontage}
-                      >
-                        {streets.map((s) => (
-                          <option key={s}>{s}</option>
-                        ))}
-                      </Form.Control>
-                      <Form.Text className="text-muted">
-                        The street that your camp faces
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group controlId="location.intersection">
-                      <Form.Label>Intersection</Form.Label>
-                      <Form.Control
-                        name="location.intersection"
-                        as="select"
-                        onChange={this.changeHandler}
-                        value={this.state.location.intersection}
-                      >
-                        {crossStreets(this.state.location.frontage).map((s) => (
-                          <option key={s}>{s}</option>
-                        ))}
-                      </Form.Control>
-                      <Form.Text className="text-muted">
-                        The nearest cross-street
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={6}>
-                    <Form.Group controlId="url">
-                      <Form.Label>Public web site</Form.Label>
-                      <Form.Control
-                        type="input"
-                        name="url"
-                        value={this.state.url}
-                        placeholder="https://www.example.com"
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {this.state._error_url}
-                      </Form.Control.Feedback>
-                      <Form.Text className="text-muted">
-                        Your camp's public website, if any. Do not use a
-                        Facebook URL here
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <Form.Group controlId="facebook">
-                      <Form.Label>Facebook</Form.Label>
-                      <Form.Control
-                        type="input"
-                        name="facebook"
-                        value={this.state.facebook}
-                        placeholder="https://www.facebook.com/campname"
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {this.state._error_facebook}
-                      </Form.Control.Feedback>
-                      <Form.Text className="text-muted">
-                        Your camp's public Facebook page or group, if any.
-                        Provide the full URL
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={4}>
-                    <Form.Group controlId="email">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="input"
-                        name="email"
-                        value={this.state.email}
-                        placeholder="info@example.com"
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {this.state._error_email}
-                      </Form.Control.Feedback>
-                      <Form.Text className="text-muted">
-                        Public email address for inquiries (this will be visible
-                        in the directory to anyone!)
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <Form.Group controlId="twitter">
-                      <Form.Label>Twitter</Form.Label>
-                      <InputGroup>
-                        <InputGroup.Prepend>
-                          <InputGroup.Text>@</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <Form.Control
-                          type="input"
-                          name="twitter"
-                          value={this.state.twitter}
-                          placeholder="example"
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {this.state._error_twitter}
-                        </Form.Control.Feedback>
-                      </InputGroup>
-                      <Form.Text className="text-muted">
-                        Your Twitter feed, if any
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <Form.Group controlId="instagram">
-                      <Form.Label>Instagram</Form.Label>
-                      <InputGroup>
-                        <InputGroup.Prepend>
-                          <InputGroup.Text>@</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <Form.Control
-                          type="input"
-                          name="instagram"
-                          value={this.state.instagram}
-                          placeholder="example"
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {this.state._error_instagram}
-                        </Form.Control.Feedback>
-                      </InputGroup>
-                      <Form.Text className="text-muted">
-                        Your Instagram feed, if any
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                </Row>
+              </Col>
+            </Row>
 
+            <Row>
+              <Col>
+                <Form.Group controlId="location.frontage">
+                  <Form.Label>Frontage</Form.Label>
+                  <Form.Control
+                    name="location.frontage"
+                    as="select"
+                    onChange={this.changeHandler}
+                    value={this.state.location.frontage}
+                  >
+                    {streets.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Text className="text-muted">
+                    The street that your camp faces
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="location.intersection">
+                  <Form.Label>Intersection</Form.Label>
+                  <Form.Control
+                    name="location.intersection"
+                    as="select"
+                    onChange={this.changeHandler}
+                    value={this.state.location.intersection}
+                  >
+                    {crossStreets(this.state.location.frontage).map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </Form.Control>
+                  <Form.Text className="text-muted">
+                    The nearest cross-street
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={12} md={6}>
+                <Form.Group controlId="url">
+                  <Form.Label>Public web site</Form.Label>
+                  <Form.Control
+                    type="input"
+                    name="url"
+                    value={this.state.url}
+                    placeholder="https://www.example.com"
+                    onChange={this.changeHandler}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {this.state._error_url}
+                  </Form.Control.Feedback>
+                  <Form.Text className="text-muted">
+                    Your camp's public website, if any. Do not use a Facebook
+                    URL here
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={6}>
+                <Form.Group controlId="facebook">
+                  <Form.Label>Facebook</Form.Label>
+                  <Form.Control
+                    type="input"
+                    name="facebook"
+                    value={this.state.facebook}
+                    placeholder="https://www.facebook.com/campname"
+                    onChange={this.changeHandler}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {this.state._error_facebook}
+                  </Form.Control.Feedback>
+                  <Form.Text className="text-muted">
+                    Your camp's public Facebook page or group, if any. Provide
+                    the full URL
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={12} md={4}>
+                <Form.Group controlId="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="input"
+                    name="email"
+                    value={this.state.email}
+                    placeholder="info@example.com"
+                    onChange={this.changeHandler}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {this.state._error_email}
+                  </Form.Control.Feedback>
+                  <Form.Text className="text-muted">
+                    Public email address for inquiries (this will be visible in
+                    the directory to anyone!)
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={4}>
+                <Form.Group controlId="twitter">
+                  <Form.Label>Twitter</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>@</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      type="input"
+                      name="twitter"
+                      value={this.state.twitter}
+                      placeholder="example"
+                      onChange={this.changeHandler}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {this.state._error_twitter}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <Form.Text className="text-muted">
+                    Your Twitter feed, if any
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={4}>
+                <Form.Group controlId="instagram">
+                  <Form.Label>Instagram</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>@</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      type="input"
+                      name="instagram"
+                      value={this.state.instagram}
+                      placeholder="example"
+                      onChange={this.changeHandler}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {this.state._error_instagram}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <Form.Text className="text-muted">
+                    Your Instagram feed, if any
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
                 <ImageUploader
                   thumbnail={this.state.thumbnail}
                   onChange={(thumbnail) => {
                     this.setState({ thumbnail: thumbnail });
                   }}
                 />
+              </Col>
+            </Row>
 
+            <Row>
+              <Col>
                 <Form.Group controlId="joinOpen">
                   <Form.Label>Are you open to new members?</Form.Label>
                   <Form.Check
@@ -527,6 +540,11 @@ export default class SubmitBody extends React.Component {
                     </Form.Group>
                   </div>
                 )}
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
                 {this.state._error_submit && (
                   <Alert
                     variant="danger"
@@ -562,10 +580,10 @@ export default class SubmitBody extends React.Component {
                     )}
                   </span>
                 )}
-              </Form>
-            </Col>
-          </Row>
-        </Container>
+              </Col>
+            </Row>
+          </Container>
+        </Form>
       );
   }
 }
