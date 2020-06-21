@@ -162,6 +162,19 @@ const CampCard = (props) => {
                 </span>
               </OverlayTrigger>
             )}
+            {o.offerWater && (
+              <OverlayTrigger
+                key="water"
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-water">Camp provides water</Tooltip>
+                }
+              >
+                <span role="img" aria-label="Camp provides water">
+                  🚰{" "}
+                </span>
+              </OverlayTrigger>
+            )}
             {o.offerMeals && (
               <OverlayTrigger
                 key="meal"
@@ -189,6 +202,21 @@ const CampCard = (props) => {
               >
                 <span role="img" aria-label="There is a fee to camp with us">
                   💲{" "}
+                </span>
+              </OverlayTrigger>
+            )}
+            {o.virginsWelcome && (
+              <OverlayTrigger
+                key="virgins"
+                placement="bottom"
+                overlay={
+                  <Tooltip id="tooltip-virgins">
+                    Burning Man first-timers welcome
+                  </Tooltip>
+                }
+              >
+                <span role="img" aria-label="Burning Man first-timers welcome">
+                  🦄{" "}
                 </span>
               </OverlayTrigger>
             )}

@@ -501,6 +501,15 @@ export default class SubmitBody extends React.Component {
                     onChange={this.changeHandler}
                   />
                 </Form.Group>
+                <Form.Group controlId="offerWater">
+                  <Form.Check
+                    type="switch"
+                    name="offerWater"
+                    checked={this.state.offerWater}
+                    label="Camp provides water"
+                    onChange={this.changeHandler}
+                  />
+                </Form.Group>
                 <Form.Group controlId="offerShowers">
                   <Form.Check
                     type="switch"
@@ -516,6 +525,15 @@ export default class SubmitBody extends React.Component {
                     name="campFee"
                     checked={this.state.campFee}
                     label="There is a fee to camp with us"
+                    onChange={this.changeHandler}
+                  />
+                </Form.Group>
+                <Form.Group controlId="virginsWelcome">
+                  <Form.Check
+                    type="switch"
+                    name="virginsWelcome"
+                    checked={this.state.virginsWelcome}
+                    label="Burning Man first-timers welcome"
                     onChange={this.changeHandler}
                   />
                 </Form.Group>

@@ -325,8 +325,10 @@ const emptyCamp = {
   joinMessage: "",
   joinUrl: "",
   offerMeals: false,
+  offerWater: false,
   offerShowers: false,
   campFee: false,
+  virginsWelcome: false,
 };
 
 const hashEmail = (email) => {
