@@ -21,6 +21,24 @@ import axios from "axios";
 
 const campIdentifications = [...require("shared").campIdentifications];
 
+const neighborhood = (camp) => {
+  const s430 = ["4:00", "4:15", "4:30", "4:45", "5:00", "5:15", "5:30"];
+  const s730 = ["6:30", "6:45", "7:00", "7:15", "7:30", "7:45", "8:00"];
+
+  if (
+    s430.includes(camp.location.frontage) ||
+    s430.includes(camp.location.intersection)
+  )
+    return "East Village";
+  if (
+    s730.includes(camp.location.frontage) ||
+    s730.includes(camp.location.intersection)
+  )
+    return "West Village";
+
+  return "Elsewhere";
+};
+
 export default class DirectoryBody extends React.Component {
   constructor(props) {
     super(props);
@@ -100,6 +118,16 @@ export default class DirectoryBody extends React.Component {
                     </Dropdown.Item>
                   ))}
                   <Dropdown.Item
+                    onClick={() => this.setState({ filter: "East Village" })}
+                  >
+                    East Village
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => this.setState({ filter: "West Village" })}
+                  >
+                    West Village
+                  </Dropdown.Item>
+                  <Dropdown.Item
                     onClick={() =>
                       this.setState({ filter: "Seeking new members" })
                     }
@@ -153,6 +181,10 @@ export default class DirectoryBody extends React.Component {
                         (this.state.filter === "all" ||
                           (this.state.filter === "Seeking new members" &&
                             onecamp.joinOpen) ||
+                          (this.state.filter === "West Village" &&
+                            neighborhood(onecamp) === this.state.filter) ||
+                          (this.state.filter === "East Village" &&
+                            neighborhood(onecamp) === this.state.filter) ||
                           this.state.filter === onecamp.identifies) &&
                         (this.state.search.length === 0 ||
                           (this.state.search.length === 1 &&
