@@ -49,6 +49,8 @@ export default class DirectoryBody extends React.Component {
       year:
         props.year && props.year >= 1996 && props.year < 3000
           ? props.year
+          : defaultYear === 2020
+          ? 2019
           : defaultYear,
     };
   }
