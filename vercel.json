@@ -1,0 +1,8 @@
+{
+  "routes": [
+    { "src": "/submit", "dest": "/web/build" },
+    { "src": "/privacy", "dest": "/web/build" },
+    { "src": "/year/\\d+", "dest": "/web/build" },
+    { "src": "/edit/\\d+/(.*)", "dest": "/web/build" }
+  ]
+}
