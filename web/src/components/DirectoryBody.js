@@ -210,8 +210,11 @@ export default class DirectoryBody extends React.Component {
               </CardColumns>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "4rem" }}>
-            Don't see your camp here?&nbsp; <Link to="/submit">Submit it!</Link>
+          <Row className="pb-4">
+            <Col>
+              Don't see your camp here?&nbsp;{" "}
+              <Link to="/submit">Submit it!</Link>
+            </Col>
           </Row>
         </Container>
       </div>
