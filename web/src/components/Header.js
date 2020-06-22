@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/header_logo.jpg";
+import banner from "../assets/header.jpg";
 
 import { Link } from "react-router-dom";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
@@ -128,8 +128,8 @@ class Header extends React.Component {
         <Link to="/">
           <img
             className="img-fluid w-100"
-            src={logo}
-            alt="placeholder 960"
+            src={banner}
+            alt="Queer Burners"
             style={{ marginBottom: "2rem" }}
           />
         </Link>
