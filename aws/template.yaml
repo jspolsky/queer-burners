@@ -185,12 +185,12 @@ Resources:
             Path: /isadmin
             Method: options
 
-  SendTestEmail:
+  SendDailyEmail:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "sends a test email"
-      FunctionName: qb-send-test-email
-      Handler: multifunc.sendTestEmail
+      Description: "Sends a daily email to admins with summary of changes"
+      FunctionName: qb-send-daily-email
+      Handler: email.sendDailyEmail
       Policies:
         - Statement:
             - Effect: Allow
@@ -199,6 +199,11 @@ Resources:
                 - "ses:SendRawEmail"
               Resource:
                 - "*"
+      Events:
+        SendDailyEmailScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
 
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion
