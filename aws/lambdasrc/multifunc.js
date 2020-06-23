@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const crypto = require("crypto");
 const sharp = require("sharp");
+const ses = new AWS.SES({ region: "us-east-1" });
 
 const { OAuth2Client } = require("google-auth-library");
 
@@ -408,6 +409,7 @@ exports.campsYearGet = async (event) => {
     ExpressionAttributeValues: {
       ":year": Number(year),
     },
+    FilterExpression: "attribute_not_exists(deleted)",
   };
 
   try {
@@ -462,9 +464,13 @@ exports.campsYearNameDelete = async (event) => {
       year: Number(year),
       name: decodeURIComponent(name),
     },
+    UpdateExpression: "set deleted = :deleted",
+    ExpressionAttributeValues: {
+      ":deleted": new Date().toISOString(),
+    },
   };
   try {
-    await db.delete(params).promise();
+    await db.update(params).promise();
     return StandardResponse(null);
   } catch (e) {
     return StandardError(e);
@@ -474,4 +480,42 @@ exports.campsYearNameDelete = async (event) => {
 exports.isAdmin = async (event) => {
   const remoteUser = await GetRemoteUser(event);
   return StandardResponse(remoteUser && remoteUser.isadmin);
+};
+
+exports.sendTestEmail = (event, context, callback) => {
+  var params = {
+    Destination: {
+      ToAddresses: ["joel@spolsky.com"],
+    },
+    Message: {
+      Body: {
+        Text: { Data: "This is the body of the message" },
+      },
+
+      Subject: { Data: "Test Email" },
+    },
+    Source: "info@queerburnersdirectory.com",
+  };
+
+  ses.sendEmail(params, (err, data) => {
+    callback(null, { err: err, data: data });
+    if (err) {
+      console.log(err);
+      context.fail(err);
+    } else {
+      console.log(data);
+      context.succeed(event);
+    }
+  });
+
+  // TODO
+  //
+  // We are really going to schedule this to run two, three times a day
+  // with a list of changes
+  //
+  // Here's how:
+  //
+  // https://docs.aws.amazon.com/lambda/latest/dg/with-scheduledevents-example-use-app-spec.html
+
+  return StandardResponse("Sent");
 };

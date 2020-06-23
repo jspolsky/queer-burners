@@ -185,6 +185,21 @@ Resources:
             Path: /isadmin
             Method: options
 
+  SendTestEmail:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "sends a test email"
+      FunctionName: qb-send-test-email
+      Handler: multifunc.sendTestEmail
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - "ses:SendEmail"
+                - "ses:SendRawEmail"
+              Resource:
+                - "*"
+
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
