@@ -192,6 +192,7 @@ Resources:
       FunctionName: qb-send-daily-email
       Handler: email.sendDailyEmail
       Policies:
+        - AmazonDynamoDBReadOnlyAccess
         - Statement:
             - Effect: Allow
               Action:
