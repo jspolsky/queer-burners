@@ -204,7 +204,7 @@ Resources:
         SendDailyEmailScheduledEvent:
           Type: Schedule
           Properties:
-            Schedule: rate(1 minute)
+            Schedule: cron(0 12 * * ? *)
 
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion

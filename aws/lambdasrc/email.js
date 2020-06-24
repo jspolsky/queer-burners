@@ -51,14 +51,14 @@ const formatCampCardForEmail = (camp) => {
         style="
           border-style: none;
           width: 75%;
-          border-radius: 0.25rem;
+          border-radius: 0.5rem;
         " />`;
   }
 
   result += `
-        <h5 style="font-weight: bold; font-size: 1.25rem;">
+        <div style="font-weight: bold; font-size: 1.25rem;">
             ${camp.name}
-        </h5>
+        </div>
         <div
         style="
             font-weight: 500;
@@ -92,6 +92,8 @@ exports.sendDailyEmail = async (event) => {
     let fAnyChanges = false;
     let htmlMail = "<!doctype html>\n";
 
+    // TODO SEE IF WE CAN MAKE AN INDEX ON THE DB TO AVOID FULL SCAN
+
     // query new camps -- created within last 24:01 hours (the extra minute is to prevent camps sneaking through)
     queryParams = {
       TableName: "camps",
@@ -109,7 +111,7 @@ exports.sendDailyEmail = async (event) => {
       fAnyChanges = true;
       camps = data.Items.sort((a, b) => a.name.localeCompare(b.name));
       htmlMail += `
-        <h3>New camps submitted in the last 24 hours</h3>
+        <div style="font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">New camps submitted in the last 24 hours:</div>
         ${camps.map(formatCampCardForEmail).join("<br /><br />")}`;
     }
 
@@ -121,7 +123,7 @@ exports.sendDailyEmail = async (event) => {
       fAnyChanges = true;
       camps = data.Items.sort((a, b) => a.name.localeCompare(b.name));
       htmlMail += `
-          <h3>These camps were updated in the last 24 hours</h3>
+          <div style="font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">These camps were updated in the last 24 hours:</div>
           ${camps.map(formatCampCardForEmail).join("<br /><br />")}`;
     }
 
@@ -134,8 +136,8 @@ exports.sendDailyEmail = async (event) => {
       fAnyChanges = true;
       camps = data.Items.sort((a, b) => a.name.localeCompare(b.name));
       htmlMail += `
-          <h3>These camps were deleted in the last 24 hours</h3>
-          ${camps.map(formatCampCardForEmail).join("<br /><br />")}`;
+        <div style="font-weight: bold; font-size: 1.5rem; margin-top: 1rem;">These camps were deleted in the last 24 hours:</div>
+        ${camps.map(formatCampCardForEmail).join("<br /><br />")}`;
     }
 
     if (!fAnyChanges) {
@@ -148,7 +150,7 @@ exports.sendDailyEmail = async (event) => {
 
     let info = await transporter.sendMail({
       from: "info@queerburnersdirectory.com",
-      to: "joel@spolsky.com",
+      to: "joel@spolsky.com", // TODO GET LIST OF ADMINS
       subject: "[queerburnersdirectory] Daily Change Report",
       text: "This message requires an email client that supports HTML mail.",
       html: htmlMail,
