@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 const crypto = require("crypto");
 const sharp = require("sharp");
-const ses = new AWS.SES({ region: "us-east-1" });
+const axios = require("axios");
 
 const { OAuth2Client } = require("google-auth-library");
 
@@ -90,6 +90,28 @@ const isEmailAdmin = (email) => {
   return email === "joel@spolsky.com";
 };
 
+const LookupToken = async (idToken) => {
+  try {
+    const client = new OAuth2Client(process.env.googleClientId);
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: process.env.googleClientId,
+    });
+    const payload = ticket.getPayload();
+    console.log(JSON.stringify(payload));
+    return {
+      google_user_id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      isadmin: isEmailAdmin(payload.email),
+      imageUrl: payload.picture,
+      duration: payload.exp - payload.iat,
+    };
+  } catch (e) {
+    return null;
+  }
+};
+
 const GetRemoteUser = async (event) => {
   if (
     !event.headers.Authorization ||
@@ -102,21 +124,37 @@ const GetRemoteUser = async (event) => {
   const up = Buffer.from(base64src, "base64").toString("ascii");
   const idToken = up.split(":")[0];
 
+  return LookupToken(idToken);
+};
+
+exports.GoogleIdTokenFromAuthCode = async (event) => {
   try {
-    const client = new OAuth2Client(process.env.googleClientId);
-    const ticket = await client.verifyIdToken({
-      idToken: idToken,
-      audience: process.env.googleClientId,
+    const js = JSON.parse(event.body);
+    const code = js.code;
+    const redirectUri = js.redirect_uri;
+    let googleSecretId = process.env.googleSecretId;
+    if (googleSecretId === "ItsASecretDumbass") {
+      googleSecretId = process.env.googleSecretId2; // this needs to be set from aws lambda console for this function https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/qb-google-idtoken-from-authcode?tab=configuration
+    }
+
+    const response = await axios.post("https://oauth2.googleapis.com/token", {
+      code: code,
+      client_id: process.env.googleClientId,
+      client_secret: googleSecretId,
+      redirect_uri: redirectUri,
+      grant_type: "authorization_code",
     });
-    const payload = ticket.getPayload();
-    return {
-      google_user_id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      isadmin: isEmailAdmin(payload.email),
-    };
-  } catch (e) {
-    return null;
+
+    const data = response.data;
+    const id_token = data.id_token;
+    let result = await LookupToken(data.id_token);
+    result.idToken = data.id_token;
+
+    return StandardResponse(result);
+  } catch (error) {
+    console.log("An error occurred logging someone on.");
+    console.log(error.response.data);
+    return StandardError(error.response.data);
   }
 };
 

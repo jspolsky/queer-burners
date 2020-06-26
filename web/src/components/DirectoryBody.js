@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { defaultYear, api } from "../definitions.js";
 
 import axios from "axios";
+const CancelToken = axios.CancelToken;
 
 const campIdentifications = [...require("shared").campIdentifications];
 
@@ -46,35 +47,53 @@ export default class DirectoryBody extends React.Component {
       filter: "all",
       search: "",
       data: null,
-      year:
-        props.year && props.year >= 1996 && props.year < 3000
-          ? props.year
-          : defaultYear === 2020
-          ? 2019
-          : defaultYear,
+      cancelFn: null,
     };
   }
 
-  async componentDidMount() {
-    try {
-      const response = await axios.get(`${api}/camps/${this.state.year}`, {
-        auth: { username: this.props.tokenId, password: "" },
-      });
-      this.setState({ data: response.data });
-    } catch (error) {
-      console.log(error);
+  async fetchData(clearFirst) {
+    if (this.state.cancelFn) {
+      this.state.cancelFn();
+      this.setState({ cancelFn: null });
     }
+
+    let year;
+    if (this.props.year >= 1996 && this.props.year < 3000) {
+      year = this.props.year;
+    } else if (defaultYear === 2020) {
+      year = 2019; // there was no burning man in 2020 :(
+    } else {
+      year = defaultYear;
+    }
+
+    if (clearFirst) {
+      this.setState({ data: null });
+    }
+    try {
+      const response = await axios.get(`${api}/camps/${year}`, {
+        auth: { username: this.props.idToken, password: "" },
+        cancelToken: new CancelToken((c) => {
+          this.setState({ cancelFn: c });
+        }),
+      });
+      this.setState({ cancelFn: null, data: response.data });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async componentDidMount() {
+    await this.fetchData(false);
   }
 
   async componentDidUpdate(prevProps) {
     // if user turns out to be admin, reload because the admin gets to see
     // more stuff
 
-    //
-    // TODO find out why user logging out doesn't trigger this?
-    // (logging in DOES)
-    if (this.props.isadmin !== prevProps.isadmin) {
-      this.componentDidMount();
+    if (this.props.isadmin && !prevProps.isadmin) {
+      await this.fetchData(false);
+    } else if (this.props.year !== prevProps.year) {
+      await this.fetchData(true);
     }
   }
 
@@ -93,7 +112,7 @@ export default class DirectoryBody extends React.Component {
         <Container fluid className="pl-4 pr-4">
           <Row className="pb-4">
             <Col>
-              <h2>Camp Directory {this.state.year}</h2>
+              <h2>Camp Directory {this.props.year}</h2>
             </Col>
             <Col md="auto">
               <Form inline={1}>
@@ -169,53 +188,59 @@ export default class DirectoryBody extends React.Component {
               </Form>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <CardColumns>
-                {!this.state.data ? (
-                  <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                ) : (
-                  this.state.data
-                    .filter(
-                      (onecamp) =>
-                        (this.state.filter === "all" ||
-                          (this.state.filter === "Seeking new members" &&
-                            onecamp.joinOpen) ||
-                          (this.state.filter === "West Village" &&
-                            neighborhood(onecamp) === this.state.filter) ||
-                          (this.state.filter === "East Village" &&
-                            neighborhood(onecamp) === this.state.filter) ||
-                          this.state.filter === onecamp.identifies) &&
-                        (this.state.search.length === 0 ||
-                          (this.state.search.length === 1 &&
-                            onecamp.name
-                              .toLowerCase()
-                              .startsWith(this.state.search.toLowerCase())) ||
-                          (this.state.search.length > 1 &&
-                            onecamp.name
-                              .toLowerCase()
-                              .includes(this.state.search.toLowerCase())))
-                    )
-                    .map((onecamp) => (
-                      <CampCard
-                        o={onecamp}
-                        key={onecamp.year + " " + onecamp.name}
-                        ismine={this.props.hashEmail === onecamp.hashEmail}
-                        isadmin={this.props.isadmin}
-                      />
-                    ))
-                )}
-              </CardColumns>
-            </Col>
-          </Row>
-          <Row className="pb-4">
-            <Col>
-              Don't see your camp here?&nbsp;{" "}
-              <Link to="/submit">Submit it!</Link>
-            </Col>
-          </Row>
+          {!this.state.data ? (
+            <Row>
+              <Col>
+                <div className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </Col>
+            </Row>
+          ) : (
+            <>
+              <Row>
+                <Col>
+                  <CardColumns>
+                    {this.state.data
+                      .filter(
+                        (onecamp) =>
+                          (this.state.filter === "all" ||
+                            (this.state.filter === "Seeking new members" &&
+                              onecamp.joinOpen) ||
+                            (this.state.filter === "West Village" &&
+                              neighborhood(onecamp) === this.state.filter) ||
+                            (this.state.filter === "East Village" &&
+                              neighborhood(onecamp) === this.state.filter) ||
+                            this.state.filter === onecamp.identifies) &&
+                          (this.state.search.length === 0 ||
+                            (this.state.search.length === 1 &&
+                              onecamp.name
+                                .toLowerCase()
+                                .startsWith(this.state.search.toLowerCase())) ||
+                            (this.state.search.length > 1 &&
+                              onecamp.name
+                                .toLowerCase()
+                                .includes(this.state.search.toLowerCase())))
+                      )
+                      .map((onecamp) => (
+                        <CampCard
+                          o={onecamp}
+                          key={onecamp.year + " " + onecamp.name}
+                          ismine={this.props.hashEmail === onecamp.hashEmail}
+                          isadmin={this.props.isadmin}
+                        />
+                      ))}
+                  </CardColumns>
+                </Col>
+              </Row>
+              <Row className="pb-4">
+                <Col>
+                  Don't see your camp here?&nbsp;{" "}
+                  <Link to="/submit">Submit it!</Link>
+                </Col>
+              </Row>
+            </>
+          )}
         </Container>
       </div>
     );

@@ -232,9 +232,9 @@ const CampCard = (props) => {
         )}
         {!props.ismine && props.isadmin && (
           <Card.Footer>
-            <a href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
               Edit
-            </a>
+            </Link>
             {o.contact && o.contact.email && o.contact.name && (
               <div style={{ fontSize: "0.8rem" }}>
                 Submitted by {o.contact.name}{" "}

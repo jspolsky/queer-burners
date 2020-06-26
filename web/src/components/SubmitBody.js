@@ -46,16 +46,8 @@ export default class SubmitBody extends React.Component {
       _error_submit: null,
       _submit_in_progress: false,
       _submit_successful: false,
+      _ready_to_show_form: false,
     };
-
-    // if the "camp" prop is present, we are editing an existing camp and camp has
-    // the name and year. Let the current data override defaults.
-    if (props.camp) {
-      this.state = {
-        ...this.state,
-        ...props.camp,
-      };
-    }
   }
 
   submitHandler = async (event) => {
@@ -101,7 +93,7 @@ export default class SubmitBody extends React.Component {
     try {
       await axios.post(`${api}/camps`, camp, {
         auth: {
-          username: this.props.tokenId,
+          username: this.props.idToken,
           password: "",
         },
       });
@@ -188,7 +180,8 @@ export default class SubmitBody extends React.Component {
             <h2>Submit your camp to the Queer Burners directory!</h2>
             <p>
               Welcome! We're building a comprehensive list of queer and ally
-              theme camps that will participate in Burning Man in {defaultYear}.
+              theme camps that will participate in Burning Man in{" "}
+              {this.state.year}.
             </p>
 
             <p>
@@ -224,7 +217,7 @@ export default class SubmitBody extends React.Component {
           <h2>Submit your camp to the Queer Burners directory!</h2>
           <p>
             Welcome! We're building a comprehensive list of queer and ally theme
-            camps that will participate in Burning Man in {defaultYear}.
+            camps that will participate in Burning Man in {this.state.year}.
           </p>
           <p>
             To add your theme camp to this directory, please fill out this form.
@@ -235,18 +228,21 @@ export default class SubmitBody extends React.Component {
   }
 
   async componentDidMount() {
-    if (this.state.name.length === 0) {
+    if (!this.props.camp || this.props.camp.length === 0) {
+      this.setState({ _ready_to_show_form: true });
       return;
     }
-    try {
-      // TODO when user is editing a camp, the submit form initially
-      // appears empty and then flashes. Try to prevent that.
 
+    try {
       const response = await axios.get(
-        `${api}/camps/${this.state.year}/${encodeURIComponent(this.state.name)}`
+        `${api}/camps/${this.props.year}/${encodeURIComponent(this.props.camp)}`
       );
       const data = response.data[0];
-      this.setState({ ...data, originalName: data.name });
+      this.setState({
+        ...data,
+        originalName: data.name,
+        _ready_to_show_form: true,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -263,6 +259,14 @@ export default class SubmitBody extends React.Component {
       );
     } else if (!this.props.loggedin) {
       return this.NotLoggedIn();
+    } else if (!this.state._ready_to_show_form) {
+      return (
+        <Container>
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </Container>
+      );
     } else
       return (
         <Form
@@ -626,7 +630,7 @@ export default class SubmitBody extends React.Component {
                       <DeleteButton
                         year={this.state.year}
                         name={this.state.name}
-                        tokenId={this.props.tokenId}
+                        idToken={this.props.idToken}
                       />
                     )}
                   </span>
@@ -813,7 +817,7 @@ const DeleteButton = (props) => {
                   )}`,
                   {
                     auth: {
-                      username: props.tokenId,
+                      username: props.idToken,
                       password: "",
                     },
                   }

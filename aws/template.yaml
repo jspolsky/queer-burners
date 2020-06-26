@@ -172,6 +172,35 @@ Resources:
             Path: /isadmin
             Method: get
 
+  GoogleIdTokenFromAuthCode:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Part of the Google OAuth2 Login Flow"
+      FunctionName: qb-google-idtoken-from-authcode
+      Handler: multifunc.GoogleIdTokenFromAuthCode
+      Events:
+        GoogleIdTokenFromAuthCode:
+          Type: Api
+          Properties:
+            Path: /googleidtokenfromauthcode
+            Method: post
+      Environment:
+        Variables:
+          googleSecretId: ItsASecretDumbass
+
+  GoogleIdTokenFromAuthCodeOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-google-idtoken-from-authcode-options
+      Handler: multifunc.Options
+      Events:
+        CampsYearNameOptions:
+          Type: Api
+          Properties:
+            Path: /googleidtokenfromauthcode
+            Method: options
+
   IsAdminOptions:
     Type: AWS::Serverless::Function
     Properties:
