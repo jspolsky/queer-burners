@@ -27,6 +27,8 @@ export const Authenticate = (props) => {
         if (new Date(tmpUserData.expires).valueOf() > new Date().valueOf()) {
           // Yes! Log them on
           props.OnUserDataChange(tmpUserData);
+        } else {
+          // No! This would be a good time to redirect through google TODO!
         }
       }
     }
@@ -48,11 +50,16 @@ export const Authenticate = (props) => {
         <NavDropdown alignRight title={props.userData.fullName}>
           <NavDropdown.Item>
             Logged on as {props.userData.email}
+            {props.userData.isAdmin && <em> (admin)</em>}
           </NavDropdown.Item>
-          <NavDropdown.Item>LOGOUT GOES HERE</NavDropdown.Item>
-          {props.userData.isAdmin && (
-            <NavDropdown.Item>You are an admin.</NavDropdown.Item>
-          )}
+          <NavDropdown.Item
+            onClick={() => {
+              localStorage.removeItem("userData");
+              props.OnUserDataChange({ isLoggedOn: false });
+            }}
+          >
+            Logout
+          </NavDropdown.Item>
         </NavDropdown>
       </>
     );
