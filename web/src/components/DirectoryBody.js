@@ -71,7 +71,7 @@ export default class DirectoryBody extends React.Component {
     }
     try {
       const response = await axios.get(`${api}/camps/${year}`, {
-        auth: { username: this.props.idToken, password: "" },
+        auth: { username: this.props.userData.idToken, password: "" },
         cancelToken: new CancelToken((c) => {
           this.setState({ cancelFn: c });
         }),
@@ -226,8 +226,10 @@ export default class DirectoryBody extends React.Component {
                         <CampCard
                           o={onecamp}
                           key={onecamp.year + " " + onecamp.name}
-                          ismine={this.props.hashEmail === onecamp.hashEmail}
-                          isadmin={this.props.isadmin}
+                          ismine={
+                            this.props.userData.hashEmail === onecamp.hashEmail
+                          }
+                          isadmin={this.props.userData.isAdmin}
                         />
                       ))}
                   </CardColumns>

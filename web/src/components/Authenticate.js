@@ -93,7 +93,7 @@ export const PostAuthenticate = (props) => {
     fetchData();
   }, [props.location.search, props]);
 
-  const queryParams = new URLSearchParams(props.location.search); // call get on that to get individual bits
+  const queryParams = new URLSearchParams(props.location.search);
 
   if (isLoggedOn) {
     return <Redirect to={queryParams.get("state")} />;

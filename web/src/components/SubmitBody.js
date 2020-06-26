@@ -93,7 +93,7 @@ export default class SubmitBody extends React.Component {
     try {
       await axios.post(`${api}/camps`, camp, {
         auth: {
-          username: this.props.idToken,
+          username: this.props.userData.idToken,
           password: "",
         },
       });
@@ -257,7 +257,7 @@ export default class SubmitBody extends React.Component {
           }`}
         />
       );
-    } else if (!this.props.loggedin) {
+    } else if (!this.props.userData.isLoggedOn) {
       return this.NotLoggedIn();
     } else if (!this.state._ready_to_show_form) {
       return (
@@ -630,7 +630,7 @@ export default class SubmitBody extends React.Component {
                       <DeleteButton
                         year={this.state.year}
                         name={this.state.name}
-                        idToken={this.props.idToken}
+                        userData={this.props.userData}
                       />
                     )}
                   </span>
@@ -817,7 +817,7 @@ const DeleteButton = (props) => {
                   )}`,
                   {
                     auth: {
-                      username: props.idToken,
+                      username: props.userData.idToken,
                       password: "",
                     },
                   }

@@ -21,25 +21,13 @@ const TopLevelComponent = (props) => {
         exact
         path="/"
         render={(props) => (
-          <DirectoryBody
-            {...props}
-            year=""
-            loggedin={userData.isLoggedOn}
-            hashEmail={userData.hashEmail}
-            isadmin={userData.isAdmin}
-            idToken={userData.idToken}
-          />
+          <DirectoryBody {...props} year="" userData={userData} />
         )}
       />
       <Route
         path="/submit"
         render={(props) => (
-          <SubmitBody
-            loggedin={userData.isLoggedOn}
-            idToken={userData.idToken}
-            year={null}
-            camp={null}
-          />
+          <SubmitBody userData={userData} year={null} camp={null} />
         )}
       />
       <Route
@@ -48,10 +36,7 @@ const TopLevelComponent = (props) => {
           <DirectoryBody
             {...props}
             year={props.match.params.year}
-            loggedin={userData.isLoggedOn}
-            hashEmail={userData.hashEmail}
-            isadmin={userData.isAdmin}
-            idToken={userData.idToken}
+            userData={userData}
           />
         )}
       />
@@ -61,8 +46,7 @@ const TopLevelComponent = (props) => {
         render={(props) => {
           return (
             <SubmitBody
-              loggedin={userData.isLoggedOn}
-              idToken={userData.idToken}
+              userData={userData}
               year={props.match.params.year}
               camp={new URLSearchParams(props.location.search).get("camp")}
             />
