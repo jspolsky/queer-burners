@@ -88,7 +88,6 @@ export const PostAuthenticate = (props) => {
 
         setStatus("Success");
         setIsLoggedOn(true);
-        console.log(`PostAuth login just occurred.`);
 
         const userData = {
           isLoggedOn: true,

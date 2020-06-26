@@ -78,7 +78,9 @@ export default class DirectoryBody extends React.Component {
       });
       this.setState({ cancelFn: null, data: response.data });
     } catch (e) {
-      console.error(e);
+      if (!axios.isCancel(e)) {
+        console.error(e);
+      }
     }
   }
 
@@ -90,7 +92,7 @@ export default class DirectoryBody extends React.Component {
     // if user turns out to be admin, reload because the admin gets to see
     // more stuff
 
-    if (this.props.isadmin && !prevProps.isadmin) {
+    if (this.props.userData.isAdmin && !prevProps.userData.isAdmin) {
       await this.fetchData(false);
     } else if (this.props.year !== prevProps.year) {
       await this.fetchData(true);
