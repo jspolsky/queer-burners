@@ -229,8 +229,14 @@ export default class DirectoryBody extends React.Component {
                           o={onecamp}
                           key={onecamp.year + " " + onecamp.name}
                           ismine={
-                            this.props.userData.hashEmail &&
-                            this.props.userData.hashEmail === onecamp.hashEmail
+                            (this.props.userData.hashEmail &&
+                              this.props.userData.hashEmail ===
+                                onecamp.hashEmail) ||
+                            (this.props.userData.email &&
+                              onecamp.contact &&
+                              onecamp.contact.email &&
+                              this.props.userData.email ===
+                                onecamp.contact.email)
                           }
                           isadmin={this.props.userData.isAdmin}
                         />
