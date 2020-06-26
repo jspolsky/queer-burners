@@ -93,6 +93,7 @@ const isEmailAdmin = (email) => {
 const LookupToken = async (idToken) => {
   try {
     const client = new OAuth2Client(process.env.googleClientId);
+
     const ticket = await client.verifyIdToken({
       idToken: idToken,
       audience: process.env.googleClientId,
@@ -146,6 +147,10 @@ exports.GoogleIdTokenFromAuthCode = async (event) => {
     });
 
     const data = response.data;
+
+    //    TODO in case we ever decide to use refresh token, it's in response.data.refresh_token but
+    //    only the first time the user logs on fresh (eg with prompt=consent or really first time)
+
     const id_token = data.id_token;
     let result = await LookupToken(data.id_token);
     result.idToken = data.id_token;
