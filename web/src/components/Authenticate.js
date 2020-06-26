@@ -17,6 +17,21 @@ import { hashEmail } from "shared";
 export const Authenticate = (props) => {
   let location = useLocation();
 
+  useEffect(() => {
+    if (!props.userData.isLoggedOn) {
+      // user isn't logged on. Do they want to be?
+
+      let tmpUserData = JSON.parse(localStorage.getItem("userData"));
+      if (tmpUserData && tmpUserData.isLoggedOn) {
+        // yes. Is their token still good?
+        if (new Date(tmpUserData.expires).valueOf() > new Date().valueOf()) {
+          // Yes! Log them on
+          props.OnUserDataChange(tmpUserData);
+        }
+      }
+    }
+  }, [props.userData, props]);
+
   if (props.userData && props.userData.isLoggedOn) {
     //
     // TODO Logout link
@@ -73,7 +88,9 @@ export const PostAuthenticate = (props) => {
 
         setStatus("Success");
         setIsLoggedOn(true);
-        props.OnUserDataChange({
+        console.log(`PostAuth login just occurred.`);
+
+        const userData = {
           isLoggedOn: true,
           idToken: result.data.idToken,
           fullName: result.data.name,
@@ -81,8 +98,13 @@ export const PostAuthenticate = (props) => {
           hashEmail: hashEmail(result.data.email),
           isAdmin: result.data.isadmin,
           imageUrl: result.data.imageUrl,
-          duration: Number(result.data.duration),
-        });
+          expires: new Date(
+            new Date().valueOf() + 1000 * Number(result.data.duration)
+          ),
+        };
+
+        localStorage.setItem("userData", JSON.stringify(userData));
+        props.OnUserDataChange(userData);
       } catch (err) {
         console.error("Error logging on");
         console.error(err.response.data);

@@ -16,7 +16,12 @@ const TopLevelComponent = (props) => {
 
   return (
     <Router>
-      <Header userData={userData} />
+      <Header
+        userData={userData}
+        OnUserDataChange={(newUserData) => {
+          setUserData(newUserData);
+        }}
+      />
       <Route
         exact
         path="/"

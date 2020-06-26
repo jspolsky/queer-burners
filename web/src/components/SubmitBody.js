@@ -88,8 +88,6 @@ export default class SubmitBody extends React.Component {
       }
     }
 
-    // console.log(JSON.stringify(camp));
-
     try {
       await axios.post(`${api}/camps`, camp, {
         auth: {

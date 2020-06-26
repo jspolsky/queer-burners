@@ -37,7 +37,10 @@ class Header extends React.Component {
               </NavDropdown>
             </Nav>
             <Nav>
-              <Authenticate userData={this.props.userData} />
+              <Authenticate
+                userData={this.props.userData}
+                OnUserDataChange={this.props.OnUserDataChange}
+              />
             </Nav>
           </Navbar.Collapse>
         </Navbar>
