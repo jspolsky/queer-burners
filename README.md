@@ -17,7 +17,7 @@ Here is a more complete list of technologies, frameworks, and libraries that are
 - From the front end, we use the [axios](https://github.com/axios/axios) library to access the API.
 - The database is stored in [Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html), a simple NoSQL database that stores JSON objects. We access DynamoDB through the JavaScript [DocumentClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) library.
 - DNS and web hosting for the static front end files is provided by [Vercel](https://vercel.com/docs/configuration#introduction/configuration-reference). Vercel detects commits to this github project and deploys them automatically.
-- All user authentication comes through [Google Sign-In for Websites](https://developers.google.com/identity/sign-in/web/sign-in) accessed through the [React Google Login](https://github.com/anthonyjgrove/react-google-login) component.
+- All user authentication comes through [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2/web-server).
 - User-uploaded images are stored in [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html).
 - Because users can upload very high resolution images, we also store a thumbnail that is 960 pixels wide using the [sharp](https://sharp.pixelplumbing.com/) library.
 - We send email through [Amazon SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html) (Simple Email Service). Rather than talking to their library directory, we use [Nodemailer](https://nodemailer.com/about/) to construct and send the email message via SES.
