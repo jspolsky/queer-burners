@@ -55,6 +55,7 @@ export const Authenticate = (props) => {
           <NavDropdown.Item
             onClick={() => {
               localStorage.removeItem("userData");
+              localStorage.setItem("oauthPrompt", "consent");
               props.OnUserDataChange({ isLoggedOn: false });
             }}
           >
@@ -64,7 +65,7 @@ export const Authenticate = (props) => {
       </>
     );
   } else {
-    const link =
+    let link =
       oauthEndpoint +
       "?state=" +
       encodeURIComponent(location.pathname + location.search) +
@@ -76,6 +77,10 @@ export const Authenticate = (props) => {
       "&scope=openid%20email%20profile" +
       "&access_type=offline" +
       "&include_granted_scopes=true";
+
+    if (localStorage.getItem("oauthPrompt")) {
+      link += `&prompt=${localStorage.getItem("oauthPrompt")}`;
+    }
 
     return <Nav.Link href={link}>Login</Nav.Link>;
   }
@@ -110,6 +115,7 @@ export const PostAuthenticate = (props) => {
         };
 
         localStorage.setItem("userData", JSON.stringify(userData));
+        localStorage.removeItem("oauthPrompt");
         props.OnUserDataChange(userData);
       } catch (err) {
         console.error("Error logging on");
