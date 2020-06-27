@@ -144,13 +144,22 @@ exports.sendDailyEmail = async (event) => {
       return StandardResponse("Nothing to say today");
     }
 
+    // who are we supposed to send this to?
+    queryParams = {
+      TableName: "SiteAdmins",
+    };
+    data = await db.scan(queryParams).promise();
+    const recipients = data.Items.filter((x) => x.dailyEmail)
+      .map((x) => x.email)
+      .join(",");
+
     let transporter = nodemailer.createTransport({
       SES: ses,
     });
 
     let info = await transporter.sendMail({
       from: "info@queerburnersdirectory.com",
-      to: "joel@spolsky.com", // TODO GET LIST OF ADMINS
+      to: recipients,
       subject: "[queerburnersdirectory] Daily Change Report",
       text: "This message requires an email client that supports HTML mail.",
       html: htmlMail,
