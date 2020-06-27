@@ -34,12 +34,28 @@ export const Authenticate = (props) => {
     }
   }, [props.userData, props]);
 
-  if (props.userData && props.userData.isLoggedOn) {
-    //
-    // TODO Logout link
-    // TODO beautify the Logged On dropdown menu it's ugggggli
-    //
+  // every 10 seconds, we check if the user login token is expiring.
+  // If so, we kinda force a logout, so the UI doesn't appear to show
+  // you that you are logged on.
+  useEffect(() => {
+    let interval = setInterval(() => {
+      if (
+        props.userData.isLoggedOn &&
+        new Date(props.userData.expires).valueOf() - 10000 <
+          new Date().valueOf()
+      ) {
+        // user token expired.
+        localStorage.removeItem("userData");
+        props.OnUserDataChange({ isLoggedOn: false });
+      }
+    }, 10000);
 
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
+  if (props.userData && props.userData.isLoggedOn) {
     return (
       <>
         <Image
