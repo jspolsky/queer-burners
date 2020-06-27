@@ -536,32 +536,62 @@ exports.campsYearNameGet = async (event) => {
 };
 
 exports.campsYearNameDelete = async (event) => {
-  const {
-    pathParameters: { year, name },
-  } = event; // extract unique id and permissions from the request path
-
-  const remoteUser = await GetRemoteUser(event);
-
-  if (!remoteUser || !remoteUser.isadmin) {
-    // TODO also let people delete their own camp
-    return StandardError(`Only admins can delete for now`);
-  }
-
-  const params = {
-    TableName: "camps",
-    Key: {
-      year: Number(year),
-      name: decodeURIComponent(name),
-    },
-    UpdateExpression: "set deleted = :deleted",
-    ExpressionAttributeValues: {
-      ":deleted": new Date().toISOString(),
-    },
-  };
   try {
+    const {
+      pathParameters: { year, name },
+    } = event; // extract unique id and permissions from the request path
+
+    const remoteUser = await GetRemoteUser(event);
+
+    if (!remoteUser) {
+      return StandardError("Must be logged on to delete a camp");
+    }
+
+    let params = {
+      TableName: "camps",
+      Key: {
+        year: Number(year),
+        name: decodeURIComponent(name),
+      },
+      ExpressionAttributeNames: queryAttributesEAN,
+      ProjectionExpression: queryAttributesPE,
+    };
+
+    let permitted = false;
+    if (remoteUser.isadmin) {
+      permitted = true;
+    } else {
+      // check if it's theirs
+      const data = await db.get(params).promise();
+      if (
+        data.Item &&
+        data.Item.contact &&
+        data.Item.contact.email === remoteUser.email
+      ) {
+        permitted = true;
+      }
+    }
+
+    if (!permitted) {
+      return StandardError("You do not have permission to delete that camp");
+    }
+
+    params = {
+      TableName: "camps",
+      Key: {
+        year: Number(year),
+        name: decodeURIComponent(name),
+      },
+      UpdateExpression: "set deleted = :deleted",
+      ExpressionAttributeValues: {
+        ":deleted": new Date().toISOString(),
+      },
+    };
+
     await db.update(params).promise();
     return StandardResponse(null);
   } catch (e) {
+    console.log(e);
     return StandardError(e);
   }
 };
