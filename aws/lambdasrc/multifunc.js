@@ -85,9 +85,20 @@ const filterPrivateInfo = (arrayOfCamps) => {
   });
 };
 
-const isEmailAdmin = (email) => {
-  //TODO check db
-  return email === "joel@spolsky.com";
+const isEmailAdmin = async (email) => {
+  const params = {
+    TableName: "SiteAdmins",
+    Key: {
+      email: email,
+    },
+  };
+
+  try {
+    const admins = await db.get(params).promise();
+    return Object.keys(admins).length > 0;
+  } catch (e) {}
+
+  return false;
 };
 
 const LookupToken = async (idToken) => {
@@ -99,12 +110,11 @@ const LookupToken = async (idToken) => {
       audience: process.env.googleClientId,
     });
     const payload = ticket.getPayload();
-    console.log(JSON.stringify(payload));
     return {
       google_user_id: payload.sub,
       email: payload.email,
       name: payload.name,
-      isadmin: isEmailAdmin(payload.email),
+      isadmin: await isEmailAdmin(payload.email),
       imageUrl: payload.picture,
       duration: payload.exp - payload.iat,
     };
