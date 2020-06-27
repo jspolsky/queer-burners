@@ -96,6 +96,7 @@ export default class DirectoryBody extends React.Component {
     if (this.props.userData.isAdmin && !prevProps.userData.isAdmin) {
       await this.fetchData(false);
     } else if (this.props.year !== prevProps.year) {
+      this.setState({ search: "" });
       await this.fetchData(true);
     }
   }
