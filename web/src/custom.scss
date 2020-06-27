@@ -40,3 +40,25 @@
   width: 80%;
   max-width: none !important;
 }
+
+.qb-footer {
+  background-color: #f7f7f7;
+}
+
+.qb-footer ul {
+  padding-inline-start: 0;
+}
+
+.qb-footer ul li {
+  display: inline-block;
+  padding-right: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.qb-textpage h3 {
+  color: #495057;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding-top: 1rem;
+}
