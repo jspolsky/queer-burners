@@ -10,6 +10,7 @@ import Image from "react-bootstrap/Image";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
+import { LogonLink } from "./Authenticate.js";
 
 import { defaultYear, api, s3images } from "../definitions.js";
 import { fieldError, emptyCamp } from "shared";
@@ -185,6 +186,9 @@ export default class SubmitBody extends React.Component {
             <p>
               To add your theme camp to this directory, please start by logging
               in using a Google Account.
+            </p>
+            <p>
+              <LogonLink />
             </p>
             <p>
               We will use the email address associated with your Google Account

@@ -14,9 +14,34 @@ import { googleClientId, oauthEndpoint, api } from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { hashEmail } from "shared";
 
-export const Authenticate = (props) => {
+export const LogonLink = () => {
+  return <a href={LogonLinkAddress()}>Login</a>;
+};
+
+const LogonLinkAddress = () => {
   let location = useLocation();
 
+  let link =
+    oauthEndpoint +
+    "?state=" +
+    encodeURIComponent(location.pathname + location.search) +
+    "&client_id=" +
+    googleClientId +
+    "&redirect_uri=" +
+    encodeURIComponent(window.location.origin + "/postauthenticate") +
+    "&response_type=code" +
+    "&scope=openid%20email%20profile" +
+    "&access_type=offline" +
+    "&include_granted_scopes=true";
+
+  if (localStorage.getItem("oauthPrompt")) {
+    link += `&prompt=${localStorage.getItem("oauthPrompt")}`;
+  }
+
+  return link;
+};
+
+export const Authenticate = (props) => {
   useEffect(() => {
     if (!props.userData.isLoggedOn) {
       // user isn't logged on. Do they want to be?
@@ -81,24 +106,7 @@ export const Authenticate = (props) => {
       </>
     );
   } else {
-    let link =
-      oauthEndpoint +
-      "?state=" +
-      encodeURIComponent(location.pathname + location.search) +
-      "&client_id=" +
-      googleClientId +
-      "&redirect_uri=" +
-      encodeURIComponent(window.location.origin + "/postauthenticate") +
-      "&response_type=code" +
-      "&scope=openid%20email%20profile" +
-      "&access_type=offline" +
-      "&include_granted_scopes=true";
-
-    if (localStorage.getItem("oauthPrompt")) {
-      link += `&prompt=${localStorage.getItem("oauthPrompt")}`;
-    }
-
-    return <Nav.Link href={link}>Login</Nav.Link>;
+    return <Nav.Link href={LogonLinkAddress()}>Login</Nav.Link>;
   }
 };
 
