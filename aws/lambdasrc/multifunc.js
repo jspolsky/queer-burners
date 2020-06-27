@@ -96,7 +96,9 @@ const isEmailAdmin = async (email) => {
   try {
     const admins = await db.get(params).promise();
     return Object.keys(admins).length > 0;
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   return false;
 };

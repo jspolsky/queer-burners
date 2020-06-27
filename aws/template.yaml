@@ -178,6 +178,7 @@ Resources:
       Description: "Part of the Google OAuth2 Login Flow"
       FunctionName: qb-google-idtoken-from-authcode
       Handler: multifunc.GoogleIdTokenFromAuthCode
+      Policies: AmazonDynamoDBReadOnlyAccess
       Events:
         GoogleIdTokenFromAuthCode:
           Type: Api
