@@ -778,6 +778,7 @@ const ImageUploader = (props) => {
 const DeleteButton = (props) => {
   const [show, setShow] = useState(false);
   const [needsScroll, setNeedsScroll] = useState(false);
+  const [done, setDone] = useState(false);
   const alertEl = useRef(null);
 
   useEffect(() => {
@@ -789,6 +790,10 @@ const DeleteButton = (props) => {
       setNeedsScroll(false);
     }
   }, [needsScroll]);
+
+  if (done) {
+    return <Redirect to={`/year/${props.year}`}></Redirect>;
+  }
 
   return (
     <>
@@ -824,7 +829,7 @@ const DeleteButton = (props) => {
                     },
                   }
                 );
-                // TODO redirect to home page
+                setDone(true);
               }}
               variant="danger"
             >
