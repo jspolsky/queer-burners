@@ -43,10 +43,17 @@
 
 .qb-footer {
   background-color: #f7f7f7;
+  color: #495057;
+}
+
+.qb-footer p {
+  margin-bottom: 0;
+  font-size: 0.8rem;
 }
 
 .qb-footer ul {
   padding-inline-start: 0;
+  margin-bottom: 0;
 }
 
 .qb-footer ul li {

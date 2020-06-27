@@ -7,13 +7,12 @@ import { Link } from "react-router-dom";
 
 export const Footer = (props) => {
   return (
-    <Container fluid className="p-3 p-md-5 qb-footer">
+    <Container fluid className="p-3 p-md-4 qb-footer">
       <Row>
         <Col>
           <p>
-            A project of Queer Burners:
-            <br />
-            The LGBTQ+ experience in a 10 principle based community
+            A project of Queer Burners: an online community of LGBTQ+ burners
+            from around the world.
           </p>
           <ul>
             <li>
