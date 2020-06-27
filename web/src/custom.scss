@@ -28,6 +28,15 @@
   }
 }
 
+.camp-lightbox {
+  @include media-breakpoint-down(sm) {
+    width: 97%;
+  }
+
+  width: 80%;
+  max-width: none !important;
+}
+
 .GoogleUserPicture {
   max-height: 2rem;
   max-width: 2rem;

@@ -77,7 +77,7 @@ const Lightbox = (props) => {
   return (
     <Modal
       show={props.show}
-      dialogClassName="modal-80w"
+      dialogClassName="camp-lightbox "
       onHide={() => props.setShow(false)}
     >
       <Modal.Header closeButton>
