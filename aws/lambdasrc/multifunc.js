@@ -268,6 +268,7 @@ exports.campsPost = async (event) => {
   // Gather submitted camp data
   //
   let jsonCamp = {};
+  let params;
 
   try {
     jsonCamp = JSON.parse(event.body);
@@ -292,14 +293,36 @@ exports.campsPost = async (event) => {
 
   const renaming = !!camp.originalName && camp.originalName !== camp.name;
 
-  // TODO noclobber -- if renaming, load the NEW NAME camp and it BETTER NOT EXIST
+  // noclobber -- if renaming, load the NEW NAME camp and it BETTER NOT EXIST
+
+  if (renaming) {
+    params = {
+      TableName: "camps",
+      Key: {
+        year: Number(camp.year),
+        name: camp.name,
+      },
+      ExpressionAttributeNames: queryAttributesEAN,
+      ProjectionExpression: queryAttributesPE,
+    };
+
+    let clobberedcamp = null;
+
+    try {
+      clobberedcamp = await db.get(params).promise();
+    } catch (e) {}
+
+    if (clobberedcamp && Object.keys(clobberedcamp).length > 0) {
+      return StandardError("A camp with that name already exists");
+    }
+  }
 
   //
   // Find out if this camp already exists and if so, who is
   // authorized to edit it
   //
 
-  let params = {
+  params = {
     TableName: "camps",
     Key: {
       year: Number(camp.year),
