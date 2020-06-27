@@ -229,17 +229,21 @@ export default class SubmitBody extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    if (!this.props.camp || this.props.camp.length === 0) {
-      this.setState({ _ready_to_show_form: true });
-      return;
-    }
-
+  async fetchData() {
     try {
       const response = await axios.get(
-        `${api}/camps/${this.props.year}/${encodeURIComponent(this.props.camp)}`
+        `${api}/camps/${this.props.year}/${encodeURIComponent(
+          this.props.camp
+        )}`,
+        {
+          auth: {
+            username: this.props.userData.idToken,
+            password: "",
+          },
+        }
       );
       const data = response.data[0];
+
       this.setState({
         ...data,
         originalName: data.name,
@@ -248,6 +252,24 @@ export default class SubmitBody extends React.Component {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (
+      prevProps.userData.isAdmin !== this.props.userData.isAdmin ||
+      prevProps.year !== this.props.year ||
+      prevProps.camp !== this.props.camp
+    )
+      await this.fetchData();
+  }
+
+  async componentDidMount() {
+    if (!this.props.camp || this.props.camp.length === 0) {
+      this.setState({ _ready_to_show_form: true });
+      return;
+    }
+
+    await this.fetchData();
   }
 
   render() {
@@ -599,6 +621,54 @@ export default class SubmitBody extends React.Component {
                 )}
               </Col>
             </Row>
+
+            {this.state.contact &&
+              this.state.contact.email &&
+              this.state.contact.name &&
+              this.props.userData.isAdmin && (
+                <Row style={{ border: "3px solid #f7f7f7" }}>
+                  <Col xs={12} md={4} style={{ backgroundColor: "#f7f7f7" }}>
+                    Administrators Only
+                    <br />
+                    <Form.Text className="text-muted">
+                      You are logged on as an administrator so you can edit who
+                      owns this camp.{" "}
+                      <strong>This private info is not shown to users.</strong>
+                    </Form.Text>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <Form.Group controlId="contact.email">
+                      <Form.Label>Private Email</Form.Label>
+                      <Form.Control
+                        type="input"
+                        placeholder="a@example.com"
+                        name="contact.email"
+                        value={this.state.contact.email}
+                        onChange={this.changeHandler}
+                      ></Form.Control>
+                      <Form.Text className="text-muted">
+                        The private email address of the person who submitted
+                        this camp. This controls who can edit the camp.
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <Form.Group controlId="contact.name">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        type="input"
+                        placeholder="Pat Burner"
+                        name="contact.name"
+                        value={this.state.contact.name}
+                        onChange={this.changeHandler}
+                      ></Form.Control>
+                      <Form.Text className="text-muted">
+                        The name of the person who submitted this camp.
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                </Row>
+              )}
 
             <Row>
               <Col>

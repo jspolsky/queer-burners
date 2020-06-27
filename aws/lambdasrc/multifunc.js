@@ -369,7 +369,12 @@ exports.campsPost = async (event) => {
     }
     camp.updated = new Date().toISOString();
     camp.created = originalcamp.Item.created;
-    camp.contact = originalcamp.Item.contact;
+
+    // When non-admins submit a change, they do not provide contact info because it can't be changing
+    // When admins submit a change, they do provide contact info because they are allowed to change it
+    if (!remoteUser.isadmin) {
+      camp.contact = originalcamp.Item.contact;
+    }
   }
 
   params = {
@@ -505,6 +510,8 @@ exports.campsYearNameGet = async (event) => {
     pathParameters: { year, name },
   } = event; // extract unique id from the request path
 
+  const remoteUser = await GetRemoteUser(event);
+
   const params = {
     TableName: "camps",
     Key: {
@@ -515,8 +522,12 @@ exports.campsYearNameGet = async (event) => {
     ProjectionExpression: queryAttributesPE,
   };
   try {
-    const data = await db.get(params).promise();
-    return StandardResponse(filterPrivateInfo([data.Item]));
+    let data = await db.get(params).promise();
+    if (!remoteUser || !remoteUser.isadmin) {
+      return StandardResponse(filterPrivateInfo([data.Item]));
+    } else {
+      return StandardResponse([data.Item]);
+    }
   } catch (e) {
     return StandardError(e);
   }
