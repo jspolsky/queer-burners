@@ -29,7 +29,7 @@ export default class SubmitBody extends React.Component {
       // camp directory object, which can be submitted to the
       // API and stored in the database.
       ...emptyCamp,
-      year: defaultYear,
+      year: defaultYear === 2020 ? 2021 : defaultYear,
 
       // state keys starting with '_' are Component state
       // and form metadata which will never be submitted to the API

@@ -27,12 +27,15 @@ class Header extends React.Component {
               <LinkContainer to="/submit">
                 <Nav.Link>Submit</Nav.Link>
               </LinkContainer>
-              <NavDropdown title="Past Years" id="collasible-nav-dropdown">
+              <NavDropdown title="Other Years" id="collasible-nav-dropdown">
                 <LinkContainer to="/year/2019">
                   <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
                 </LinkContainer>
                 <LinkContainer to="/year/2020">
                   <NavDropdown.Item>2020 The Multiverse</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/year/2021">
+                  <NavDropdown.Item>2021</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
             </Nav>
