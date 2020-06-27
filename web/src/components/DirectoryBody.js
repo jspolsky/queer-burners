@@ -11,6 +11,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+import Card from "react-bootstrap/Card";
 
 import CampCard from "./CampCard.js";
 
@@ -45,7 +46,7 @@ export default class DirectoryBody extends React.Component {
     super(props);
     this.state = {
       filter: "all",
-      search: "",
+      search: this.props.search ? this.props.search : "",
       data: null,
       cancelFn: null,
     };
@@ -241,13 +242,75 @@ export default class DirectoryBody extends React.Component {
                           isadmin={this.props.userData.isAdmin}
                         />
                       ))}
+                    {this.props.search ? (
+                      <Card bg="success" text="white">
+                        <Card.Header>
+                          <strong>Thank you!</strong>
+                        </Card.Header>
+                        <Card.Body>
+                          <p>
+                            <strong>{this.props.search}</strong> will now appear
+                            in the Queer Burners Directory for {this.props.year}
+                            .
+                          </p>
+                          <p>
+                            You can edit this listing, change the picture, and
+                            add more information at any time. Just come back to
+                            queerburnersdirectory.com and log on again using
+                            your Google account.
+                          </p>
+                          <p>
+                            This directory is a service of{" "}
+                            <a
+                              href="http://queerburners.com/"
+                              className="text-reset"
+                              style={{ textDecoration: "underline" }}
+                            >
+                              Queer Burners
+                            </a>
+                            , an online community of LGBTQ+ burners from around
+                            the world. Check out our website for galleries, the
+                            history of LGBTQ+ participants at Burning Man, and
+                            more. We also have{" "}
+                            <a
+                              href="https://www.facebook.com/groups/queer.burners/"
+                              className="text-reset"
+                              style={{ textDecoration: "underline" }}
+                            >
+                              an active Facebook group
+                            </a>{" "}
+                            to keep in touch and hope you will join!
+                          </p>
+                          <Button
+                            onClick={() => {
+                              this.setState({ search: "" });
+                            }}
+                          >
+                            Ok
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                    ) : (
+                      <Card bg="success" text="white">
+                        <Card.Header>
+                          <strong>Don't see your camp here?</strong>
+                        </Card.Header>
+                        <Card.Body>
+                          <p>
+                            Please{" "}
+                            <Link
+                              to="/submit"
+                              className="text-reset"
+                              style={{ textDecoration: "underline" }}
+                            >
+                              submit it
+                            </Link>
+                            !
+                          </p>
+                        </Card.Body>
+                      </Card>
+                    )}
                   </CardColumns>
-                </Col>
-              </Row>
-              <Row className="pb-4">
-                <Col>
-                  Don't see your camp here?&nbsp;{" "}
-                  <Link to="/submit">Submit it!</Link>
                 </Col>
               </Row>
             </>

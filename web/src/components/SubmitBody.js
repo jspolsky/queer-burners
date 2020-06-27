@@ -250,9 +250,9 @@ export default class SubmitBody extends React.Component {
     if (this.state._submit_successful) {
       return (
         <Redirect
-          to={`/${
-            defaultYear !== this.state.year ? "year/" + this.state.year : ""
-          }`}
+          to={`/year/${this.state.year}?s=${encodeURIComponent(
+            this.state.name
+          )}`}
         />
       );
     } else if (!this.props.userData.isLoggedOn) {

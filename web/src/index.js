@@ -41,6 +41,7 @@ const TopLevelComponent = (props) => {
           <DirectoryBody
             {...props}
             year={props.match.params.year}
+            search={new URLSearchParams(props.location.search).get("s")}
             userData={userData}
           />
         )}
