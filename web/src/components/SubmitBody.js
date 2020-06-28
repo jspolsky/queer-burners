@@ -229,6 +229,10 @@ export default class SubmitBody extends React.Component {
   }
 
   async fetchData() {
+    if (!this.props.camp || this.props.camp.length === 0) {
+      return;
+    }
+
     try {
       const response = await axios.get(
         `${api}/camps/${this.props.year}/${encodeURIComponent(
