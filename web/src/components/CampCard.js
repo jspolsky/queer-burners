@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
@@ -29,49 +29,77 @@ function JoinButton(props) {
     );
 
     return (
-      <OverlayTrigger trigger="click" placement="top" overlay={popover}>
-        <Button variant="outline-info" size="sm" style={{ marginLeft: "1rem" }}>
+      <OverlayTrigger
+        rootClose
+        trigger="click"
+        placement="top"
+        overlay={popover}
+      >
+        <Badge
+          variant="primary"
+          as="a"
+          size="sm"
+          style={{ cursor: "pointer", color: "white" }}
+        >
           Join Us!
-        </Button>
+        </Badge>
       </OverlayTrigger>
     );
   } else return null;
 }
 
-function DisplayURL(props) {
-  if (props.url) {
-    const strippedURL = props.url
-      .replace(/^https?:\/\//, "")
-      .replace(/\/$/, "");
-    return (
-      <div>
-        <Image
-          src={require("../assets/social_www.svg")}
-          style={{ width: "1.3rem", paddingRight: ".35rem" }}
-        />
-        <a href={props.url}>{strippedURL}</a>
-      </div>
-    );
-  } else {
-    return null;
-  }
-}
+const DisplaySocialLink = ({ linkType, raw }) => {
+  // valid linkTypes: url, email, facebook, instagram, twitter
+  // raw is the way it is stored in the database in the field of the same name
 
-function DisplayEmail(props) {
-  if (props.email) {
-    return (
-      <div style={{ marginBottom: "1rem" }}>
-        <Image
-          src={require("../assets/social_email.svg")}
-          style={{ width: "1.3rem", paddingRight: ".35rem" }}
-        />
-        <a href={"mailto:" + props.email}>{props.email}</a>
-      </div>
-    );
-  } else {
-    return null;
+  if (!raw) return null;
+
+  let href = raw;
+  let display = raw;
+
+  switch (linkType) {
+    case "url":
+      display = raw
+        .replace(/^https?:\/\//, "")
+        .replace(/\/$/, "")
+        .replace(/^www\./, "");
+      break;
+
+    case "email":
+      href = `mailto:${raw}`;
+      break;
+
+    case "facebook":
+      display = raw
+        .replace(/^https?:\/\//, "")
+        .replace(/\/$/, "")
+        .replace(/^www\./, "");
+      break;
+
+    case "instagram":
+      href = `https://instagram.com/${raw}`;
+      break;
+
+    case "twitter":
+      href = `https://twitter.com/${raw}`;
+      display = `@${raw}`;
+      break;
+
+    default:
   }
-}
+
+  return (
+    <div>
+      <Image
+        src={require(`../assets/social_${linkType}.svg`)}
+        style={{ width: "1.2rem", paddingRight: ".35rem" }}
+      />
+      <a style={{ fontSize: "0.85rem" }} href={href}>
+        {display}
+      </a>
+    </div>
+  );
+};
 
 const Lightbox = (props) => {
   return (
@@ -124,31 +152,20 @@ const CampCard = (props) => {
           <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
             {o.name}
           </span>
-          <JoinButton o={o} />
         </Card.Header>
         <Card.Body>
           <Card.Subtitle className="mb-2 text-muted">
             {o.identifies}
             {o.location && o.location.string && <div>{o.location.string}</div>}
           </Card.Subtitle>
-          <Card.Text>{o.about}</Card.Text>
-          <DisplayURL url={o.url} />
-          <DisplayEmail email={o.email} />
-          {["facebook", "instagram", "twitter"].map((s) => {
-            if (!o[s]) return null;
-            let url = o[s];
-            if (s === "twitter" || s === "instagram")
-              url = `https://${s}.com/${url}`;
-            return (
-              <a href={url} key={s}>
-                <Image
-                  src={require("../assets/social_" + s + ".svg")}
-                  style={{ width: "1.8rem", paddingRight: ".35rem" }}
-                />
-              </a>
-            );
+          <Card.Text>
+            {o.about} <JoinButton o={o} />
+          </Card.Text>
+
+          {["url", "facebook", "email", "instagram", "twitter"].map((s) => {
+            return <DisplaySocialLink key={s} linkType={s} raw={o[s]} />;
           })}
-          <h4>
+          <h4 style={{ marginTop: "0.7rem" }}>
             {o.offerShowers && (
               <OverlayTrigger
                 key="shower"
