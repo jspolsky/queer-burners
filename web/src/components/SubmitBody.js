@@ -11,7 +11,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { LogonLink } from "./Authenticate.js";
 import { ImageUploader } from "./ImageUploader.js";
 
-import { defaultYear, api } from "../definitions.js";
+import { defaultYear, api, s3images } from "../definitions.js";
 import { fieldError, emptyCamp } from "shared";
 
 import axios from "axios";
@@ -47,6 +47,7 @@ export default class SubmitBody extends React.Component {
       _submit_in_progress: false,
       _submit_successful: false,
       _ready_to_show_form: false,
+      _submit_disabled: false,
     };
   }
 
@@ -511,12 +512,25 @@ export default class SubmitBody extends React.Component {
 
             <Row>
               <Col>
-                <ImageUploader
-                  thumbnail={this.state.thumbnail}
-                  onChange={(thumbnail) => {
-                    this.setState({ thumbnail: thumbnail });
-                  }}
-                />
+                <Form.Group controlId="thumbnail">
+                  <Form.Label>Upload a picture of your camp here</Form.Label>
+                  <ImageUploader
+                    thumbnail={this.state.thumbnail}
+                    onChange={(thumbnail) => {
+                      this.setState({ thumbnail: thumbnail });
+                    }}
+                    s3images={s3images}
+                    api={api}
+                    onSubmitInProgress={(inProgress) => {
+                      this.setState({ _submit_disabled: inProgress });
+                    }}
+                  />
+                  <Form.Text className="text-muted">
+                    This picture will appear in the Queer Burners directory.
+                    Submit a picture of your campers, your frontage, or
+                    something else fun, but please keep it SFW!
+                  </Form.Text>
+                </Form.Group>
               </Col>
             </Row>
 
@@ -698,7 +712,11 @@ export default class SubmitBody extends React.Component {
                   </Spinner>
                 ) : (
                   <span>
-                    <Button variant="primary" type="submit">
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      disabled={this.state._submit_disabled}
+                    >
                       Submit
                     </Button>{" "}
                     {this.props.year && this.props.camp && (
