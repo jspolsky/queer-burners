@@ -245,3 +245,17 @@ Resources:
         - nodejs12.x
       LicenseInfo: "Not applicable"
       RetentionPolicy: Retain
+
+  PostsGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Gets a list of all posts"
+      FunctionName: qb-posts-get
+      Handler: multifunc.postsGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        PostsGet:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: get

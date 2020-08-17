@@ -40,7 +40,7 @@ exports.Options = async (event) => {
   return StandardResponse("Hello!");
 };
 
-// list of attributes to pull from database
+// list of attributes to pull from database (for camps)
 const queryAttributes = [
   "year",
   "name",
@@ -599,4 +599,43 @@ exports.campsYearNameDelete = async (event) => {
 exports.isAdmin = async (event) => {
   const remoteUser = await GetRemoteUser(event);
   return StandardResponse(remoteUser && remoteUser.isadmin);
+};
+
+//
+//
+//
+//  P O S T S
+//
+//  Because every sufficiently complicated website contains
+//  an ad hoc, informally-specified, bug-ridden, slow implementation
+//  of half of WordPress.
+//
+//
+//
+
+// list of attributes to pull from database (for posts)
+const queryAttributesPosts = ["path", "description", "post"];
+
+const queryAttributesPostsEAN = queryAttributesPosts.reduce((res, it, i) => {
+  res["#" + it] = it;
+  return res;
+}, {});
+
+const queryAttributesPostsPE = queryAttributesPosts
+  .map((s) => "#" + s)
+  .join(",");
+
+exports.postsGet = async (event) => {
+  const params = {
+    TableName: "posts",
+    ExpressionAttributeNames: queryAttributesPostsEAN,
+    ProjectionExpression: queryAttributesPostsPE,
+  };
+
+  try {
+    const data = await db.scan(params).promise();
+    return StandardResponse(data.Items);
+  } catch (e) {
+    return StandardError(e);
+  }
 };
