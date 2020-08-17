@@ -13,6 +13,7 @@ import * as serviceWorker from "./serviceWorker";
 import "./custom.scss";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
+import EditPosts from "./components/EditPosts";
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -52,6 +53,11 @@ const TopLevelComponent = (props) => {
       />
       <Route path="/privacy" component={PrivacyBody} />
       <Route path="/FAQ" component={FAQ} />
+      <Route
+        path="/editposts"
+        render={(props) => <EditPosts userData={userData} />}
+      />
+
       <Route
         path="/edit/:year"
         render={(props) => {

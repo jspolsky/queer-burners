@@ -12,6 +12,8 @@ import Col from "react-bootstrap/Col";
 
 import { googleClientId, oauthEndpoint, api } from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { LinkContainer } from "react-router-bootstrap";
+
 import { hashEmail } from "shared";
 
 export const LogonLink = () => {
@@ -93,6 +95,9 @@ export const Authenticate = (props) => {
             Logged on as {props.userData.email}
             {props.userData.isAdmin && <em> (admin)</em>}
           </NavDropdown.Item>
+          <LinkContainer to="/editPosts">
+            <NavDropdown.Item>Edit Posts</NavDropdown.Item>
+          </LinkContainer>
           <NavDropdown.Item
             onClick={() => {
               localStorage.removeItem("userData");
