@@ -24,13 +24,34 @@ export const EditPosts = (props) => {
     }
   }, [props.userData]);
 
+  if (!props.userData || !props.userData.isAdmin) {
+    return (
+      <Container className="qb-textpage">
+        <Row>
+          <Col>
+            <h3>
+              You have to be logged on to see this page.
+              <br />
+              <br />
+              <br />
+            </h3>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+
   return (
     <Container className="qb-textpage">
       <Row>
         <Col>
           <h1>Edit Posts</h1>
 
-          {props.userData && props.userData.isAdmin ? (
+          {data.length === 0 ? (
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          ) : (
             <>
               <Table bordered hover>
                 <thead>
@@ -42,7 +63,7 @@ export const EditPosts = (props) => {
                 </thead>
                 <tbody>
                   {data.map((i) => (
-                    <tr>
+                    <tr key={i.path}>
                       <td>/{i.path}</td>
                       <td>{i.description}</td>
                       <td>View | Edit | Delete</td>
@@ -52,11 +73,6 @@ export const EditPosts = (props) => {
               </Table>
               <p>+ Add a new post</p>
             </>
-          ) : (
-            <p>
-              You must be logged on as an administrator to edit posts on this
-              site.
-            </p>
           )}
         </Col>
       </Row>
