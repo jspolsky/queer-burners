@@ -12,9 +12,10 @@ import ScrollToTop from "./components/ScrollToTop.js";
 import * as serviceWorker from "./serviceWorker";
 import "./custom.scss";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import EditPosts from "./components/EditPosts";
 import EditPost from "./components/EditPost";
+import ViewPost from "./components/ViewPost";
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -28,68 +29,74 @@ const TopLevelComponent = (props) => {
           setUserData(newUserData);
         }}
       />
-      <Route
-        exact
-        path="/"
-        render={(props) => (
-          <DirectoryBody {...props} year="" userData={userData} />
-        )}
-      />
-      <Route
-        path="/submit"
-        render={(props) => (
-          <SubmitBody userData={userData} year={null} camp={null} />
-        )}
-      />
-      <Route
-        path="/year/:year"
-        render={(props) => (
-          <DirectoryBody
-            {...props}
-            year={props.match.params.year}
-            search={new URLSearchParams(props.location.search).get("s")}
-            userData={userData}
-          />
-        )}
-      />
-      <Route
-        path="/editPosts"
-        render={(props) => <EditPosts userData={userData} />}
-      />
-      <Route
-        path="/editPost/:post+"
-        render={(props) => (
-          <EditPost userData={userData} post={props.match.params.post} />
-        )}
-      />
-
-      <Route
-        path="/edit/:year"
-        render={(props) => {
-          return (
-            <SubmitBody
-              userData={userData}
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={(props) => (
+            <DirectoryBody {...props} year="" userData={userData} />
+          )}
+        />
+        <Route
+          path="/submit"
+          render={(props) => (
+            <SubmitBody userData={userData} year={null} camp={null} />
+          )}
+        />
+        <Route
+          path="/year/:year"
+          render={(props) => (
+            <DirectoryBody
+              {...props}
               year={props.match.params.year}
-              camp={new URLSearchParams(props.location.search).get("camp")}
+              search={new URLSearchParams(props.location.search).get("s")}
+              userData={userData}
             />
-          );
-        }}
-      />
-      <Route
-        path="/postauthenticate"
-        render={(props) => (
-          <PostAuthenticate
-            {...props}
-            OnUserDataChange={(newUserData) => {
-              setUserData(newUserData);
-            }}
-          />
-        )}
-      />
+          )}
+        />
+        <Route
+          path="/editPosts"
+          render={(props) => <EditPosts userData={userData} />}
+        />
+        <Route
+          path="/editPost/:post+"
+          render={(props) => (
+            <EditPost userData={userData} post={props.match.params.post} />
+          )}
+        />
 
-      <Route path="/privacy" component={PrivacyBody} />
-      <Route path="/FAQ" component={FAQ} />
+        <Route
+          path="/edit/:year"
+          render={(props) => {
+            return (
+              <SubmitBody
+                userData={userData}
+                year={props.match.params.year}
+                camp={new URLSearchParams(props.location.search).get("camp")}
+              />
+            );
+          }}
+        />
+        <Route
+          path="/postauthenticate"
+          render={(props) => (
+            <PostAuthenticate
+              {...props}
+              OnUserDataChange={(newUserData) => {
+                setUserData(newUserData);
+              }}
+            />
+          )}
+        />
 
+        <Route path="/privacy" component={PrivacyBody} />
+        <Route path="/FAQ" component={FAQ} />
+
+        <Route
+          path="/:post+"
+          render={(props) => <ViewPost post={props.match.params.post} />}
+        />
+      </Switch>
       <Footer />
     </Router>
   );
