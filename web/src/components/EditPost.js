@@ -17,7 +17,6 @@ export const EditPost = (props) => {
       const result = await axios(`${api}/posts`);
 
       setData(result.data);
-      console.log(result.data);
     };
 
     if (props.userData && props.userData.isAdmin) {

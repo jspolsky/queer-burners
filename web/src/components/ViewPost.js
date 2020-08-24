@@ -12,27 +12,24 @@ export const ViewPost = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(`${api}/posts`);
+      const result = await axios(`${api}/posts/${props.post}`);
 
       setData(result.data);
-      console.log(result.data);
     };
 
     fetchData();
-  }, []);
+  }, [props.post]);
 
   return (
     <Container className="qb-textpage">
       <Row>
         <Col>
-          <h1>View One Post, vis {props.post}</h1>
-
           {data.length === 0 ? (
             <div className="spinner-border" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           ) : (
-            <>hi bub</>
+            <div dangerouslySetInnerHTML={{ __html: data.post }} />
           )}
         </Col>
       </Row>

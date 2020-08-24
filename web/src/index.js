@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import PrivacyBody from "./components/PrivacyBody.js";
-import FAQ from "./components/FAQ.js";
 import DirectoryBody from "./components/DirectoryBody.js";
 import SubmitBody from "./components/SubmitBody.js";
 import Header from "./components/Header.js";
@@ -88,9 +86,6 @@ const TopLevelComponent = (props) => {
             />
           )}
         />
-
-        <Route path="/privacy" component={PrivacyBody} />
-        <Route path="/FAQ" component={FAQ} />
 
         <Route
           path="/:post+"
