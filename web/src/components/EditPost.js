@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 import { api } from "../definitions.js";
 
-export const EditPosts = (props) => {
+export const EditPost = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const EditPosts = (props) => {
     <Container className="qb-textpage">
       <Row>
         <Col>
-          <h1>Edit Posts</h1>
+          <h1>Edit One Post, vis {props.post}</h1>
 
           {data.length === 0 ? (
             <div className="spinner-border" role="status">
@@ -86,4 +86,4 @@ export const EditPosts = (props) => {
   );
 };
 
-export default EditPosts;
+export default EditPost;

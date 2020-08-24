@@ -614,7 +614,7 @@ exports.isAdmin = async (event) => {
 //
 
 // list of attributes to pull from database (for posts)
-const queryAttributesPosts = ["path", "description", "post"];
+const queryAttributesPosts = ["path", "description"];
 
 const queryAttributesPostsEAN = queryAttributesPosts.reduce((res, it, i) => {
   res["#" + it] = it;

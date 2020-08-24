@@ -14,6 +14,7 @@ import "./custom.scss";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
 import EditPosts from "./components/EditPosts";
+import EditPost from "./components/EditPost";
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -51,11 +52,15 @@ const TopLevelComponent = (props) => {
           />
         )}
       />
-      <Route path="/privacy" component={PrivacyBody} />
-      <Route path="/FAQ" component={FAQ} />
       <Route
-        path="/editposts"
+        path="/editPosts"
         render={(props) => <EditPosts userData={userData} />}
+      />
+      <Route
+        path="/editPost/:post+"
+        render={(props) => (
+          <EditPost userData={userData} post={props.match.params.post} />
+        )}
       />
 
       <Route
@@ -81,6 +86,10 @@ const TopLevelComponent = (props) => {
           />
         )}
       />
+
+      <Route path="/privacy" component={PrivacyBody} />
+      <Route path="/FAQ" component={FAQ} />
+
       <Footer />
     </Router>
   );
