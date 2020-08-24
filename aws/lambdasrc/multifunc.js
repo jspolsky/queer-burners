@@ -35,6 +35,16 @@ const StandardError = (e) => ({
   body: JSON.stringify(e),
 });
 
+const NotFound = (e) => ({
+  statusCode: 404,
+  headers: {
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+  },
+  body: JSON.stringify(e),
+});
+
 // for preflight CORS:
 exports.Options = async (event) => {
   return StandardResponse("Hello!");
@@ -635,6 +645,29 @@ exports.postsGet = async (event) => {
   try {
     const data = await db.scan(params).promise();
     return StandardResponse(data.Items);
+  } catch (e) {
+    return StandardError(e);
+  }
+};
+
+exports.postsGet1 = async (event) => {
+  const path = event.pathParameters.path; // extract post path from the request path
+
+  const params = {
+    TableName: "posts",
+    Key: {
+      path: event.pathParameters.path,
+    },
+    AttributesToGet: ["path", "post"],
+  };
+
+  try {
+    const posts = await db.get(params).promise();
+    if (Object.keys(posts).length === 0) {
+      return NotFound("Not found");
+    } else {
+      return StandardResponse(posts.Item);
+    }
   } catch (e) {
     return StandardError(e);
   }

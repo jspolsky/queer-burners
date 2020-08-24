@@ -246,6 +246,20 @@ Resources:
       LicenseInfo: "Not applicable"
       RetentionPolicy: Retain
 
+  PostsGet1:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Gets a single post"
+      FunctionName: qb-posts-get1
+      Handler: multifunc.postsGet1
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        PostsGet1:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: get
+
   PostsGet:
     Type: AWS::Serverless::Function
     Properties:
