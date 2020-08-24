@@ -1,3 +1,10 @@
 {
-  "routes": [{ "src": "/(.*)", "dest": "/" }]
+  "routes": [
+    { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/submit", "dest": "/" },
+    { "src": "/privacy", "dest": "/" },
+    { "src": "/postauthenticate", "dest": "/" },
+    { "src": "/year/\\d+", "dest": "/" },
+    { "src": "/edit/\\d+/(.*)", "dest": "/" }
+  ]
 }
