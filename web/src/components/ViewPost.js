@@ -12,9 +12,12 @@ export const ViewPost = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(`${api}/posts/${props.post}`);
-
-      setData(result.data);
+      try {
+        const result = await axios(`${api}/posts/${props.post}`);
+        setData(result.data);
+      } catch (e) {
+        setData({ post: "<h1>404 Not Found</h1>" });
+      }
     };
 
     fetchData();
