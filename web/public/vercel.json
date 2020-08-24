@@ -1,6 +1,7 @@
 {
   "routes": [
     { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/static/(.*)" },
     { "src": "/(.*)", "dest": "/" }
   ]
 }
