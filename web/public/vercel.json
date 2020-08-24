@@ -1,6 +1,8 @@
 {
   "routes": [
-    { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/manifest.json" },
+    { "src": "/favicon.ico" },
+    { "src": "/logo192.png" },
     { "src": "/static/(.*)" },
     { "src": "/(.*)", "dest": "/" }
   ]
