@@ -16,7 +16,11 @@ export const EditPosts = (props) => {
     const fetchData = async () => {
       const result = await axios(`${api}/posts`);
 
-      setData(result.data);
+      const sortedPosts = result.data.sort((a, b) =>
+        a.path.localeCompare(b.path)
+      );
+
+      setData(sortedPosts);
     };
 
     if (props.userData && props.userData.isAdmin) {
