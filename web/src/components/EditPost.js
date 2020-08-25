@@ -10,8 +10,6 @@ import Button from "react-bootstrap/Button";
 
 import { api } from "../definitions.js";
 
-// TODO CONFIRM LOGGED IN
-
 export const EditPost = (props) => {
   const [path, setPath] = useState("");
   const [description, setDescription] = useState("");
@@ -87,6 +85,23 @@ export const EditPost = (props) => {
     console.log(path);
     console.log(description);
   };
+
+  if (!props.userData || !props.userData.isAdmin) {
+    return (
+      <Container className="qb-textpage">
+        <Row>
+          <Col>
+            <h3>
+              You have to be logged on to see this page.
+              <br />
+              <br />
+              <br />
+            </h3>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 
   return (
     <Container className="qb-textpage">
