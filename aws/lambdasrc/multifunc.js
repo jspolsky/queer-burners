@@ -624,7 +624,7 @@ exports.isAdmin = async (event) => {
 //
 
 // list of attributes to pull from database (for posts)
-const queryAttributesPosts = ["path", "description"];
+const queryAttributesPosts = ["path", "description", "locked"];
 
 const queryAttributesPostsEAN = queryAttributesPosts.reduce((res, it, i) => {
   res["#" + it] = it;
@@ -658,7 +658,7 @@ exports.postsGet1 = async (event) => {
     Key: {
       path: event.pathParameters.path,
     },
-    AttributesToGet: ["path", "post"],
+    AttributesToGet: ["path", "description", "locked", "post"],
   };
 
   try {

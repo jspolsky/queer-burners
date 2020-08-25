@@ -70,7 +70,8 @@ export const EditPosts = (props) => {
                         <Link to={i.path}>View</Link>
                         &nbsp;|&nbsp;
                         <Link to={`/editPost/${i.path}`}>Edit</Link>
-                        &nbsp;|&nbsp; Delete
+                        &nbsp;
+                        {!i.locked && <span>|&nbsp; Delete</span>}
                       </td>
                     </tr>
                   ))}
