@@ -13,33 +13,97 @@ import { api } from "../definitions.js";
 // TODO CONFIRM LOGGED IN
 
 export const EditPost = (props) => {
-  const [data, setData] = useState([]);
+  const [path, setPath] = useState("");
+  const [description, setDescription] = useState("");
+  const [post, setPost] = useState("");
+  const [locked, setLocked] = useState(true);
+  const [loaded, setLoaded] = useState(false); /// haha locked and loaded haha
+  const [pathError, setPathError] = useState(null);
+  const [formValidated, setFormValidated] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await axios(`${api}/posts/${props.post}`);
-        setData(result.data);
+        setPath(result.data.path);
+        setDescription(result.data.description);
+        setPost(result.data.post);
+        setLocked(result.data.locked);
+        setLoaded(true);
       } catch (e) {
-        setData({ post: "<h1>404 Not Found</h1>" });
+        setDescription("404 not found");
       }
     };
 
     fetchData();
   }, [props.post]);
 
+  const changeHandler = (event) => {
+    switch (event.target.name) {
+      case "path":
+        setPath(event.target.value.trim());
+        break;
+
+      case "description":
+        setDescription(event.target.value);
+        break;
+
+      default:
+        break;
+    }
+
+    setFormValidated(false);
+  };
+
+  const submitHandler = async (event) => {
+    // TODO copy all that fancy shmancy submit handling (from SubmitBody.js)
+
+    event.preventDefault();
+    setFormValidated(true);
+
+    setPathError("");
+    document.getElementById("path").setCustomValidity("");
+
+    const tester2 = /\/\//;
+
+    if (path.startsWith("/") || path.endsWith("/") || tester2.test(path)) {
+      setPathError(
+        "Path should not start or end with /, or contain more than one / in a row"
+      );
+      document.getElementById("path").setCustomValidity("NOT");
+      return;
+    }
+
+    const tester = /^[a-zA-Z0-9\-_/]+$/;
+
+    if (!tester.test(path)) {
+      setPathError(
+        "This would not be a valid URL. Please stick to letters, numbers, -, _, and /"
+      );
+      document.getElementById("path").setCustomValidity("NOT");
+      return;
+    }
+
+    console.log(path);
+    console.log(description);
+  };
+
   return (
     <Container className="qb-textpage">
       <Row>
         <Col>
-          {data.length === 0 ? (
+          {!loaded ? (
             <div className="spinner-border" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           ) : (
             <div>
               <h1>Editing one post</h1>
-              <Form noValidate>
+              <Form
+                noValidate
+                validated={formValidated}
+                onSubmit={submitHandler}
+              >
                 <Form.Group controlId="path">
                   <Form.Label>Path</Form.Label>
                   <InputGroup>
@@ -48,16 +112,21 @@ export const EditPost = (props) => {
                         queerburnersdirectory.com/
                       </InputGroup.Text>
                     </InputGroup.Prepend>
-
                     <Form.Control
                       type="input"
                       placeholder="x/y/z"
                       name="path"
-                      value={data.path}
-                    ></Form.Control>
+                      value={path}
+                      readOnly={locked}
+                      onChange={changeHandler}
+                    ></Form.Control>{" "}
+                    <Form.Control.Feedback type="invalid">
+                      {pathError}
+                    </Form.Control.Feedback>
                   </InputGroup>
+
                   <Form.Text className="text-muted">
-                    The URL where this post appears
+                    The URL where this post appears. Can be multi/part
                   </Form.Text>
                 </Form.Group>
 
@@ -68,7 +137,8 @@ export const EditPost = (props) => {
                     type="description"
                     placeholder=""
                     name="description"
-                    value={data.description}
+                    value={description}
+                    onChange={changeHandler}
                   ></Form.Control>
                   <Form.Text className="text-muted">
                     Describe this post briefly
