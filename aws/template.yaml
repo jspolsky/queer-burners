@@ -273,3 +273,31 @@ Resources:
           Properties:
             Path: /posts
             Method: get
+
+  PostsPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Creates or edits a blog post"
+      FunctionName: qb-posts-post
+      Handler: multifunc.postsPost
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        PostsPost:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: post
+
+  PostsOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-posts-options
+      Handler: multifunc.Options
+      Events:
+        PostsOptions:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: options

@@ -54,6 +54,8 @@ export const EditPost = (props) => {
   };
 
   const submitHandler = async (event) => {
+    console.log(props.userData.idToken);
+
     // TODO copy all that fancy shmancy submit handling (from SubmitBody.js)
 
     event.preventDefault();
@@ -84,6 +86,8 @@ export const EditPost = (props) => {
 
     console.log(path);
     console.log(description);
+
+    // TODO ok now call postsPost on the server. it should be all ready for you
   };
 
   if (!props.userData || !props.userData.isAdmin) {

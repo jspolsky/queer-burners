@@ -373,7 +373,7 @@ exports.campsPost = async (event) => {
       !originalcamp.Item.contact ||
       (originalcamp.Item.contact.google_user_id !== remoteUser.google_user_id &&
         originalcamp.Item.contact.email !== remoteUser.email &&
-        !remoteUser.isadmin)
+        !remoteUser.id)
     ) {
       return StandardError(
         "Current logged-in user is not the creator of this camp and can't edit it"
@@ -671,4 +671,63 @@ exports.postsGet1 = async (event) => {
   } catch (e) {
     return StandardError(e);
   }
+};
+
+exports.postsPost = async (event) => {
+  const remoteUser = await GetRemoteUser(event);
+  if (!remoteUser || !remoteUser.isadmin) {
+    return StandardError(
+      "You must be logged on as an admin to create or edit a post"
+    );
+  }
+
+  let post = {};
+  try {
+    post = JSON.parse(event.body);
+  } catch (err) {
+    return StandardError("Unable to parse JSON");
+  }
+
+  // does post.path already exist? This is an edit.
+  let params = {
+    TableName: "posts",
+    Key: {
+      path: post.path,
+    },
+    AttributesToGet: ["path", "createdBy", "createTime"],
+  };
+
+  let originalPost = null;
+
+  try {
+    originalPost = await db.get(params).promise();
+  } catch (e) {
+    return StandardError("Error checking if post exists");
+  }
+
+  const newPost = Object.keys(originalPost).length === 0;
+
+  post.lastEditedBy = remoteUser.email;
+  post.lastEditedTime = new Date().toISOString();
+
+  if (newPost) {
+    post.createdBy = post.lastEditedBy;
+    post.createTime = post.lastEditedTime;
+  } else {
+    post.createdBy = originalPost.Item.createdBy;
+    post.createTime = originalPost.Item.createTime;
+  }
+
+  params = {
+    TableName: "posts",
+    Item: post,
+  };
+
+  try {
+    const data = await db.put(params).promise();
+  } catch (e) {
+    return StandardError("Error updating post");
+  }
+
+  return StandardResponse("Ok");
 };
