@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 
 export const Footer = (props) => {
   return (
-    <Container fluid className="p-3 p-md-4 qb-footer">
+    <Container
+      fluid
+      className="p-3 p-md-4 qb-footer"
+      style={{ marginTop: "2rem" }}
+    >
       <Row>
         <Col>
           <p>
