@@ -160,6 +160,18 @@ export const EditPost = (props) => {
                   </Form.Text>
                 </Form.Group>
 
+                <Form.Group controlId="post">
+                  <Form.Label>Post</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows="15"
+                    placeholder="Blog post here. Use HTML"
+                    name="post"
+                    onChange={changeHandler}
+                    value={post}
+                  ></Form.Control>
+                </Form.Group>
+
                 <Button variant="primary" type="submit">
                   Submit
                 </Button>
