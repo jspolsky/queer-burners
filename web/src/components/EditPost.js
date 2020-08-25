@@ -46,6 +46,10 @@ export const EditPost = (props) => {
         setDescription(event.target.value);
         break;
 
+      case "post":
+        setPost(event.target.value);
+        break;
+
       default:
         break;
     }
@@ -54,8 +58,6 @@ export const EditPost = (props) => {
   };
 
   const submitHandler = async (event) => {
-    console.log(props.userData.idToken);
-
     // TODO copy all that fancy shmancy submit handling (from SubmitBody.js)
 
     event.preventDefault();
@@ -84,10 +86,16 @@ export const EditPost = (props) => {
       return;
     }
 
-    console.log(path);
-    console.log(description);
+    const postToSubmit = {
+      path: path,
+      description: description,
+      post: post,
+      locked: locked,
+    };
 
-    // TODO ok now call postsPost on the server. it should be all ready for you
+    console.log(postToSubmit);
+
+    // TODO ok now call postsPost on the server. It should be all ready for you
   };
 
   if (!props.userData || !props.userData.isAdmin) {
@@ -136,7 +144,7 @@ export const EditPost = (props) => {
                       placeholder="x/y/z"
                       name="path"
                       value={path}
-                      readOnly={locked}
+                      readOnly={true}
                       onChange={changeHandler}
                     ></Form.Control>{" "}
                     <Form.Control.Feedback type="invalid">
@@ -145,7 +153,9 @@ export const EditPost = (props) => {
                   </InputGroup>
 
                   <Form.Text className="text-muted">
-                    The URL where this post appears. Can be multi/part
+                    The URL where this post appears. Can be multi/part, but can
+                    never be changed (to change it, create a new post and copy
+                    everything over)
                   </Form.Text>
                 </Form.Group>
 
