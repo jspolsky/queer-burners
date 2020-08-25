@@ -162,6 +162,7 @@ export default class SubmitBody extends React.Component {
       });
     }
 
+    // TODO why is this code here? it doesn't do anything... looks like a bug.
     if (x === "location") {
       if (splitname[1] === "frontage") {
         // constrain intersections to valid cross streets

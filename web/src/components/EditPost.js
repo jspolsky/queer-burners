@@ -4,80 +4,82 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Button from "react-bootstrap/Button";
 
 import { api } from "../definitions.js";
+
+// TODO CONFIRM LOGGED IN
 
 export const EditPost = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(`${api}/posts`);
-
-      setData(result.data);
+      try {
+        const result = await axios(`${api}/posts/${props.post}`);
+        setData(result.data);
+      } catch (e) {
+        setData({ post: "<h1>404 Not Found</h1>" });
+      }
     };
 
-    if (props.userData && props.userData.isAdmin) {
-      fetchData();
-    }
-  }, [props.userData]);
-
-  if (!props.userData || !props.userData.isAdmin) {
-    return (
-      <Container className="qb-textpage">
-        <Row>
-          <Col>
-            <h3>
-              You have to be logged on to see this page.
-              <br />
-              <br />
-              <br />
-            </h3>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+    fetchData();
+  }, [props.post]);
 
   return (
     <Container className="qb-textpage">
       <Row>
         <Col>
-          <h1>Edit One Post, vis {props.post}</h1>
-
           {data.length === 0 ? (
             <div className="spinner-border" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           ) : (
-            <>
-              <Table bordered hover>
-                <thead>
-                  <tr>
-                    <th>Path</th>
-                    <th>Description</th>
-                    <th>&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((i) => (
-                    <tr key={i.path}>
-                      <td>/{i.path}</td>
-                      <td>{i.description}</td>
-                      <td>
-                        <Link to={i.path}>View</Link>
-                        &nbsp;|&nbsp;
-                        <Link to={`/editPost/${i.path}`}>Edit</Link>
-                        &nbsp;|&nbsp; Delete
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <p>+ Add a new post</p>
-            </>
+            <div>
+              <h1>Editing one post</h1>
+              <Form noValidate>
+                <Form.Group controlId="path">
+                  <Form.Label>Path</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        queerburnersdirectory.com/
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+
+                    <Form.Control
+                      type="input"
+                      placeholder="x/y/z"
+                      name="path"
+                      value={data.path}
+                    ></Form.Control>
+                  </InputGroup>
+                  <Form.Text className="text-muted">
+                    The URL where this post appears
+                  </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="description">
+                  <Form.Label>Description</Form.Label>
+
+                  <Form.Control
+                    type="description"
+                    placeholder=""
+                    name="description"
+                    value={data.description}
+                  ></Form.Control>
+                  <Form.Text className="text-muted">
+                    Describe this post briefly
+                  </Form.Text>
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </div>
           )}
         </Col>
       </Row>
