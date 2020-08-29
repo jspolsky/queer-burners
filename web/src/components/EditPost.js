@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 import { api } from "../definitions.js";
 
@@ -18,6 +19,8 @@ export const EditPost = (props) => {
   const [loaded, setLoaded] = useState(false); /// haha locked and loaded haha
   const [pathError, setPathError] = useState(null);
   const [formValidated, setFormValidated] = useState(false);
+  const [saveInProgress, setSaveInProgress] = useState(false);
+  const [saveError, setSaveError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,8 +61,6 @@ export const EditPost = (props) => {
   };
 
   const submitHandler = async (event) => {
-    // TODO copy all that fancy shmancy submit handling (from SubmitBody.js)
-
     event.preventDefault();
     setFormValidated(true);
 
@@ -93,9 +94,31 @@ export const EditPost = (props) => {
       locked: locked,
     };
 
-    console.log(postToSubmit);
+    setSaveInProgress(true);
 
-    // TODO ok now call postsPost on the server. It should be all ready for you
+    try {
+      await axios.post(`${api}/posts`, postToSubmit, {
+        auth: {
+          username: props.userData.idToken,
+          password: "",
+        },
+      });
+      setSaveInProgress(false);
+    } catch (error) {
+      let msg = "";
+      if (error.response) {
+        // server returned error
+        msg = `Error ${error.response.status}: ${error.response.data}`;
+      } else if (error.request) {
+        msg = "Error: Network error (no response received)";
+      } else {
+        msg = error.message;
+      }
+      console.error(msg);
+      console.error(error);
+      setSaveInProgress(false);
+      setSaveError(msg);
+    }
   };
 
   if (!props.userData || !props.userData.isAdmin) {
@@ -186,9 +209,29 @@ export const EditPost = (props) => {
                   ></Form.Control>
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                  Submit
+                {saveError && (
+                  <Alert
+                    variant="danger"
+                    dismissible
+                    onClose={() => setSaveError(null)}
+                  >
+                    <Alert.Heading>Error</Alert.Heading>
+                    <p>An error occurred and this blog post was not saved.</p>
+                    <p>
+                      <strong>{saveError}</strong>
+                    </p>
+                  </Alert>
+                )}
+
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={saveInProgress}
+                >
+                  Save
                 </Button>
+
+                {saveInProgress && <span>Saving...</span>}
               </Form>
             </div>
           )}
