@@ -9,6 +9,8 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
+import { Editor } from "@tinymce/tinymce-react";
+
 import { api } from "../definitions.js";
 
 export const EditPost = (props) => {
@@ -57,6 +59,11 @@ export const EditPost = (props) => {
         break;
     }
 
+    setFormValidated(false);
+  };
+
+  const postChangeHandler = (event) => {
+    setPost(event.target.getContent());
     setFormValidated(false);
   };
 
@@ -197,17 +204,23 @@ export const EditPost = (props) => {
                   </Form.Text>
                 </Form.Group>
 
-                <Form.Group controlId="post">
-                  <Form.Label>Post</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows="15"
-                    placeholder="Blog post here. Use HTML"
-                    name="post"
-                    onChange={changeHandler}
-                    value={post}
-                  ></Form.Control>
-                </Form.Group>
+                <Editor
+                  initialValue={post}
+                  apiKey="zdh08645sds1nt23ip19o4wcxn97mqppnuqeid6wfu3kpjz9"
+                  init={{
+                    height: 500,
+                    menubar: false,
+                    plugins: [
+                      "advlist autolink lists link image",
+                      "charmap print preview anchor help",
+                      "searchreplace visualblocks code",
+                      "insertdatetime media table paste wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | help",
+                  }}
+                  onChange={postChangeHandler}
+                />
 
                 {saveError && (
                   <Alert
