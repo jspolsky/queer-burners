@@ -11,7 +11,7 @@ import Alert from "react-bootstrap/Alert";
 
 import { Editor } from "@tinymce/tinymce-react";
 
-import { api } from "../definitions.js";
+import { api, apiKeyTinyMCE } from "../definitions.js";
 
 export const EditPost = (props) => {
   const [path, setPath] = useState("");
@@ -206,7 +206,7 @@ export const EditPost = (props) => {
 
                 <Editor
                   initialValue={post}
-                  apiKey="zdh08645sds1nt23ip19o4wcxn97mqppnuqeid6wfu3kpjz9"
+                  apiKey={apiKeyTinyMCE}
                   init={{
                     height: 500,
                     menubar: false,

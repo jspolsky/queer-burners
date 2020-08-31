@@ -7,3 +7,4 @@ export const s3images =
 export const googleClientId =
   "1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com";
 export const oauthEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+export const apiKeyTinyMCE = "zdh08645sds1nt23ip19o4wcxn97mqppnuqeid6wfu3kpjz9";
