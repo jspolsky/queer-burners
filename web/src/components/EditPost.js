@@ -128,6 +128,44 @@ export const EditPost = (props) => {
     }
   };
 
+  const imageUploadHandler = async (blobInfo, success, failure, progress) => {
+    const localFilename = blobInfo.filename();
+    const re = /(?:\.([^.]+))?$/; // https://stackoverflow.com/q/680929
+    const localExtension = re.exec(localFilename)[1];
+
+    console.log(blobInfo);
+    console.log(localFilename);
+    console.log(localExtension);
+
+    if (!["png", "jpg", "jpeg"].includes(localExtension)) {
+      console.log("Only JPG or PNG files can be uploaded");
+      failure("Only JPG or PNG files can be uploaded");
+      return;
+    }
+
+    progress(1);
+    const uploader = await axios.get(
+      `${api}/camps/pictureuploadurl/${localExtension}`
+    );
+    console.log(uploader);
+    progress(10);
+
+    await axios.put(uploader.data.url, blobInfo.blob(), {
+      headers: {
+        "Content-Type": uploader.data.contentType,
+      },
+      onUploadProgress: (pe) => {
+        progress(
+          pe.lengthComputable ? Math.floor((pe.loaded * 100) / pe.total) : 50
+        );
+      },
+    });
+
+    success(
+      `https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/${uploader.data.fileName}`
+    );
+  };
+
   if (!props.userData || !props.userData.isAdmin) {
     return (
       <Container className="qb-textpage">
@@ -210,6 +248,7 @@ export const EditPost = (props) => {
                   init={{
                     height: 500,
                     menubar: false,
+                    images_upload_handler: imageUploadHandler,
                     plugins: [
                       "advlist autolink lists link image",
                       "charmap print preview anchor help",
@@ -217,7 +256,7 @@ export const EditPost = (props) => {
                       "insertdatetime media table paste wordcount",
                     ],
                     toolbar:
-                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | help",
+                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | image | bullist numlist outdent indent | help",
                   }}
                   onChange={postChangeHandler}
                 />
