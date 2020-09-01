@@ -249,14 +249,22 @@ export const EditPost = (props) => {
                     height: 500,
                     menubar: false,
                     images_upload_handler: imageUploadHandler,
+                    image_caption: true,
+                    // image_class_list: [
+                    //   { title: "None", value: "" },
+                    //   { title: "Dog", value: "dog" },
+                    //   { title: "Cat", value: "cat" },
+                    // ],
                     plugins: [
-                      "advlist autolink lists link image",
+                      "advlist autolink emoticons lists link image",
                       "charmap print preview anchor help",
                       "searchreplace visualblocks code",
                       "insertdatetime media table paste wordcount",
                     ],
+                    block_formats:
+                      "Paragraph=p; Title=h1; Header 2=h2; Header 3=h3",
                     toolbar:
-                      "undo redo | formatselect | bold italic | alignleft aligncenter alignright | image | bullist numlist outdent indent | help",
+                      "undo redo removeformat | formatselect | bold italic | alignleft aligncenter alignright | image link | blockquote bullist numlist outdent indent | charmap emoticons | help",
                   }}
                   onChange={postChangeHandler}
                 />
