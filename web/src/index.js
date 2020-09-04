@@ -32,7 +32,7 @@ const TopLevelComponent = (props) => {
           exact
           path="/"
           render={(props) => (
-            <DirectoryBody {...props} year="" userData={userData} />
+            <ViewPost userData={userData} post="greetersStation" />
           )}
         />
         <Route
@@ -50,6 +50,12 @@ const TopLevelComponent = (props) => {
               search={new URLSearchParams(props.location.search).get("s")}
               userData={userData}
             />
+          )}
+        />
+        <Route
+          path="/directory"
+          render={(props) => (
+            <DirectoryBody {...props} year="" userData={userData} />
           )}
         />
         <Route

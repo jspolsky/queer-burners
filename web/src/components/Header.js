@@ -7,19 +7,18 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
+import { defaultYear } from "../definitions";
 
 export const Header = (props) => {
   return (
     <div>
       <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
-        <Navbar.Brand href="http://queerburners.com/">
-          Queer Burners
-        </Navbar.Brand>
+        <Navbar.Brand href="/">Queer Burners</Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer to="/">
+            <LinkContainer to="/directory">
               <Nav.Link>Directory</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/submit">
