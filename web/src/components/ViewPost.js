@@ -4,6 +4,7 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Link } from "react-router-dom";
 
 import { api } from "../definitions.js";
 
@@ -25,6 +26,16 @@ export const ViewPost = (props) => {
 
   return (
     <Container className="qb-textpage">
+      {props.userData.isAdmin && (
+        <Row>
+          <Col>
+            <div class="alert alert-info" role="alert">
+              You are an admin, so you can{" "}
+              <Link to={`/editPost/${props.post}`}>edit this post</Link>.
+            </div>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col>
           {data.length === 0 ? (

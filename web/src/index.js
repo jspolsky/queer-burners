@@ -93,7 +93,9 @@ const TopLevelComponent = (props) => {
 
         <Route
           path="/:post+"
-          render={(props) => <ViewPost post={props.match.params.post} />}
+          render={(props) => (
+            <ViewPost userData={userData} post={props.match.params.post} />
+          )}
         />
       </Switch>
       <Footer />
