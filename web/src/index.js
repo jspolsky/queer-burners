@@ -62,6 +62,10 @@ const TopLevelComponent = (props) => {
             <EditPost userData={userData} post={props.match.params.post} />
           )}
         />
+        <Route
+          path="/newPost"
+          render={(props) => <EditPost userData={userData} post={null} />}
+        />
 
         <Route
           path="/edit/:year"

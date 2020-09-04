@@ -81,7 +81,9 @@ export const EditPosts = (props) => {
                   ))}
                 </tbody>
               </Table>
-              <p>+ Add a new post</p>
+              <p>
+                <Link to={"/newPost"}>+ Add a new post</Link>
+              </p>
             </>
           )}
         </Col>

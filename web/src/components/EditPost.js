@@ -38,7 +38,13 @@ export const EditPost = (props) => {
       }
     };
 
-    fetchData();
+    if (props.post) {
+      fetchData();
+    } else {
+      setLoaded(true);
+      setLocked(false);
+      setPost("<h1>Type your title here<h1><p>Type your post here</p>");
+    }
   }, [props.post]);
 
   const changeHandler = (event) => {
@@ -84,6 +90,12 @@ export const EditPost = (props) => {
       return;
     }
 
+    if (path === "") {
+      setPathError("Specify the URL path where this post can be seen");
+      document.getElementById("path").setCustomValidity("NOT");
+      return;
+    }
+
     const tester = /^[a-zA-Z0-9\-_/]+$/;
 
     if (!tester.test(path)) {
@@ -110,6 +122,7 @@ export const EditPost = (props) => {
           password: "",
         },
       });
+      setLocked(true);
       setSaveInProgress(false);
     } catch (error) {
       let msg = "";
@@ -209,10 +222,10 @@ export const EditPost = (props) => {
                     </InputGroup.Prepend>
                     <Form.Control
                       type="input"
-                      placeholder="x/y/z"
+                      placeholder=""
                       name="path"
                       value={path}
-                      readOnly={true}
+                      readOnly={locked || props.post}
                       onChange={changeHandler}
                     ></Form.Control>{" "}
                     <Form.Control.Feedback type="invalid">
@@ -232,13 +245,13 @@ export const EditPost = (props) => {
 
                   <Form.Control
                     type="description"
-                    placeholder=""
+                    placeholder="Describe this post briefly"
                     name="description"
                     value={description}
                     onChange={changeHandler}
                   ></Form.Control>
                   <Form.Text className="text-muted">
-                    Describe this post briefly
+                    Description for admins, not shown to public
                   </Form.Text>
                 </Form.Group>
 
