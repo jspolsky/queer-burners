@@ -43,7 +43,7 @@ export const EditPost = (props) => {
     } else {
       setLoaded(true);
       setLocked(false);
-      setPost("<h1>Type your title here<h1><p>Type your post here</p>");
+      setPost("<h1>Type your title here</h1><p>Type your post here</p>");
     }
   }, [props.post]);
 
