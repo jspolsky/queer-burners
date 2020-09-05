@@ -640,6 +640,7 @@ exports.postsGet = async (event) => {
     TableName: "posts",
     ExpressionAttributeNames: queryAttributesPostsEAN,
     ProjectionExpression: queryAttributesPostsPE,
+    FilterExpression: "attribute_not_exists(deleted)",
   };
 
   try {
@@ -658,17 +659,49 @@ exports.postsGet1 = async (event) => {
     Key: {
       path: event.pathParameters.path,
     },
-    AttributesToGet: ["path", "description", "locked", "post"],
+    AttributesToGet: ["path", "description", "locked", "post", "deleted"],
   };
 
   try {
     const posts = await db.get(params).promise();
-    if (Object.keys(posts).length === 0) {
+    if (Object.keys(posts).length === 0 || posts.Item.deleted) {
       return NotFound("Not found");
     } else {
       return StandardResponse(posts.Item);
     }
   } catch (e) {
+    return StandardError(e);
+  }
+};
+
+exports.postsDelete = async (event) => {
+  const path = event.pathParameters.path; // extract post path from the request path
+
+  const remoteUser = await GetRemoteUser(event);
+  if (!remoteUser) {
+    return StandardError("Must be logged on as admin to delete a post");
+  }
+
+  if (!remoteUser.isadmin) {
+    return StandardError("Must be logged on as an admin to delete a post");
+  }
+
+  params = {
+    TableName: "posts",
+    Key: {
+      path: path,
+    },
+    UpdateExpression: "set deleted = :deleted",
+    ExpressionAttributeValues: {
+      ":deleted": new Date().toISOString(),
+    },
+  };
+
+  try {
+    await db.update(params).promise();
+    return StandardResponse(null);
+  } catch (e) {
+    console.log(e);
     return StandardError(e);
   }
 };

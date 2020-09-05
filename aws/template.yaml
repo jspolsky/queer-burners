@@ -260,6 +260,34 @@ Resources:
             Path: /posts/{path+}
             Method: get
 
+  PostsDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Deletes a single post"
+      FunctionName: qb-posts-delete
+      Handler: multifunc.postsDelete
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Events:
+        PostsDelete:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: delete
+
+  PostsDeleteOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-posts-delete-options
+      Handler: multifunc.Options
+      Events:
+        PostsDeleteOptions:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: options
+
   PostsGet:
     Type: AWS::Serverless::Function
     Properties:

@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
 import { Editor } from "@tinymce/tinymce-react";
+import DeleteButton from "./DeleteButton.js";
 
 import { api, apiKeyTinyMCE } from "../definitions.js";
 
@@ -234,7 +235,6 @@ export const EditPost = (props) => {
                     everything over)
                   </Form.Text>
                 </Form.Group>
-
                 <Form.Group controlId="description">
                   <Form.Label>Description</Form.Label>
 
@@ -249,7 +249,6 @@ export const EditPost = (props) => {
                     Description for admins, not shown to public
                   </Form.Text>
                 </Form.Group>
-
                 <Editor
                   initialValue={post}
                   apiKey={apiKeyTinyMCE}
@@ -276,7 +275,7 @@ export const EditPost = (props) => {
                   }}
                   onChange={postChangeHandler}
                 />
-
+                <br />
                 {saveError && (
                   <Alert
                     variant="danger"
@@ -290,7 +289,6 @@ export const EditPost = (props) => {
                     </p>
                   </Alert>
                 )}
-
                 <Button
                   variant="primary"
                   onClick={saveHandler}
@@ -298,8 +296,16 @@ export const EditPost = (props) => {
                 >
                   Save
                 </Button>
-
-                {saveInProgress && <span>Saving...</span>}
+                {saveInProgress && <span>Saving...</span>}{" "}
+                {!locked && props.post && (
+                  <DeleteButton
+                    message="Delete this post?"
+                    longMessage="Are you sure you want to permanently delete this entire post from the site?"
+                    apiToDelete={`${api}/posts/${path}`}
+                    redirectOnSuccess="/editPosts"
+                    userData={props.userData}
+                  />
+                )}
               </Form>
             </div>
           )}

@@ -29,7 +29,7 @@ export const ViewPost = (props) => {
       {props.userData.isAdmin && (
         <Row>
           <Col>
-            <div class="alert alert-info" role="alert">
+            <div className="alert alert-info" role="alert">
               You are an admin, so you can{" "}
               <Link to={`/editPost/${props.post}`}>edit this post</Link>.
             </div>
