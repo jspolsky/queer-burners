@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { Redirect } from "react-router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -10,6 +10,7 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { LogonLink } from "./Authenticate.js";
 import { ImageUploader } from "./ImageUploader.js";
+import DeleteButton from "./DeleteButton.js";
 
 import { defaultYear, api, s3images } from "../definitions.js";
 import { fieldError, emptyCamp } from "shared";
@@ -722,8 +723,12 @@ export default class SubmitBody extends React.Component {
                     </Button>{" "}
                     {this.props.year && this.props.camp && (
                       <DeleteButton
-                        year={this.state.year}
-                        name={this.state.name}
+                        message="Delete this camp?"
+                        longMessage="Are you sure you want to permanently delete this theme camp from the Queer Burners directory?"
+                        apiToDelete={`${api}/camps/${
+                          this.state.year
+                        }/${encodeURIComponent(this.state.name)}`}
+                        redirectOnSuccess={`/year/${this.state.year}`}
                         userData={this.props.userData}
                       />
                     )}
@@ -736,74 +741,3 @@ export default class SubmitBody extends React.Component {
       );
   }
 }
-
-const DeleteButton = (props) => {
-  const [show, setShow] = useState(false);
-  const [needsScroll, setNeedsScroll] = useState(false);
-  const [done, setDone] = useState(false);
-  const alertEl = useRef(null);
-
-  useEffect(() => {
-    if (needsScroll) {
-      alertEl.current.scrollIntoView({
-        block: "end",
-        behavior: "smooth",
-      });
-      setNeedsScroll(false);
-    }
-  }, [needsScroll]);
-
-  if (done) {
-    return <Redirect to={`/year/${props.year}`}></Redirect>;
-  }
-
-  return (
-    <>
-      <Button
-        variant="outline-danger"
-        onClick={() => {
-          if (!show) setNeedsScroll(true);
-          setShow(!show);
-        }}
-      >
-        Delete
-      </Button>
-      <div ref={alertEl}>
-        <Alert show={show} variant="danger" style={{ marginTop: "1rem" }}>
-          <Alert.Heading>Delete this camp?</Alert.Heading>
-          <p>
-            Are you sure you want to permanently delete this theme camp from the
-            Queer Burners Directory?
-          </p>
-          <hr />
-          <div className="d-flex justify-content-end">
-            <Button
-              onClick={async () => {
-                setShow(false);
-                await axios.delete(
-                  `${api}/camps/${props.year}/${encodeURIComponent(
-                    props.name
-                  )}`,
-                  {
-                    auth: {
-                      username: props.userData.idToken,
-                      password: "",
-                    },
-                  }
-                );
-                setDone(true);
-              }}
-              variant="danger"
-            >
-              Yes, permanently delete it
-            </Button>
-            &nbsp;
-            <Button onClick={() => setShow(false)} variant="outline-success">
-              Cancel
-            </Button>
-          </div>
-        </Alert>
-      </div>
-    </>
-  );
-};
