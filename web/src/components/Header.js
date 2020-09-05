@@ -7,7 +7,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
-import { defaultYear } from "../definitions";
 
 export const Header = (props) => {
   return (

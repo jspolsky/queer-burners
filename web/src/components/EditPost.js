@@ -73,8 +73,7 @@ export const EditPost = (props) => {
     setFormValidated(false);
   };
 
-  const submitHandler = async (event) => {
-    event.preventDefault();
+  const saveHandler = async (event) => {
     setFormValidated(true);
 
     setPathError("");
@@ -207,11 +206,7 @@ export const EditPost = (props) => {
           ) : (
             <div>
               <h1>Editing one post</h1>
-              <Form
-                noValidate
-                validated={formValidated}
-                onSubmit={submitHandler}
-              >
+              <Form noValidate validated={formValidated}>
                 <Form.Group controlId="path">
                   <Form.Label>Path</Form.Label>
                   <InputGroup>
@@ -298,7 +293,7 @@ export const EditPost = (props) => {
 
                 <Button
                   variant="primary"
-                  type="submit"
+                  onClick={saveHandler}
                   disabled={saveInProgress}
                 >
                   Save
