@@ -271,7 +271,7 @@ export const EditPost = (props) => {
                     block_formats:
                       "Paragraph=p; Title=h1; Header 2=h2; Header 3=h3",
                     toolbar:
-                      "undo redo removeformat | formatselect | bold italic | alignleft aligncenter alignright | image link | blockquote bullist numlist outdent indent | charmap emoticons | help",
+                      "undo redo removeformat | formatselect | bold italic | alignleft aligncenter alignright | image link | blockquote bullist numlist outdent indent | charmap emoticons | code help",
                   }}
                   onChange={postChangeHandler}
                 />
