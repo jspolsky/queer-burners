@@ -72,9 +72,27 @@
   color: #495057;
 }
 
-.qb-textpage h3 {
-  color: #495057;
-  font-size: 1.2rem;
-  font-weight: 600;
+.qb-textpage h1 {
+  font-family: "Kufam", sans-serif;
+  color: #615030;
+}
+
+.qb-textpage h2 {
   padding-top: 1rem;
+  font-family: "Kufam", sans-serif;
+  color: #615030;
+}
+
+.qb-textpage h3 {
+  padding-top: 1rem;
+  font-family: "Kufam", sans-serif;
+  color: #615030;
+}
+
+.qb-textpage p {
+  font-family: "Raleway", sans-serif;
+}
+
+.qb-textpage figcaption {
+  color: #770000;
 }
