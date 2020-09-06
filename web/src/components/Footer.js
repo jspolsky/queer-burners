@@ -20,12 +20,10 @@ export const Footer = (props) => {
           </p>
           <ul>
             <li>
-              <a href="http://queerburners.com/history">History</a>
+              <Link to="/history">History</Link>
             </li>
             <li>
-              <a href="http://queerburners.com/go-to-burning-man">
-                Going to Burning Man
-              </a>
+              <Link to="/go-to-burning-man">Going to Burning Man</Link>
             </li>
 
             <li>
