@@ -168,18 +168,37 @@ exports.GoogleIdTokenFromAuthCode = async (event) => {
       grant_type: "authorization_code",
     });
 
-    const data = response.data;
-
-    //    TODO in case we ever decide to use refresh token, it's in response.data.refresh_token but
-    //    only the first time the user logs on fresh (eg with prompt=consent or really first time)
-
-    const id_token = data.id_token;
-    let result = await LookupToken(data.id_token);
-    result.idToken = data.id_token;
+    let result = await LookupToken(response.data.id_token);
+    result.idToken = response.data.id_token;
+    result.refreshToken = response.data.refresh_token;
 
     return StandardResponse(result);
   } catch (error) {
     console.log("An error occurred logging someone on.");
+    console.log(error.response.data);
+    return StandardError(error.response.data);
+  }
+};
+
+exports.RefreshExpiredToken = async (event) => {
+  try {
+    const js = JSON.parse(event.body);
+    const refreshToken = js.refreshToken;
+    let googleSecretId = process.env.googleSecretId;
+    if (googleSecretId === "ItsASecretDumbass") {
+      googleSecretId = process.env.googleSecretId2; // this needs to be set from aws lambda console for this function https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/functions/qb-google-idtoken-from-authcode?tab=configuration
+    }
+
+    const response = await axios.post("https://oauth2.googleapis.com/token", {
+      client_id: process.env.googleClientId,
+      client_secret: googleSecretId,
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
+    });
+
+    return StandardResponse(response.data);
+  } catch (error) {
+    console.log("Error refreshing token");
     console.log(error.response.data);
     return StandardError(error.response.data);
   }

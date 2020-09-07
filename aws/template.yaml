@@ -196,10 +196,40 @@ Resources:
       FunctionName: qb-google-idtoken-from-authcode-options
       Handler: multifunc.Options
       Events:
-        CampsYearNameOptions:
+        GoogleIdTokenFromAuthCodeOptions:
           Type: Api
           Properties:
             Path: /googleidtokenfromauthcode
+            Method: options
+
+  RefreshExpiredToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Refresh an expired logon token"
+      FunctionName: qb-refresh-expired-token
+      Handler: multifunc.RefreshExpiredToken
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        RefreshExpiredToken:
+          Type: Api
+          Properties:
+            Path: /refreshexpiredtoken
+            Method: post
+      Environment:
+        Variables:
+          googleSecretId: ItsASecretDumbass
+
+  RefreshExpiredTokenOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-refresh-expired-token-options
+      Handler: multifunc.Options
+      Events:
+        RefreshExpiredTokenOptions:
+          Type: Api
+          Properties:
+            Path: /refreshexpiredtoken
             Method: options
 
   IsAdminOptions:
