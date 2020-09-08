@@ -175,8 +175,6 @@ export const PostAuthenticate = (props) => {
         setStatus("Success");
         setIsLoggedOn(true);
 
-        console.log(result.data);
-
         const userData = {
           isLoggedOn: true,
           idToken: result.data.idToken,
