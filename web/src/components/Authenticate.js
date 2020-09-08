@@ -46,15 +46,12 @@ const LogonLinkAddress = () => {
 const refreshToken = async (props) => {
   let tmpUserData = JSON.parse(localStorage.getItem("userData"));
   if (tmpUserData && tmpUserData.isLoggedOn && tmpUserData.refreshToken) {
-    console.log(`Refresh token was ${tmpUserData.refreshToken}`);
-
     try {
       const result = await axios.post(`${api}/refreshexpiredtoken`, {
         refreshToken: tmpUserData.refreshToken,
       });
 
-      console.log(result.data);
-      console.log("I think that means refresh token succeeded");
+      console.log("Token refreshed");
 
       tmpUserData.expires = new Date(
         new Date().valueOf() + 1000 * Number(result.data.expires_in)
@@ -63,23 +60,18 @@ const refreshToken = async (props) => {
       tmpUserData.idToken = result.data.id_token;
       localStorage.setItem("userData", JSON.stringify(tmpUserData));
 
-      console.log("Just updated localstorage.");
-
-      console.log("props.userdata WAS ");
-      console.log(JSON.stringify(props.userData));
-
       props.OnUserDataChange({
         ...props.userData,
         expires: tmpUserData.expires,
         idToken: tmpUserData.idToken,
       });
     } catch (e) {
-      console.log("Refreshing token failed -- logging you off sorry");
+      console.log("Token refresh failed");
       localStorage.removeItem("userData");
       props.OnUserDataChange({ isLoggedOn: false });
     }
   } else {
-    console.log("no refresh token in localstorage - logging you off sorry");
+    console.log("Unable to refresh token");
     localStorage.removeItem("userData");
     props.OnUserDataChange({ isLoggedOn: false });
   }
@@ -90,21 +82,15 @@ export const Authenticate = (props) => {
 
   useEffect(() => {
     if (!props.userData.isLoggedOn) {
-      console.log("Not logged on...");
       // user isn't logged on. Do they want to be?
 
       let tmpUserData = JSON.parse(localStorage.getItem("userData"));
       if (tmpUserData && tmpUserData.isLoggedOn) {
-        console.log("Supposed to be logged on...");
-
         // yes. Is their token still good?
         if (new Date(tmpUserData.expires).valueOf() > new Date().valueOf()) {
-          console.log("Token is still good...");
-
           // Yes! Log them on
           props.OnUserDataChange(tmpUserData);
         } else {
-          console.log("Token has expired.");
           refreshToken(props);
         }
       }
@@ -126,7 +112,6 @@ export const Authenticate = (props) => {
       ) {
         // user token expired.
 
-        console.log("User token JUST expired. Going to try to refresh it");
         await refreshToken(props);
       }
     }, 10000);
