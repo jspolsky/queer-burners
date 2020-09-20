@@ -1,5 +1,9 @@
 import React from "react";
-import banner from "../assets/header.jpg";
+import banner0 from "../assets/banner0.jpg";
+import banner1 from "../assets/banner1.jpg";
+import banner2 from "../assets/banner2.jpg";
+import banner3 from "../assets/banner3.jpg";
+import banner4 from "../assets/banner4.jpg";
 import { Authenticate } from "./Authenticate.js";
 
 import { Link } from "react-router-dom";
@@ -7,6 +11,23 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
+
+export const HeaderImage = () => {
+  const rgImages = [banner0, banner1, banner2, banner3, banner4];
+  // rotate every five seconds:
+  const ixImage = Math.floor(new Date() / 5000) % rgImages.length;
+
+  console.log(ixImage);
+
+  return (
+    <img
+      className="img-fluid w-100"
+      src={rgImages[ixImage]}
+      alt="Queer Burners"
+      style={{ marginBottom: "2rem" }}
+    />
+  );
+};
 
 export const Header = (props) => {
   return (
@@ -44,12 +65,7 @@ export const Header = (props) => {
         </Navbar.Collapse>
       </Navbar>
       <Link to="/">
-        <img
-          className="img-fluid w-100"
-          src={banner}
-          alt="Queer Burners"
-          style={{ marginBottom: "2rem" }}
-        />
+        <HeaderImage />
       </Link>
     </div>
   );
