@@ -1,0 +1,362 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Queer Burners API SAM Template
+
+  '
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Timeout: 3
+    CodeUri: lambdasrc/
+    Tags:
+      app: queerburners
+    Layers:
+    - Ref: NodeModulesLayer
+    Environment:
+      Variables:
+        googleClientId: 1091094241484-ve5hbpa496m6d1k21m8r5ni16kvrkifi.apps.googleusercontent.com
+Resources:
+  CampsOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-camps-options
+      Handler: multifunc.Options
+      Events:
+        CampsOptions:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Creates a new camp
+      FunctionName: qb-camps-post
+      Handler: multifunc.campsPost
+      Policies:
+      - AmazonDynamoDBFullAccess
+      - Statement:
+        - Effect: Allow
+          Action:
+          - lambda:InvokeFunction
+          Resource:
+          - '*'
+      Events:
+        CampsPost:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: post
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets a list of all camps
+      FunctionName: qb-camps-get
+      Handler: multifunc.campsGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsGet:
+          Type: Api
+          Properties:
+            Path: /camps
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsPictureUploadURLGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Get a URL to upload a picture of a camp
+      FunctionName: qb-camps-picture-upload-url-get
+      Handler: multifunc.campsPictureUploadURLGet
+      Policies: AmazonS3FullAccess
+      Events:
+        CampsPictureUploadURLGet:
+          Type: Api
+          Properties:
+            Path: /camps/pictureuploadurl/{format}
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api->0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets a list of camps for a single year
+      FunctionName: qb-camps-year-get
+      Handler: multifunc.campsYearGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsYearGet:
+          Type: Api
+          Properties:
+            Path: /camps/{year}
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-camps-year-options
+      Handler: multifunc.Options
+      Events:
+        CampsYearNameOptions:
+          Type: Api
+          Properties:
+            Path: /camps/{year}
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearNameGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets details of a single camp for a single year
+      FunctionName: qb-camps-year-name-get
+      Handler: multifunc.campsYearNameGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        CampsYearNameGet:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearNameThumbnail:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Updates a camp thumbnail.
+      FunctionName: qb-camps-year-name-thumbnail
+      Handler: multifunc.campsYearNameThumbnail
+      Timeout: 10
+      MemorySize: 512
+      Policies:
+      - AmazonDynamoDBFullAccess
+      - AmazonS3FullAccess
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearNameDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Deletes a single camp
+      FunctionName: qb-camps-year-name-delete
+      Handler: multifunc.campsYearNameDelete
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        CampsYearNameDelete:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: delete
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  CampsYearNameOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-camps-year-name-options
+      Handler: multifunc.Options
+      Events:
+        CampsYearNameOptions:
+          Type: Api
+          Properties:
+            Path: /camps/{year}/{name}
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  IsAdmin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Checks if logged in user is an admin
+      FunctionName: qb-isadmin
+      Handler: multifunc.isAdmin
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        IsAdmin:
+          Type: Api
+          Properties:
+            Path: /isadmin
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  GoogleIdTokenFromAuthCode:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Part of the Google OAuth2 Login Flow
+      FunctionName: qb-google-idtoken-from-authcode
+      Handler: multifunc.GoogleIdTokenFromAuthCode
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        GoogleIdTokenFromAuthCode:
+          Type: Api
+          Properties:
+            Path: /googleidtokenfromauthcode
+            Method: post
+      Environment:
+        Variables:
+          googleSecretId: ItsASecretDumbass
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  GoogleIdTokenFromAuthCodeOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-google-idtoken-from-authcode-options
+      Handler: multifunc.Options
+      Events:
+        GoogleIdTokenFromAuthCodeOptions:
+          Type: Api
+          Properties:
+            Path: /googleidtokenfromauthcode
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  RefreshExpiredToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Refresh an expired logon token
+      FunctionName: qb-refresh-expired-token
+      Handler: multifunc.RefreshExpiredToken
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        RefreshExpiredToken:
+          Type: Api
+          Properties:
+            Path: /refreshexpiredtoken
+            Method: post
+      Environment:
+        Variables:
+          googleSecretId: ItsASecretDumbass
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  RefreshExpiredTokenOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-refresh-expired-token-options
+      Handler: multifunc.Options
+      Events:
+        RefreshExpiredTokenOptions:
+          Type: Api
+          Properties:
+            Path: /refreshexpiredtoken
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  IsAdminOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-isadmin-options
+      Handler: multifunc.Options
+      Events:
+        IsAdminOptions:
+          Type: Api
+          Properties:
+            Path: /isadmin
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  SendDailyEmail:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Sends a daily email to admins with summary of changes
+      FunctionName: qb-send-daily-email
+      Handler: email.sendDailyEmail
+      Policies:
+      - AmazonDynamoDBReadOnlyAccess
+      - Statement:
+        - Effect: Allow
+          Action:
+          - ses:SendEmail
+          - ses:SendRawEmail
+          Resource:
+          - '*'
+      Events:
+        SendDailyEmailScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 12 * * ? *)
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  NodeModulesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: full set of function dependencies
+      ContentUri: s3://queerburnersdirectory.com-api-0001/8991c4d9509a38d0e55b8afd45fe2d38
+      CompatibleRuntimes:
+      - nodejs12.x
+      LicenseInfo: Not applicable
+      RetentionPolicy: Retain
+  PostsGet1:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets a single post
+      FunctionName: qb-posts-get1
+      Handler: multifunc.postsGet1
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        PostsGet1:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  PostsDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Deletes a single post
+      FunctionName: qb-posts-delete
+      Handler: multifunc.postsDelete
+      Policies:
+      - AmazonDynamoDBFullA
+      ccess
+      Events:
+        PostsDelete:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: delete
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  PostsDeleteOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-posts-delete-options
+      Handler: multifunc.Options
+      Events:
+        PostsDeleteOptions:
+          Type: Api
+          Properties:
+            Path: /posts/{path+}
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  PostsGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Gets a list of all posts
+      FunctionName: qb-posts-get
+      Handler: multifunc.postsGet
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Events:
+        PostsGet:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: get
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  PostsPost:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Creates or edits a blog post
+      FunctionName: qb-posts-post
+      Handler: multifunc.postsPost
+      Policies:
+      - AmazonDynamoDBFullAccess
+      Events:
+        PostsPost:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: post
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
+  PostsOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: CORS pre-flight check
+      FunctionName: qb-posts-options
+      Handler: multifunc.Options
+      Events:
+        PostsOptions:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: options
+      CodeUri: s3://queerburnersdirectory.com-api-0001/9742e954901a5ec2366cda54dd2a232f
