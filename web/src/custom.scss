@@ -74,19 +74,19 @@
 
 .qb-textpage h1 {
   font-family: "Kufam", sans-serif;
-  color: #615030;
+  color: #ff00ff;
 }
 
 .qb-textpage h2 {
   padding-top: 1rem;
   font-family: "Kufam", sans-serif;
-  color: #615030;
+  color: #ff00ff;
 }
 
 .qb-textpage h3 {
   padding-top: 1rem;
   font-family: "Kufam", sans-serif;
-  color: #615030;
+  color: #ff00ff;
 }
 
 .qb-textpage p {
@@ -95,4 +95,13 @@
 
 .qb-textpage figcaption {
   color: #770000;
+}
+
+.navbar-dark .navbar-brand {
+  color: #ff00ff;
+  font-weight: bold;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
 }
