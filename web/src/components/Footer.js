@@ -17,7 +17,7 @@ export const Footer = (props) => {
           <p>
             A project of Queer Burners: an online community of LGBTQ+ burners
             from around the world. We are grateful to{" "}
-            <a href="duncan.co">Duncan Rawlinson</a> (CC BY-NC 3.0) for the
+            <a href="https://duncan.co">Duncan Rawlinson</a> (CC BY-NC 3.0) for the
             header image, and many queer burners throughout the years for their
             contributions to this site.
           </p>
