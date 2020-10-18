@@ -4,12 +4,14 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Link } from "react-router-dom";
 
 import { api } from "../definitions.js";
 
 export const ViewPost = (props) => {
   const [data, setData] = useState([]);
+  const [showContentWarning, setShowContentWarning] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,13 @@ export const ViewPost = (props) => {
 
     fetchData();
   }, [props.post]);
+
+  var cw = "";
+  if (props.post === "history" && showContentWarning) {
+    cw = <Alert variant="warning" onClose={() => setShowContentWarning(false)} dismissible>
+    <p>Content warning: Nudity</p>
+  </Alert>;
+  }
 
   return (
     <Container className="qb-textpage">
@@ -43,7 +52,10 @@ export const ViewPost = (props) => {
               <span className="sr-only">Loading...</span>
             </div>
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: data.post }} />
+            <div>
+              {cw}
+              <div dangerouslySetInnerHTML={{ __html: data.post }} />
+            </div>
           )}
         </Col>
       </Row>

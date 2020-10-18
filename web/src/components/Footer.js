@@ -23,13 +23,6 @@ export const Footer = (props) => {
           </p>
           <ul>
             <li>
-              <Link to="/history">History</Link>
-            </li>
-            <li>
-              <Link to="/go-to-burning-man">Going to Burning Man</Link>
-            </li>
-
-            <li>
               <Link to="/FAQ">FAQ</Link>
             </li>
             <li>

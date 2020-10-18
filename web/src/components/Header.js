@@ -39,12 +39,17 @@ export const Header = (props) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <LinkContainer to="/directory">
-              <Nav.Link>Directory</Nav.Link>
+              <Nav.Link>Camp Directory</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/submit">
-              <Nav.Link>Submit</Nav.Link>
+            <LinkContainer to="/go-to-burning-man">
+              <Nav.Link>Going to Burning Man</Nav.Link>
             </LinkContainer>
-            <NavDropdown title="Other Years" id="collasible-nav-dropdown">
+            <NavDropdown title="History" id="collasible-nav-dropdown">
+              <LinkContainer to="/history">
+                <NavDropdown.Item>
+                  Queer Burner History at Black Rock City
+                </NavDropdown.Item>
+              </LinkContainer>
               <LinkContainer to="/year/2019">
                 <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
               </LinkContainer>
