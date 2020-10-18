@@ -50,6 +50,27 @@ export const Header = (props) => {
                   Queer Burner History at Black Rock City
                 </NavDropdown.Item>
               </LinkContainer>
+              <LinkContainer to="/history/2012">
+                <NavDropdown.Item>2012 Fertility 2.0</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2013">
+                <NavDropdown.Item>2013 Cargo Cult</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2014">
+                <NavDropdown.Item>2014 Caravansary</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2015">
+                <NavDropdown.Item>2015 Carnival of Mirrors</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2016">
+                <NavDropdown.Item>2016 da Vinci's Workshop</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2017">
+                <NavDropdown.Item>2017 Radical Ritual</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/history/2018">
+                <NavDropdown.Item>2018 iRobot</NavDropdown.Item>
+              </LinkContainer>
               <LinkContainer to="/year/2019">
                 <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
               </LinkContainer>
