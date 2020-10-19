@@ -289,6 +289,10 @@ export const EditPost = (props) => {
                     </p>
                   </Alert>
                 )}
+                <Button target="_blank" href={"/" + path}>
+                  Preview
+                </Button>
+                  &nbsp;
                 <Button
                   variant="primary"
                   onClick={saveHandler}
