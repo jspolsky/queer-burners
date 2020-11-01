@@ -77,7 +77,7 @@ export const Header = (props) => {
               <LinkContainer to="/year/2019">
                 <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
               </LinkContainer>
-              <LinkContainer to="/year/2020">
+              <LinkContainer to="/history/2020">
                 <NavDropdown.Item>2020 The Multiverse</NavDropdown.Item>
               </LinkContainer>
               <LinkContainer to="/year/2021">

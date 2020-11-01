@@ -111,12 +111,33 @@ export default class DirectoryBody extends React.Component {
       filterButtonString = "Filter";
     }
 
+    const submitCard = (
+      <Card bg="success" text="white">
+        <Card.Header>
+          <strong>Don't see your camp here?</strong>
+        </Card.Header>
+        <Card.Body>
+          <p>
+            Please{" "}
+            <Link
+              to="/submit"
+              className="text-reset"
+              style={{ textDecoration: "underline" }}
+            >
+              submit it
+            </Link>
+            !
+          </p>
+        </Card.Body>
+      </Card>
+    );
+
     return (
       <div>
         <Container fluid className="pl-4 pr-4">
           <Row className="pb-4">
             <Col>
-              <h2>Camp Directory {this.props.year}</h2>
+              <h1>Camp Directory {this.props.year}</h1>
             </Col>
             <Col md="auto">
               <Form inline={1}>
@@ -291,26 +312,7 @@ export default class DirectoryBody extends React.Component {
                           </Button>
                         </Card.Body>
                       </Card>
-                    ) : (
-                      <Card bg="success" text="white">
-                        <Card.Header>
-                          <strong>Don't see your camp here?</strong>
-                        </Card.Header>
-                        <Card.Body>
-                          <p>
-                            Please{" "}
-                            <Link
-                              to="/submit"
-                              className="text-reset"
-                              style={{ textDecoration: "underline" }}
-                            >
-                              submit it
-                            </Link>
-                            !
-                          </p>
-                        </Card.Body>
-                      </Card>
-                    )}
+                    ) : submitCard}
                   </CardColumns>
                 </Col>
               </Row>
