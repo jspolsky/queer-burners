@@ -31,8 +31,8 @@ export const HeaderImage = () => {
 
 export const Header = (props) => {
   return (
-    <div>
-      <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
+    <>
+      <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" sticky="top">
         <Navbar.Brand href="/">Queer Burners</Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -96,7 +96,7 @@ export const Header = (props) => {
       <Link to="/">
         <HeaderImage />
       </Link>
-    </div>
+    </>
   );
 };
 
