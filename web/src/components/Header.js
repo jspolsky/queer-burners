@@ -33,7 +33,7 @@ export const Header = (props) => {
   return (
     <>
       <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" sticky="top">
-        <Navbar.Brand href="/">Queer Burners</Navbar.Brand>
+        <Navbar.Brand href="/">Queerburners</Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

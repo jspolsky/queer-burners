@@ -3,6 +3,12 @@
 
 // for example:
 // $body-bg: #654321;
+@font-face {
+  font-family: "VAG Rounded BT";
+  font-style: normal;
+  font-weight: normal;
+  src: local("VAG Rounded BT"), url("/VAGRON.woff") format("woff");
+}
 
 @import "~bootstrap/scss/bootstrap.scss";
 
@@ -73,19 +79,19 @@
 }
 
 h1 {
-  font-family: "Kufam", sans-serif;
+  font-family: "VAG Rounded BT", sans-serif;
   color: #ff00ff;
 }
 
 .qb-textpage h2 {
   padding-top: 1rem;
-  font-family: "Kufam", sans-serif;
+  font-family: "VAG Rounded BT", sans-serif;
   color: #ff00ff;
 }
 
 .qb-textpage h3 {
   padding-top: 1rem;
-  font-family: "Kufam", sans-serif;
+  font-family: "VAG Rounded BT", sans-serif;
   color: #ff00ff;
 }
 
@@ -99,11 +105,15 @@ h1 {
 
 .navbar-dark .navbar-brand {
   color: #ff00ff;
-  font-weight: bold;
+  font-family: "VAG Rounded BT";
+  font-size: 24px;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: #ffffff;
+  font-family: "Raleway";
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffccff;
 }
 
 blockquote {
