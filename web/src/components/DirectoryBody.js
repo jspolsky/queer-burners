@@ -276,7 +276,7 @@ export default class DirectoryBody extends React.Component {
                         <Card.Body>
                           <p>
                             <strong>{this.props.search}</strong> will now appear
-                            in the Queer Burners Directory for {this.props.year}
+                            in the Queerburners Directory for {this.props.year}
                             .
                           </p>
                           <p>
@@ -292,11 +292,11 @@ export default class DirectoryBody extends React.Component {
                               className="text-reset"
                               style={{ textDecoration: "underline" }}
                             >
-                              Queer Burners
+                              Queerburners
                             </a>
-                            , an online community of LGBTQ+ burners from around
+                            , an online community of LGBTQIA+ burners from around
                             the world. Check out our website for galleries, the
-                            history of LGBTQ+ participants at Burning Man, and
+                            history of LGBTQIA+ participants at Burning Man, and
                             more. We also have{" "}
                             <a
                               href="https://www.facebook.com/groups/queer.burners/"

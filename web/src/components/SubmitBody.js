@@ -178,7 +178,7 @@ export default class SubmitBody extends React.Component {
       <Container>
         <Row>
           <Col>
-            <h2>Submit your camp to the Queer Burners directory!</h2>
+            <h2>Submit your camp to the Queerburners directory!</h2>
             <p>
               Welcome! We're building a comprehensive list of queer and ally
               theme camps that will participate in Burning Man in{" "}
@@ -218,7 +218,7 @@ export default class SubmitBody extends React.Component {
     } else {
       return (
         <div>
-          <h2>Submit your camp to the Queer Burners directory!</h2>
+          <h2>Submit your camp to the Queerburners directory!</h2>
           <p>
             Welcome! We're building a comprehensive list of queer and ally theme
             camps that will participate in Burning Man in {this.state.year}.
@@ -528,7 +528,7 @@ export default class SubmitBody extends React.Component {
                     }}
                   />
                   <Form.Text className="text-muted">
-                    This picture will appear in the Queer Burners directory.
+                    This picture will appear in the Queerburners directory.
                     Submit a picture of your campers, your frontage, or
                     something else fun, but please keep it SFW!
                   </Form.Text>
@@ -724,7 +724,7 @@ export default class SubmitBody extends React.Component {
                     {this.props.year && this.props.camp && (
                       <DeleteButton
                         message="Delete this camp?"
-                        longMessage="Are you sure you want to permanently delete this theme camp from the Queer Burners directory?"
+                        longMessage="Are you sure you want to permanently delete this theme camp from the Queerburners directory?"
                         apiToDelete={`${api}/camps/${
                           this.state.year
                         }/${encodeURIComponent(this.state.name)}`}

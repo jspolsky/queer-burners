@@ -23,7 +23,7 @@ export const HeaderImage = () => {
     <img
       className="img-fluid w-100"
       src={rgImages[ixImage]}
-      alt="Queer Burners"
+      alt="Queerburners"
       style={{ marginBottom: "2rem" }}
     />
   );
