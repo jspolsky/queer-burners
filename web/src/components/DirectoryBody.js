@@ -44,11 +44,22 @@ const neighborhood = (camp) => {
 export default class DirectoryBody extends React.Component {
   constructor(props) {
     super(props);
+
+    let y;
+    if (this.props.year >= 1996 && this.props.year < 3000) {
+      y = this.props.year;
+    } else if (defaultYear === 2020) {
+      y = 2019; // there was no burning man in 2020 :(
+    } else {
+      y = defaultYear;
+    }
+
     this.state = {
       filter: "all",
       search: this.props.search ? this.props.search : "",
       data: null,
       cancelFn: null,
+      year: y,
     };
   }
 
@@ -58,14 +69,7 @@ export default class DirectoryBody extends React.Component {
       this.setState({ cancelFn: null });
     }
 
-    let year;
-    if (this.props.year >= 1996 && this.props.year < 3000) {
-      year = this.props.year;
-    } else if (defaultYear === 2020) {
-      year = 2019; // there was no burning man in 2020 :(
-    } else {
-      year = defaultYear;
-    }
+    const  year = this.state.year;
 
     if (clearFirst) {
       this.setState({ data: null });
@@ -137,7 +141,7 @@ export default class DirectoryBody extends React.Component {
         <Container fluid className="pl-4 pr-4">
           <Row className="pb-4">
             <Col>
-              <h1>Camp Directory {this.props.year}</h1>
+              <h1>Theme Camp Directory {this.state.year}</h1>
             </Col>
             <Col md="auto">
               <Form inline={1}>
