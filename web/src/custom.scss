@@ -103,6 +103,10 @@ h1 {
   color: #770000;
 }
 
+.navbar {
+  padding: 0 1rem;
+}
+
 .navbar-dark .navbar-brand {
   color: #ff00ff;
   font-family: "VAG Rounded BT";
@@ -114,8 +118,13 @@ h1 {
   font-weight: bold;
   font-size: 16px;
   color: #ffccff;
+  padding-top: 0.9rem;
 }
 
 blockquote {
   font-size: 1.25rem;
+}
+
+.GoogleUserPicture {
+  margin-top: 0.4rem;
 }
