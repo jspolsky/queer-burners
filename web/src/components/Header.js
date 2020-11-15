@@ -4,6 +4,11 @@ import banner1 from "../assets/banner1.jpg";
 import banner2 from "../assets/banner2.jpg";
 import banner3 from "../assets/banner3.jpg";
 import banner4 from "../assets/banner4.jpg";
+import banner5 from "../assets/banner5.jpg";
+import banner6 from "../assets/banner6.jpg";
+import banner7 from "../assets/banner7.jpg";
+import banner8 from "../assets/banner8.jpg";
+import banner9 from "../assets/banner9.jpg";
 import { Authenticate } from "./Authenticate.js";
 
 import { Link } from "react-router-dom";
@@ -13,7 +18,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
 
 export const HeaderImage = () => {
-  const rgImages = [banner0, banner1, banner2, banner3, banner4];
+  const rgImages = [banner0, banner1, banner2, banner3, banner4, banner5, banner6, banner7, banner8, banner9];
   // rotate every five seconds:
   const ixImage = Math.floor(new Date() / 5000) % rgImages.length;
 
