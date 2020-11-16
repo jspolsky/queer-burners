@@ -76,6 +76,7 @@ export default class DirectoryBody extends React.Component {
       this.setState({ data: null });
     }
     try {
+
       const response = await axios.get(`${api}/camps/${year}`, {
         auth: { username: this.props.userData.idToken, password: "" },
         cancelToken: new CancelToken((c) => {
@@ -285,22 +286,13 @@ export default class DirectoryBody extends React.Component {
                           <p>
                             You can edit this listing, change the picture, and
                             add more information at any time. Just come back to
-                            queerburnersdirectory.com and log on again using
+                            queerburners.org and log on again using
                             your Google account.
                           </p>
                           <p>
                             This directory is a service of{" "}
-                            <a
-                              href="http://queerburners.com/"
-                              className="text-reset"
-                              style={{ textDecoration: "underline" }}
-                            >
-                              Queerburners
-                            </a>
-                            , an online community of LGBTQIA+ burners from around
-                            the world. Check out our website for galleries, the
-                            history of LGBTQIA+ participants at Burning Man, and
-                            more. We also have{" "}
+                            Queerburners, an online community of LGBTQIA+ burners from around
+                            the world. We also have{" "}
                             <a
                               href="https://www.facebook.com/groups/queer.burners/"
                               className="text-reset"

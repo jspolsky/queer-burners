@@ -536,6 +536,41 @@ exports.campsYearGet = async (event) => {
   }
 };
 
+exports.myCampsYearGet = async (event) => {
+
+  const {
+    pathParameters: { year },
+  } = event; // extract year from the request path
+
+  const remoteUser = await GetRemoteUser(event);
+
+  if (!remoteUser) {
+    return StandardError("You are not logged on");
+  }
+
+
+  const params = {
+    TableName: "camps",
+    KeyConditionExpression: "#year = :year",
+    ExpressionAttributeNames: queryAttributesEAN,
+    ProjectionExpression: queryAttributesPE,
+    ExpressionAttributeValues: {
+      ":year": Number(year),
+    },
+    FilterExpression: "attribute_not_exists(deleted)",
+  };
+
+  try {
+    const data = await db.query(params).promise();
+    let camps = data.Items.filter(x => (x.contact.email === remoteUser.email));
+    camps = filterPrivateInfo(camps);
+    return StandardResponse(camps);
+  } catch (e) {
+    return StandardError(e);
+  }
+
+};
+
 exports.campsYearNameGet = async (event) => {
   const {
     pathParameters: { year, name },
