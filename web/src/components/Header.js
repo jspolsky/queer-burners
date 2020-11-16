@@ -15,22 +15,23 @@ import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Carousel from "react-bootstrap/Carousel";
 import { LinkContainer } from "react-router-bootstrap";
 
 export const HeaderImage = () => {
   const rgImages = [banner0, banner1, banner2, banner3, banner4, banner5, banner6, banner7, banner8, banner9];
-  // rotate every five seconds:
-  const ixImage = Math.floor(new Date() / 5000) % rgImages.length;
-
-  console.log(ixImage);
 
   return (
-    <img
-      className="img-fluid w-100"
-      src={rgImages[ixImage]}
-      alt="Queerburners"
-      style={{ marginBottom: "2rem" }}
-    />
+    <Carousel controls={false} fade={true} interval={8000}>
+      { rgImages.map((i, index) => (<Carousel.Item key={index}>
+        <img 
+          className="img-fluid w-100"
+          src={i}
+          alt="Queerburners"
+          style={{marginBottom:"2rem"}}></img>
+      </Carousel.Item>))}
+      
+    </Carousel>
   );
 };
 
