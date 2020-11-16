@@ -180,7 +180,7 @@ export default class SubmitBody extends React.Component {
           <Col>
             <h2>Submit your camp to the Queerburners directory!</h2>
             <p>
-              Welcome! We're building a comprehensive list of queer and ally
+              Welcome! We’re building a comprehensive list of LGBTQIA+ and ally
               theme camps that will participate in Burning Man in{" "}
               {this.state.year}.
             </p>
@@ -189,14 +189,14 @@ export default class SubmitBody extends React.Component {
               To add your theme camp to this directory, please start by logging
               in using a Google Account.
             </p>
-            <p>
+            <p style={{textAlign:"center", fontSize:"1.3rem", fontWeight:"600"}}>
               <LogonLink />
             </p>
             <p>
-              We will use the email address associated with your Google Account
-              to contact you in case of difficulty, but it won't appear in the
-              directory. Later if you need to make changes or remove your camp's
-              listing, you can do so by logging in again.
+              We will save your email address in case we need to contact you. 
+              You'll be able to edit your camp directory listing at any time
+              by logging in again. Your email address will <strong>not</strong> be
+              shown publically.
             </p>
           </Col>
         </Row>
@@ -220,7 +220,7 @@ export default class SubmitBody extends React.Component {
         <div>
           <h2>Submit your camp to the Queerburners directory!</h2>
           <p>
-            Welcome! We're building a comprehensive list of queer and ally theme
+            Welcome! We're building a comprehensive list of LGBTQIA+ and ally theme
             camps that will participate in Burning Man in {this.state.year}.
           </p>
           <p>
