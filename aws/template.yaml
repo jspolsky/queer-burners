@@ -92,18 +92,18 @@ Resources:
             Path: /camps/{year}
             Method: get
 
-  MyCampsYearGet:
+  MyCampsGet:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Gets a list of camps for a single year for the logged-on user"
-      FunctionName: qb-mycamps-year-get
-      Handler: multifunc.myCampsYearGet
+      Description: "Gets a list of camps for the logged-on user"
+      FunctionName: qb-mycamps-get
+      Handler: multifunc.myCampsGet
       Policies: AmazonDynamoDBReadOnlyAccess
       Events:
-        MyCampsYearGet:
+        MyCampsGet:
           Type: Api
           Properties:
-            Path: /mycamps/{year}
+            Path: /mycamps
             Method: get
 
   CampsYearOptions:
