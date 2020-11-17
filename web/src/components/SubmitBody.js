@@ -90,6 +90,10 @@ export default class SubmitBody extends React.Component {
       }
     }
 
+    if (this.props.saveCopyAsYear) {
+      camp["year"] = this.props.saveCopyAsYear;
+    }
+
     try {
       await axios.post(`${api}/camps`, camp, {
         auth: {
@@ -182,13 +186,19 @@ export default class SubmitBody extends React.Component {
               To add your theme camp to this directory, please start by logging
               in using a Google Account.
             </p>
-            <p style={{textAlign:"center", fontSize:"1.3rem", fontWeight:"600"}}>
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "1.3rem",
+                fontWeight: "600",
+              }}
+            >
               <LogonLink />
             </p>
             <p>
-              We will save your email address in case we need to contact you. 
-              You'll be able to edit your camp directory listing at any time
-              by logging in again. Your email address will <strong>not</strong> be
+              We will save your email address in case we need to contact you.
+              You'll be able to edit your camp directory listing at any time by
+              logging in again. Your email address will <strong>not</strong> be
               shown publically.
             </p>
           </Col>
@@ -199,12 +209,16 @@ export default class SubmitBody extends React.Component {
 
   Instructions() {
     if (this.props.year && this.props.camp) {
+      const destinationYear = this.props.saveCopyAsYear
+        ? this.props.saveCopyAsYear
+        : this.props.year;
+
       return (
         <div>
-          <h2>{this.props.camp.name}</h2>
+          <h2>{this.props.camp}</h2>
           <p>
             Edit any changes in the information for your camp in{" "}
-            {this.props.year} and hit Submit.
+            {destinationYear} and hit Submit.
           </p>
         </div>
       );
@@ -213,8 +227,9 @@ export default class SubmitBody extends React.Component {
         <div>
           <h2>Submit your camp to the Queerburners directory!</h2>
           <p>
-            Welcome! We're building a comprehensive list of LGBTQIA+ and ally theme
-            camps that will participate in Burning Man in {this.state.year}.
+            Welcome! We're building a comprehensive list of LGBTQIA+ and ally
+            theme camps that will participate in Burning Man in{" "}
+            {this.state.year}.
           </p>
           <p>
             To add your theme camp to this directory, please fill out this form.
@@ -273,11 +288,18 @@ export default class SubmitBody extends React.Component {
 
   render() {
     if (this.state._submit_successful) {
+      //
+      // after a submit, we are going to redirect them to the directory,
+      // set up with a filter to show just their camp.
+      //
+
+      const yearToBounce = this.props.saveCopyAsYear
+        ? this.props.saveCopyAsYear
+        : this.state.year;
+
       return (
         <Redirect
-          to={`/year/${this.state.year}?s=${encodeURIComponent(
-            this.state.name
-          )}`}
+          to={`/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`}
         />
       );
     } else if (!this.props.userData.isLoggedOn) {

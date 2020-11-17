@@ -14,6 +14,7 @@ import { Route, Switch } from "react-router-dom";
 import EditPosts from "./components/EditPosts";
 import EditPost from "./components/EditPost";
 import ViewPost from "./components/ViewPost";
+import Presubmit from "./components/Presubmit";
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -35,12 +36,27 @@ const TopLevelComponent = (props) => {
             <ViewPost userData={userData} post="greetersStation" />
           )}
         />
+
         <Route
-          path="/submit"
+          path="/presubmit/:year"
+          render={(props) => {
+            return (
+              <Presubmit
+                userData={userData}
+                year={props.match.params.year}
+                camp={new URLSearchParams(props.location.search).get("camp")}
+              />
+            );
+          }}
+        />
+
+        <Route
+          path="/presubmit"
           render={(props) => (
-            <SubmitBody userData={userData} year={null} camp={null} />
+            <Presubmit userData={userData} year={null} camp={null} />
           )}
         />
+
         <Route
           path="/year/:year"
           render={(props) => (

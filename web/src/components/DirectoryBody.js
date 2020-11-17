@@ -54,7 +54,6 @@ export default class DirectoryBody extends React.Component {
   }
 
   async fetchData(clearFirst) {
-
     if (this.state.cancelFn) {
       this.state.cancelFn();
       this.setState({ cancelFn: null });
@@ -69,14 +68,12 @@ export default class DirectoryBody extends React.Component {
       year = defaultYear;
     }
 
-
-    this.setState({year: year});
+    this.setState({ year: year });
 
     if (clearFirst) {
       this.setState({ data: null });
     }
     try {
-
       const response = await axios.get(`${api}/camps/${year}`, {
         auth: { username: this.props.userData.idToken, password: "" },
         cancelToken: new CancelToken((c) => {
@@ -92,9 +89,7 @@ export default class DirectoryBody extends React.Component {
   }
 
   async componentDidMount() {
-
     await this.fetchData(false);
-
   }
 
   async componentDidUpdate(prevProps) {
@@ -128,7 +123,7 @@ export default class DirectoryBody extends React.Component {
           <p>
             Please{" "}
             <Link
-              to="/submit"
+              to="/presubmit"
               className="text-reset"
               style={{ textDecoration: "underline" }}
             >
@@ -280,19 +275,18 @@ export default class DirectoryBody extends React.Component {
                         <Card.Body>
                           <p>
                             <strong>{this.props.search}</strong> will now appear
-                            in the Queerburners Directory for {this.props.year}
-                            .
+                            in the Queerburners Directory for {this.props.year}.
                           </p>
                           <p>
                             You can edit this listing, change the picture, and
                             add more information at any time. Just come back to
-                            queerburners.org and log on again using
-                            your Google account.
+                            queerburners.org and log on again using your Google
+                            account.
                           </p>
                           <p>
-                            This directory is a service of{" "}
-                            Queerburners, an online community of LGBTQIA+ burners from around
-                            the world. We also have{" "}
+                            This directory is a service of Queerburners, an
+                            online community of LGBTQIA+ burners from around the
+                            world. We also have{" "}
                             <a
                               href="https://www.facebook.com/groups/queer.burners/"
                               className="text-reset"
@@ -311,7 +305,9 @@ export default class DirectoryBody extends React.Component {
                           </Button>
                         </Card.Body>
                       </Card>
-                    ) : submitCard}
+                    ) : (
+                      submitCard
+                    )}
                   </CardColumns>
                 </Col>
               </Row>

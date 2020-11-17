@@ -13,10 +13,19 @@ import Col from "react-bootstrap/Col";
 import { googleClientId, oauthEndpoint, api } from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
+import googleIcon from "../assets/btn_google_signin_dark_normal_web.png";
 
 import { hashEmail } from "shared";
 
-export const LogonLink = () => {
+export const LogonLink = (props) => {
+  if (props.useIcon) {
+    return (
+      <a href={LogonLinkAddress()}>
+        <img src={googleIcon} alt="Sign in with Google"></img>
+      </a>
+    );
+  }
+
   return <a href={LogonLinkAddress()}>Login</a>;
 };
 
