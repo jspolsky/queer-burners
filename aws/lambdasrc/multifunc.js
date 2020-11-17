@@ -392,7 +392,7 @@ exports.campsPost = async (event) => {
       !originalcamp.Item.contact ||
       (originalcamp.Item.contact.google_user_id !== remoteUser.google_user_id &&
         originalcamp.Item.contact.email !== remoteUser.email &&
-        !remoteUser.id)
+        !remoteUser.isadmin)
     ) {
       return StandardError(
         "Current logged-in user is not the creator of this camp and can't edit it"
@@ -537,7 +537,6 @@ exports.campsYearGet = async (event) => {
 };
 
 exports.myCampsGet = async (event) => {
-
   const remoteUser = await GetRemoteUser(event);
 
   if (!remoteUser) {
@@ -546,19 +545,18 @@ exports.myCampsGet = async (event) => {
 
   const params = {
     TableName: "camps",
-    ExpressionAttributeNames: {"#name":"name", "#year":"year"},
+    ExpressionAttributeNames: { "#name": "name", "#year": "year" },
     ProjectionExpression: "#name, #year, contact",
     FilterExpression: "attribute_not_exists(deleted)",
   };
 
   try {
     const data = await db.scan(params).promise();
-    let camps = data.Items.filter(x => (x.contact.email === remoteUser.email));
+    let camps = data.Items.filter((x) => x.contact.email === remoteUser.email);
     return StandardResponse(camps);
   } catch (e) {
     return StandardError(e);
   }
-
 };
 
 exports.campsYearNameGet = async (event) => {
