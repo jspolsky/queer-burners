@@ -106,6 +106,19 @@ Resources:
             Path: /mycamps
             Method: get
 
+  MyCampsGetOptions:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "CORS pre-flight check"
+      FunctionName: qb-mycamps-get-options
+      Handler: multifunc.Options
+      Events:
+        MyCampsGetOptions:
+          Type: Api
+          Properties:
+            Path: /mycamps
+            Method: options
+
   CampsYearOptions:
     Type: AWS::Serverless::Function
     Properties:
