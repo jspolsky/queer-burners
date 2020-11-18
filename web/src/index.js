@@ -38,7 +38,7 @@ const TopLevelComponent = (props) => {
         />
 
         <Route
-          path="/presubmit/:year"
+          path="/submit/:year"
           render={(props) => {
             return (
               <Presubmit
@@ -51,7 +51,7 @@ const TopLevelComponent = (props) => {
         />
 
         <Route
-          path="/presubmit"
+          path="/submit"
           render={(props) => (
             <Presubmit userData={userData} year={null} camp={null} />
           )}

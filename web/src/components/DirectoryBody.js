@@ -123,7 +123,7 @@ export default class DirectoryBody extends React.Component {
           <p>
             Please{" "}
             <Link
-              to="/presubmit"
+              to="/submit"
               className="text-reset"
               style={{ textDecoration: "underline" }}
             >
