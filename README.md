@@ -1,4 +1,4 @@
-This is the source code for the [Queer Burners Directory](https://queerburnersdirectory.com), an online directory of Burning Man theme camps that are, broadly speaking, LBGTQ+ or allies.
+This is the source code for the [Queerburners website](https://queerburners.org). It includes a simple content management system for editing pages, and an online directory of theme camps that is updated every year.
 
 Here are some notes to future developers that want to modify this project.
 
@@ -32,21 +32,57 @@ I use VS Code with the Prettier code formatter by Esben Petersen. I always forma
 
 This is where you work on the front end and the react code.
 
+Install node and npm to work on the website.
+
 **npm start** will start a local web server for testing. Whenever you edit and save files locally, your browser will refresh automatically with the latest version.
 
-**npm start build** builds a build/ subdirectory which is what you deploy to the server (currently automatically deployed to vercel when you check in the changes).
+Once you have everything working locally:
+
+- **npm start build** builds a build/ subdirectory which is what you deploy to the server
+- Then just check that into github. Vercel will automatically pick it up and in a minute or two the new live site will appear at queerburners.org.
 
 ## The **aws** directory
 
-This is where the server-side code goes.
+Anything that can't be done on the client side, for example, adding a new theme camp to the theme camp directory, is done through the Queerburners API which is implemented with Javascript functions living on AWS Lambda.
+
+The aws directory is where all this server-side code goes.
+
+Install the [aws command line](https://aws.amazon.com/cli/) and [AWS's "sam" command line](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) to work on server-side code. (The sam command line is also going to want docker and Homebrew).
 
 - **lambdasrc** contains the code for the lambda functions.
 
-- **template.yaml** is the SAM configuration that defines every function and it's API gateway.
+- **template.yaml** is the SAM configuration that defines every function and its API gateway.
 
-- The script ./local-sam.sh launches the API on your local machine, in a docker instance, assuming you've set up your local machine according to [these instructions](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html). This allows you to test changes to the API or lambda functions without deploying those changes to AWS. If you are doing this local testing, don't forget to change the API endpoint in **web/definitions.js**
+Ready to make changes to the server side code? First develop them locally.
+
+- Almost all the code you might want to modify is in aws/lamdbdasrc/multifunc.js
+
+- If you add new functions that need to be available through the web API, also add them in aws/template.yaml
+
+- From the directory aws, the script ./local-sam.sh launches the API on your local machine, in a docker instance, assuming you've set up your local machine according to [these instructions](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html). This allows you to test changes to the API or lambda functions without deploying those changes to AWS.
+
+- The file **web/definitions.js** lets you specify where the API is running. When you are testing locally with ./local-sam.sh, the api is at localhost:3001.
+
+- You may want to use Postman to test the API directly before you try to get it to work from the web front end.
+
+Once the server-side code is tested locally, you can deploy it to Amazon.
 
 - The script ./deploy-sam.sh deploys any changes you have made to the lamdba functions (locally) up to AWS.
+
+- This will make changes to the lambda functions up on AWS and also to the API Gateway.
+
+- The one thing that is NOT automatically deployed is a "google secret ID" used for logging on users with Google. So:
+
+  - Log onto the [AWS Lambda Console](https://us-east-2.console.aws.amazon.com/lambda/home?region=us-east-2#/discover)
+
+  - Navigate into the function **qb-google-idtoken-from-authcode**
+
+  - Scroll down to see the Environment Variables
+
+  - Look at the **googleSecretId** environment variable. If
+    it is missing, or if it says something like "ItsASecretDumbass", provide the real google secret ID. (This is not checked into the repository).
+
+  - Repeat for the function **qb-refresh-expired-token**
 
 - **lambdalayer** contains definitions describing any shared libraries that you need to use on AWS that need to be available for the code in **lambdasrc**. They are deployed to an AWS Lambda Layer. If you **npm list** in there you can see what libraries are currently a part of the layer on the server.
 
