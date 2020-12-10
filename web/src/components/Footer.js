@@ -18,9 +18,8 @@ export const Footer = (props) => {
             A project of Queerburners: an online community of LGBTQIA+ burners
             from around the world. We are grateful to{" "}
             <a href="https://duncan.co">Duncan Rawlinson</a> (CC BY-NC 3.0) and
-            Wink Maltman for the
-            header images, and many burners and friends throughout the years for their
-            contributions to this site.
+            Wink Maltman for the header images, and many burners and friends
+            throughout the years for their contributions to this site.
           </p>
           <ul>
             <li>
@@ -31,7 +30,7 @@ export const Footer = (props) => {
             </li>
 
             <li>
-              <a href="mailto:info@queerburners.com">info@queerburners.com</a>
+              <a href="mailto:info@queerburners.org">info@queerburners.org</a>
             </li>
           </ul>
         </Col>

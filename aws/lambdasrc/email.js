@@ -158,7 +158,7 @@ exports.sendDailyEmail = async (event) => {
     });
 
     let info = await transporter.sendMail({
-      from: "info@queerburnersdirectory.com",
+      from: "info@queerburnersdirectory.org",
       to: recipients,
       subject: "[queerburnersdirectory] Daily Change Report",
       text: "This message requires an email client that supports HTML mail.",
