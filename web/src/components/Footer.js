@@ -28,6 +28,9 @@ export const Footer = (props) => {
             <li>
               <Link to="/Privacy">Privacy Policy</Link>
             </li>
+            <li>
+              <Link to="/501c3">501(c)(3)</Link>
+            </li>
 
             <li>
               <a href="mailto:info@queerburners.org">info@queerburners.org</a>
