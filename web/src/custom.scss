@@ -103,6 +103,22 @@ h2 {
   color: #770000;
 }
 
+.qb-textpage img[align="right"],
+.qb-textpage img[style*="float: right"],
+.qb-textpage img[style*="float:right"],
+.qb-textpage figure[style*="float: right"],
+.qb-textpage figure[style*="float:right"] {
+  margin: 1.5rem 0px 1.5rem 1.5rem;
+}
+
+.qb-textpage img[align="left"],
+.qb-textpage img[style*="float: left"],
+.qb-textpage img[style*="float:left"],
+.qb-textpage figure[style*="float: left"],
+.qb-textpage figure[style*="float:left"] {
+  margin: 1.5rem 1.5rem 1.5rem 0px;
+}
+
 .navbar {
   padding: 0 1rem;
 }
