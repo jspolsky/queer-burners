@@ -213,7 +213,7 @@ export const EditPost = (props) => {
                   <InputGroup>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        queerburnersdirectory.com/
+                        queerburners.org/
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
