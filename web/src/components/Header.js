@@ -45,10 +45,10 @@ export const Header = (props) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <LinkContainer to="/directory">
-              <Nav.Link>Camp Directory</Nav.Link>
+              <Nav.Link>Camp&nbsp;Directory</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/go-to-burning-man">
-              <Nav.Link>Going to Burning Man</Nav.Link>
+              <Nav.Link>Going&nbsp;to&nbsp;Burning&nbsp;Man</Nav.Link>
             </LinkContainer>
             <LinkContainer title="Events" to="/all-of-us-event">
               <Nav.Link>Events</Nav.Link>
