@@ -2,23 +2,35 @@ This is the source code for the [Queerburners website](https://queerburners.org)
 
 Here are some notes to future developers that want to modify this project.
 
-# Technologies used
+# Site Architecture
 
-The site is "serverless," more or less. Instead of having a web server running code, the site is implemented as a single page React app which pulls data from an API and pictures from AWS S3. The API is implemented using AWS Lambda functions. The data is stored in an AWS DynamoDB database. The React app itself is served by Vercel which treats it as a handful of static files.
+The site is serverless. Instead of having a web server running code, the site is implemented as a single page React app. That means most of the logic is running in JavaScript on the client (in a web browser). You'll find this code in the `web` subdirectory. On the client side, we use:
+
+- All code is written in modern ECMAScript 6 (aka Javascript) and developed with Node and NPM.
+- The [React](https://reactjs.org/docs/getting-started.html) framework, in particular [Create React App](https://create-react-app.dev/)
+- For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
+
+When you build the front end (using the `npm start build`) command, it will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. As soon as you commit your changes to github, our web host, Vercel, notices the changes and deploys them to the Vercel content distribution network. That means that anything you check into `web\build` is automatically deployed to, and hosted at, [queerburners.org](https://queerburners.org). But they are all static files--nothing runs on the Vercel server.
+
+There are two major dynamic parts to the website: the content management system, which lets administrators add, edit, and delete individual pages of the site, and the Theme Camp Directory, which lets any LGBTQIA+ theme camp owner submit and edit information about their camp.
+
+To store this data on the server, Queerburners has a web-based API which is running on AWS. For example, this API supports functions like `/camps` which returns a JSON list of camps. You will find all the code for the web-based API in the `aws` subdirectory.
+
+- Back end functions run on [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html) -- they are all in node.js.
+- Those functions are accessed through a REST API via the [AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html). This component hooks up a URL to lambda code.
+- The definition of all of the API endpoints is in the file `template.yaml` which is an input file for the [AWS Serverless Application Model](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) (aka "SAM").
+- All the code that runs on the server is in the `lambdasrc` directory.
+- From the front end, we use the [axios](https://github.com/axios/axios) library to access the API.
+
+Whenever the API needs to store some data:
+
+- User-uploaded images are stored in [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html).
+- Other data, like information about theme camps, is in [Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html), a simple NoSQL database that stores JSON objects. We access DynamoDB through the JavaScript [DocumentClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) library.
 
 Here is a more complete list of technologies, frameworks, and libraries that are used to build Queer Burners Directory, along with links to the documentation.
 
-- All code is written in modern ECMAScript 6 (aka Javascript) and developed with Node and NPM.
-- The [AWS Serverless Application Model](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) (SAM)
-- The [React](https://reactjs.org/docs/getting-started.html) framework, in particular [Create React App](https://create-react-app.dev/)
-- For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
-- Back end functions run on [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html) -- they are all in node.js.
-- Those functions are accessed through a REST API via the [AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html).
-- From the front end, we use the [axios](https://github.com/axios/axios) library to access the API.
-- The database is stored in [Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html), a simple NoSQL database that stores JSON objects. We access DynamoDB through the JavaScript [DocumentClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) library.
 - DNS and web hosting for the static front end files is provided by [Vercel](https://vercel.com/docs/configuration#introduction/configuration-reference). Vercel detects commits to this github project and deploys them automatically.
 - All user authentication comes through [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2/web-server).
-- User-uploaded images are stored in [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html).
 - Because users can upload very high resolution images, we also store a thumbnail that is 960 pixels wide using the [sharp](https://sharp.pixelplumbing.com/) library.
 - We send email through [Amazon SES](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html) (Simple Email Service). Rather than talking to their library directory, we use [Nodemailer](https://nodemailer.com/about/) to construct and send the email message via SES.
 
@@ -32,13 +44,13 @@ I use VS Code with the Prettier code formatter by Esben Petersen. I always forma
 
 This is where you work on the front end and the react code.
 
-Install node and npm to work on the website.
+Install `node` and `npm` to work on the website.
 
 **npm start** will start a local web server for testing. Whenever you edit and save files locally, your browser will refresh automatically with the latest version.
 
 Once you have everything working locally:
 
-- **npm start build** builds a build/ subdirectory which is what you deploy to the server
+- **npm start build** builds the `web/build` subdirectory which is what you deploy to the server
 - Then just check that into github. Vercel will automatically pick it up and in a minute or two the new live site will appear at queerburners.org.
 
 ## The **aws** directory
@@ -47,7 +59,7 @@ Anything that can't be done on the client side, for example, adding a new theme 
 
 The aws directory is where all this server-side code goes.
 
-Install the [aws command line](https://aws.amazon.com/cli/) and [AWS's "sam" command line](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) to work on server-side code. (The sam command line is also going to want docker and Homebrew).
+Install the [aws command line](https://aws.amazon.com/cli/) and [AWS's "sam" command line](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) to work on server-side code. (The sam command line is also going to require that you install [Docker](https://www.docker.com) and [Homebrew](https://brew.sh)).
 
 - **lambdasrc** contains the code for the lambda functions.
 
@@ -57,13 +69,15 @@ Ready to make changes to the server side code? First develop them locally.
 
 - Almost all the code you might want to modify is in aws/lamdbdasrc/multifunc.js
 
+- There is a tiny amount of Javascript in `shared` which is available on both the server and the client.
+
 - If you add new functions that need to be available through the web API, also add them in aws/template.yaml
 
 - From the directory aws, the script ./local-sam.sh launches the API on your local machine, in a docker instance, assuming you've set up your local machine according to [these instructions](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html). This allows you to test changes to the API or lambda functions without deploying those changes to AWS.
 
 - The file **web/definitions.js** lets you specify where the API is running. When you are testing locally with ./local-sam.sh, the api is at localhost:3001.
 
-- You may want to use Postman to test the API directly before you try to get it to work from the web front end.
+- You may want to install [Postman](https://www.postman.com) to test the API directly before you try to get it to work from the web front end.
 
 Once the server-side code is tested locally, you can deploy it to Amazon.
 
@@ -84,8 +98,18 @@ Once the server-side code is tested locally, you can deploy it to Amazon.
 
   - Repeat for the function **qb-refresh-expired-token**
 
+If you need to modify any of the the shared code that is shared between the server and the client, this is a little bit tricky.
+
 - **lambdalayer** contains definitions describing any shared libraries that you need to use on AWS that need to be available for the code in **lambdasrc**. They are deployed to an AWS Lambda Layer. If you **npm list** in there you can see what libraries are currently a part of the layer on the server.
 
   - To add another library and make it available on the server, go into this directory, then **npm install** your new library. The next time you run **deploy-sam.sh** it will get deployed as a new version of the lambda library to the server.
 
   - This will increment the version number of the library on the server. If you are debugging locally with docker and **local-sam.sh** as described earlier, you will still be seeing the old version of the layer which is not helpful, since the version number of the lambda library is hardcoded. So log onto AWS Lambda console and see what the new version number is, and then update that in the **local-sam.sh** script.
+
+# Secrets!
+
+To modify the website, you will need to get set up with various accounts and passwords.
+
+- If everything you are doing is client side, you just need to be able to commit to the github repository (or submit a pull request which can be accepted by someone who can commit). **That probably covers 99% of the cases of changes that will need to be made.**
+
+- To work on the API, you'll need AWS permission.
