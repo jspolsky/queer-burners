@@ -146,6 +146,11 @@ export const Authenticate = (props) => {
           <LinkContainer to="/editPosts">
             <NavDropdown.Item>Edit Posts</NavDropdown.Item>
           </LinkContainer>
+          <LinkContainer to="/analytics">
+            <NavDropdown.Item>
+              Site analytics
+            </NavDropdown.Item>
+          </LinkContainer>
           <NavDropdown.Item
             onClick={() => {
               localStorage.removeItem("userData");

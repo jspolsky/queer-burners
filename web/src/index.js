@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import DirectoryBody from "./components/DirectoryBody.js";
@@ -15,6 +15,14 @@ import EditPosts from "./components/EditPosts";
 import EditPost from "./components/EditPost";
 import ViewPost from "./components/ViewPost";
 import Presubmit from "./components/Presubmit";
+
+const Analytics = () => {
+  useEffect(()=>{
+    window.location.href = "https://app.usefathom.com/share/fuivzexd/queerburners.org";
+  }, []);
+
+  return (<div><h1>Loading Analytics...</h1></div>);
+}
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -113,12 +121,18 @@ const TopLevelComponent = (props) => {
           )}
         />
 
+        <Route path="/analytics"
+               render={(props) => <Analytics />}
+        />
+
         <Route
           path="/:post+"
           render={(props) => (
             <ViewPost userData={userData} post={props.match.params.post} />
           )}
         />
+
+        
       </Switch>
       <Footer />
     </Router>
