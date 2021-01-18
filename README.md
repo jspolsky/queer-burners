@@ -4,17 +4,31 @@ Here are some notes to future developers that want to modify this project.
 
 # Site Architecture
 
-The site is serverless. Instead of having a web server running code, the site is implemented as a single page React app. That means most of the logic is running in JavaScript on the client (in a web browser). You'll find this code in the `web` subdirectory. On the client side, we use:
+The site is serverless. Instead of having a web server running code, the site is implemented as a single page React app. That means most of the logic is running in JavaScript on the client (in a web browser). There is also an API running on AWS to save things like camp directory entries and page content, and we use S3 to store user-uploaded pictures.
 
-- All code is written in modern ECMAScript 6 (aka Javascript) and developed with Node and NPM.
-- The [React](https://reactjs.org/docs/getting-started.html) framework, in particular [Create React App](https://create-react-app.dev/)
+## The Client Side
+
+You'll find this code in the `web` subdirectory.
+
+- All code is written in modern ECMAScript 6 (aka Javascript) and developed with `node` and `npm`
+- We use the [React](https://reactjs.org/docs/getting-started.html) framework, in particular [Create React App](https://create-react-app.dev/)
 - For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
 
-When you build the front end (using the `npm start build`) command, it will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. As soon as you commit your changes to github, our web host, Vercel, notices the changes and deploys them to the Vercel content distribution network. That means that anything you check into `web\build` is automatically deployed to, and hosted at, [queerburners.org](https://queerburners.org). But they are all static files--nothing runs on the Vercel server.
+As you develop code on your local machine in the web subdirectory, you can use the `npm start` command which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
+
+Once you're happy with your changes, commit them to github.
+
+When you are ready to deploy these changes to the live web server, build the front end (using the `npm start build`) command. This will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. Now commit again to github.
+
+As soon as you commit these `web\build` files to github, our web host, Vercel, notices the changes and deploys them to the Vercel content distribution network. That means that anything you check into `web\build` is automatically deployed to, and hosted at, [queerburners.org](https://queerburners.org). It will only take a few seconds for the new site to be live.
+
+So far, the front end consists entirely of static files. Vercel serves them off of their content distribution network, like any old fashioned web server, but no actual code is running on the Vercel server.
+
+## The Server Side (but it's serverless)
 
 There are two major dynamic parts to the website: the content management system, which lets administrators add, edit, and delete individual pages of the site, and the Theme Camp Directory, which lets any LGBTQIA+ theme camp owner submit and edit information about their camp.
 
-To store this data on the server, Queerburners has a web-based API which is running on AWS. For example, this API supports functions like `/camps` which returns a JSON list of camps. You will find all the code for the web-based API in the `aws` subdirectory.
+To store this data on the server, Queerburners has a RESTful API which is running on AWS. For example, this API supports functions like `/camps` which returns a JSON list of camps. You will find all the code for the API in the `aws` subdirectory.
 
 - Back end functions run on [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html) -- they are all in node.js.
 - Those functions are accessed through a REST API via the [AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html). This component hooks up a URL to lambda code.
@@ -57,9 +71,18 @@ Once you have everything working locally:
 
 Anything that can't be done on the client side, for example, adding a new theme camp to the theme camp directory, is done through the Queerburners API which is implemented with Javascript functions living on AWS Lambda.
 
-The aws directory is where all this server-side code goes.
+The `aws` directory is where all this server-side code goes.
 
-Install the [aws command line](https://aws.amazon.com/cli/) and [AWS's "sam" command line](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) to work on server-side code. (The sam command line is also going to require that you install [Docker](https://www.docker.com) and [Homebrew](https://brew.sh)).
+To develop server-side code locally, you are going to have to install
+
+- [Docker](https://www.docker.com) - required for local SAM testing
+- [Homebrew](https://brew.sh) - required for SAM
+- the [aws command line](https://aws.amazon.com/cli/)
+- the [AWS "sam" command line](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+
+You need to configure the aws cli. [Instructions here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html). Our region is `us-east-2` and the output format should be configured to `json`. You will need to get an access key and secret access key to do this.
+
+Now:
 
 - **lambdasrc** contains the code for the lambda functions.
 
@@ -67,11 +90,11 @@ Install the [aws command line](https://aws.amazon.com/cli/) and [AWS's "sam" com
 
 Ready to make changes to the server side code? First develop them locally.
 
-- Almost all the code you might want to modify is in aws/lamdbdasrc/multifunc.js
+- Almost all the code you might want to modify is in `aws/lamdbdasrc/multifunc.js`
 
 - There is a tiny amount of Javascript in `shared` which is available on both the server and the client.
 
-- If you add new functions that need to be available through the web API, also add them in aws/template.yaml
+- If you add new functions that need to be available through the web API, also add them in `aws/template.yaml`
 
 - From the directory aws, the script ./local-sam.sh launches the API on your local machine, in a docker instance, assuming you've set up your local machine according to [these instructions](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-mac.html). This allows you to test changes to the API or lambda functions without deploying those changes to AWS.
 
@@ -105,11 +128,3 @@ If you need to modify any of the the shared code that is shared between the serv
   - To add another library and make it available on the server, go into this directory, then **npm install** your new library. The next time you run **deploy-sam.sh** it will get deployed as a new version of the lambda library to the server.
 
   - This will increment the version number of the library on the server. If you are debugging locally with docker and **local-sam.sh** as described earlier, you will still be seeing the old version of the layer which is not helpful, since the version number of the lambda library is hardcoded. So log onto AWS Lambda console and see what the new version number is, and then update that in the **local-sam.sh** script.
-
-# Secrets!
-
-To modify the website, you will need to get set up with various accounts and passwords.
-
-- If everything you are doing is client side, you just need to be able to commit to the github repository (or submit a pull request which can be accepted by someone who can commit). **That probably covers 99% of the cases of changes that will need to be made.**
-
-- To work on the API, you'll need AWS permission.
