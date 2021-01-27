@@ -17,12 +17,17 @@ import ViewPost from "./components/ViewPost";
 import Presubmit from "./components/Presubmit";
 
 const Analytics = () => {
-  useEffect(()=>{
-    window.location.href = "https://app.usefathom.com/share/fuivzexd/queerburners.org";
+  useEffect(() => {
+    window.location.href =
+      "https://app.usefathom.com/share/fuivzexd/queerburners.org";
   }, []);
 
-  return (<div><h1>Loading Analytics...</h1></div>);
-}
+  return (
+    <div>
+      <h1>Loading Analytics...</h1>
+    </div>
+  );
+};
 
 const TopLevelComponent = (props) => {
   const [userData, setUserData] = useState({ isLoggedOn: false });
@@ -121,8 +126,11 @@ const TopLevelComponent = (props) => {
           )}
         />
 
-        <Route path="/analytics"
-               render={(props) => <Analytics />}
+        <Route path="/analytics" render={(props) => <Analytics />} />
+
+        <Route
+          path="/headeronly"
+          render={() => <React.Fragment></React.Fragment>}
         />
 
         <Route
@@ -131,8 +139,6 @@ const TopLevelComponent = (props) => {
             <ViewPost userData={userData} post={props.match.params.post} />
           )}
         />
-
-        
       </Switch>
       <Footer />
     </Router>
