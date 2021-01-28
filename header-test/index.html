@@ -4,163 +4,149 @@
       href="https://fonts.googleapis.com/css2?family=Kufam:wght@700&family=Raleway:wght@500&display=swap"
       rel="stylesheet"
     />
-    <link href="./static/css/main.9b79c7f9.chunk.css" rel="stylesheet" />
+    <link rel="stylesheet" href="bootstrap-iso.css" />
+    <script>
+      const toggleShow = (id) => {
+        document.getElementById(id).classList.toggle("show");
+      };
 
+      document.addEventListener("DOMContentLoaded", (event) => {
+        document
+          .getElementById("collapsible-nav-dropdown")
+          .addEventListener("click", (x) => toggleShow("historyMenu"));
+
+        document
+          .getElementById("hamburger")
+          .addEventListener("click", (x) =>
+            toggleShow("responsive-navbar-nav")
+          );
+      });
+    </script>
+
+    <style type="text/css" media="screen">
+      @font-face {
+        font-family: "VAG Rounded BT";
+        font-style: normal;
+        font-weight: normal;
+        src: local("VAG Rounded BT"), url("./VAGRON.woff") format("woff");
+      }
+      .bootstrap-iso .navbar {
+        padding: 0 1rem;
+      }
+
+      .bootstrap-iso .navbar-dark .navbar-brand {
+        color: #ff00ff;
+        font-family: "VAG Rounded BT";
+        font-size: 24px;
+      }
+
+      .bootstrap-iso .navbar-dark .navbar-nav .nav-link {
+        font-family: "Raleway";
+        font-weight: bold;
+        font-size: 16px;
+        color: #ffccff;
+        padding-top: 0.9rem;
+      }
+    </style>
     <title>Henlo</title>
   </head>
-  <body>
-    <div id="queerburnersHeader"></div>
-    <script>
-      !(function (e) {
-        function r(r) {
-          for (
-            var n, a, i = r[0], c = r[1], l = r[2], s = 0, p = [];
-            s < i.length;
-            s++
-          )
-            (a = i[s]),
-              Object.prototype.hasOwnProperty.call(o, a) &&
-                o[a] &&
-                p.push(o[a][0]),
-              (o[a] = 0);
-          for (n in c)
-            Object.prototype.hasOwnProperty.call(c, n) && (e[n] = c[n]);
-          for (f && f(r); p.length; ) p.shift()();
-          return u.push.apply(u, l || []), t();
-        }
-        function t() {
-          for (var e, r = 0; r < u.length; r++) {
-            for (var t = u[r], n = !0, i = 1; i < t.length; i++) {
-              var c = t[i];
-              0 !== o[c] && (n = !1);
-            }
-            n && (u.splice(r--, 1), (e = a((a.s = t[0]))));
-          }
-          return e;
-        }
-        var n = {},
-          o = { 1: 0 },
-          u = [];
-        function a(r) {
-          if (n[r]) return n[r].exports;
-          var t = (n[r] = { i: r, l: !1, exports: {} });
-          return e[r].call(t.exports, t, t.exports, a), (t.l = !0), t.exports;
-        }
-        (a.e = function (e) {
-          var r = [],
-            t = o[e];
-          if (0 !== t)
-            if (t) r.push(t[2]);
-            else {
-              var n = new Promise(function (r, n) {
-                t = o[e] = [r, n];
-              });
-              r.push((t[2] = n));
-              var u,
-                i = document.createElement("script");
-              (i.charset = "utf-8"),
-                (i.timeout = 120),
-                a.nc && i.setAttribute("nonce", a.nc),
-                (i.src = (function (e) {
-                  return (
-                    a.p +
-                    "static/js/" +
-                    ({}[e] || e) +
-                    "." +
-                    { 3: "16b73e66" }[e] +
-                    ".chunk.js"
-                  );
-                })(e));
-              var c = new Error();
-              u = function (r) {
-                (i.onerror = i.onload = null), clearTimeout(l);
-                var t = o[e];
-                if (0 !== t) {
-                  if (t) {
-                    var n = r && ("load" === r.type ? "missing" : r.type),
-                      u = r && r.target && r.target.src;
-                    (c.message =
-                      "Loading chunk " +
-                      e +
-                      " failed.\n(" +
-                      n +
-                      ": " +
-                      u +
-                      ")"),
-                      (c.name = "ChunkLoadError"),
-                      (c.type = n),
-                      (c.request = u),
-                      t[1](c);
-                  }
-                  o[e] = void 0;
-                }
-              };
-              var l = setTimeout(function () {
-                u({ type: "timeout", target: i });
-              }, 12e4);
-              (i.onerror = i.onload = u), document.head.appendChild(i);
-            }
-          return Promise.all(r);
-        }),
-          (a.m = e),
-          (a.c = n),
-          (a.d = function (e, r, t) {
-            a.o(e, r) ||
-              Object.defineProperty(e, r, { enumerable: !0, get: t });
-          }),
-          (a.r = function (e) {
-            "undefined" != typeof Symbol &&
-              Symbol.toStringTag &&
-              Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
-              Object.defineProperty(e, "__esModule", { value: !0 });
-          }),
-          (a.t = function (e, r) {
-            if ((1 & r && (e = a(e)), 8 & r)) return e;
-            if (4 & r && "object" == typeof e && e && e.__esModule) return e;
-            var t = Object.create(null);
-            if (
-              (a.r(t),
-              Object.defineProperty(t, "default", { enumerable: !0, value: e }),
-              2 & r && "string" != typeof e)
-            )
-              for (var n in e)
-                a.d(
-                  t,
-                  n,
-                  function (r) {
-                    return e[r];
-                  }.bind(null, n)
-                );
-            return t;
-          }),
-          (a.n = function (e) {
-            var r =
-              e && e.__esModule
-                ? function () {
-                    return e.default;
-                  }
-                : function () {
-                    return e;
-                  };
-            return a.d(r, "a", r), r;
-          }),
-          (a.o = function (e, r) {
-            return Object.prototype.hasOwnProperty.call(e, r);
-          }),
-          (a.p = "./"),
-          (a.oe = function (e) {
-            throw (console.error(e), e);
-          });
-        var i = (this.webpackJsonpheader = this.webpackJsonpheader || []),
-          c = i.push.bind(i);
-        (i.push = r), (i = i.slice());
-        for (var l = 0; l < i.length; l++) r(i[l]);
-        var f = c;
-        t();
-      })([]);
-    </script>
-    <script src="./static/js/2.fa71dfd5.chunk.js"></script>
-    <script src="./static/js/main.cd2c49ea.chunk.js"></script>
+  <body style="margin: 0 0 0 0">
+    <div class="bootstrap-iso">
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+        <a href="https://queerburners.org/" class="navbar-brand">Queerburners</a
+        ><button
+          aria-controls="responsive-navbar-nav"
+          type="button"
+          aria-label="Toggle navigation"
+          class="navbar-toggler collapsed"
+          id="hamburger"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="responsive-navbar-nav">
+          <div class="mr-auto navbar-nav">
+            <a
+              href="https://queerburners.org/directory"
+              data-rb-event-key="/directory"
+              class="nav-link"
+              >Camp&nbsp;Directory</a
+            ><a
+              href="https://queerburners.org/go-to-burning-man"
+              data-rb-event-key="/go-to-burning-man"
+              class="nav-link"
+              >Going&nbsp;to&nbsp;Burning&nbsp;Man</a
+            ><a
+              title="Events"
+              href="https://queerburners.org/all-of-us-event"
+              data-rb-event-key="/all-of-us-event"
+              class="nav-link"
+              >Events</a
+            >
+            <div class="dropdown nav-item">
+              <a
+                aria-haspopup="true"
+                aria-expanded="false"
+                id="collapsible-nav-dropdown"
+                href="#"
+                class="dropdown-toggle nav-link"
+                role="button"
+                >History</a
+              >
+              <div
+                aria-labelledby="collapsible-nav-dropdown"
+                class="dropdown-menu"
+                style="margin: 0px"
+                id="historyMenu"
+              >
+                <a href="https://queerburners.org/history" class="dropdown-item"
+                  >Queer Burner History at Black Rock City</a
+                ><a
+                  href="https://queerburners.org/year/2021"
+                  class="dropdown-item"
+                  >2021 (t.b.a!)</a
+                ><a
+                  href="https://queerburners.org/history/2020"
+                  class="dropdown-item"
+                  >2020 The Multiverse</a
+                ><a
+                  href="https://queerburners.org/year/2019"
+                  class="dropdown-item"
+                  >2019 Metamorphoses</a
+                ><a
+                  href="https://queerburners.org/history/2018"
+                  class="dropdown-item"
+                  >2018 iRobot</a
+                ><a
+                  href="https://queerburners.org/history/2017"
+                  class="dropdown-item"
+                  >2017 Radical Ritual</a
+                ><a
+                  href="https://queerburners.org/history/2016"
+                  class="dropdown-item"
+                  >2016 da Vinci's Workshop</a
+                ><a
+                  href="https://queerburners.org/history/2015"
+                  class="dropdown-item"
+                  >2015 Carnival of Mirrors</a
+                ><a
+                  href="https://queerburners.org/history/2014"
+                  class="dropdown-item"
+                  >2014 Caravansary</a
+                ><a
+                  href="https://queerburners.org/history/2013"
+                  class="dropdown-item"
+                  >2013 Cargo Cult</a
+                ><a
+                  href="https://queerburners.org/history/2012"
+                  class="dropdown-item"
+                  >2012 Fertility 2.0</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
     <p>How are you doing?</p>
   </body>
 </html>
