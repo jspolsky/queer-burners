@@ -19,18 +19,31 @@ import Carousel from "react-bootstrap/Carousel";
 import { LinkContainer } from "react-router-bootstrap";
 
 export const HeaderImage = () => {
-  const rgImages = [banner0, banner1, banner2, banner3, banner4, banner5, banner6, banner7, banner8, banner9];
+  const rgImages = [
+    banner0,
+    banner1,
+    banner2,
+    banner3,
+    banner4,
+    banner5,
+    banner6,
+    banner7,
+    banner8,
+    banner9,
+  ];
 
   return (
     <Carousel controls={false} fade={true} interval={8000}>
-      { rgImages.map((i, index) => (<Carousel.Item key={index}>
-        <img 
-          className="img-fluid w-100"
-          src={i}
-          alt="Queerburners"
-          style={{marginBottom:"2rem"}}></img>
-      </Carousel.Item>))}
-      
+      {rgImages.map((i, index) => (
+        <Carousel.Item key={index}>
+          <img
+            className="img-fluid w-100"
+            src={i}
+            alt="Queerburners"
+            style={{ marginBottom: "2rem" }}
+          ></img>
+        </Carousel.Item>
+      ))}
     </Carousel>
   );
 };
@@ -38,8 +51,16 @@ export const HeaderImage = () => {
 export const Header = (props) => {
   return (
     <>
-      <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" sticky="top">
-        <Navbar.Brand href="/">Queerburners</Navbar.Brand>
+      <Navbar
+        collapseOnSelect
+        expand="md"
+        bg="dark"
+        variant="dark"
+        sticky="top"
+      >
+        <Navbar.Brand href="https://queerburners.org">
+          Queerburners
+        </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
