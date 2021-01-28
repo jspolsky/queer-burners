@@ -1,0 +1,146 @@
+// customize bootstrap default variables here
+// https://getbootstrap.com/docs/4.5/getting-started/theming/
+
+// for example:
+// $body-bg: #654321;
+@font-face {
+  font-family: "VAG Rounded BT";
+  font-style: normal;
+  font-weight: normal;
+  src: local("VAG Rounded BT"), url("./VAGRON.woff") format("woff");
+}
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+.card-columns {
+  @include media-breakpoint-down(xs) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+
+  @include media-breakpoint-up(lg) {
+    column-count: 3;
+  }
+
+  @include media-breakpoint-up(xl) {
+    column-count: 4;
+  }
+}
+
+.camp-lightbox {
+  @include media-breakpoint-down(sm) {
+    width: 97%;
+  }
+
+  width: 80%;
+  max-width: none !important;
+}
+
+.GoogleUserPicture {
+  max-height: 2rem;
+  max-width: 2rem;
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}
+
+.modal-80w {
+  width: 80%;
+  max-width: none !important;
+}
+
+.qb-footer {
+  background-color: #f7f7f7;
+  color: #495057;
+}
+
+.qb-footer p {
+  margin-bottom: 0;
+  font-size: 0.8rem;
+}
+
+.qb-footer ul {
+  padding-inline-start: 0;
+  margin-bottom: 0;
+}
+
+.qb-footer ul li {
+  display: inline-block;
+  padding-right: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+h1 {
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+h2 {
+  padding-top: 1rem;
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+.qb-textpage h3 {
+  padding-top: 1rem;
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+.qb-textpage p {
+  font-family: "Raleway", sans-serif;
+}
+
+.qb-textpage figcaption {
+  color: #770000;
+}
+
+.qb-textpage img[align="right"],
+.qb-textpage img[style*="float: right"],
+.qb-textpage img[style*="float:right"],
+.qb-textpage figure[style*="float: right"],
+.qb-textpage figure[style*="float:right"] {
+  margin: 1.5rem 0px 1.5rem 1.5rem;
+}
+
+.qb-textpage img[align="left"],
+.qb-textpage img[style*="float: left"],
+.qb-textpage img[style*="float:left"],
+.qb-textpage figure[style*="float: left"],
+.qb-textpage figure[style*="float:left"] {
+  margin: 1.5rem 1.5rem 1.5rem 0px;
+}
+
+.navbar {
+  padding: 0 1rem;
+}
+
+.navbar-dark .navbar-brand {
+  color: #ff00ff;
+  font-family: "VAG Rounded BT";
+  font-size: 24px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  font-family: "Raleway";
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffccff;
+  padding-top: 0.9rem;
+}
+
+blockquote {
+  font-size: 1.25rem;
+}
+
+.GoogleUserPicture {
+  margin-top: 0.4rem;
+}
