@@ -65,6 +65,7 @@ export const Header = (props) => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
+            <a className="nav-link" href="https://participate.queerburners.org/">Forum</a>
             <LinkContainer to="/directory">
               <Nav.Link>Camp&nbsp;Directory</Nav.Link>
             </LinkContainer>
