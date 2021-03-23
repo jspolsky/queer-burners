@@ -147,10 +147,9 @@ blockquote {
 
 div.board .member {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  width: 20rem;
+  width: 25rem;
   border-radius: 5px;
   margin: 0 0 1rem 1rem;
-  display: inline-block;
 }
 
 div.board .member img {
@@ -160,4 +159,12 @@ div.board .member img {
 
 div.board .member div {
   padding: 2px 16px;
+}
+
+div.board .member h3 {
+  color: #ff00ff;
+  font-family: "VAG Rounded BT";
+  font-size: 24px;
+  margin-top: 1.0rem;
+  margin-bottom: 1.5rem;
 }
