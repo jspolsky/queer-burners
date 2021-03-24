@@ -145,11 +145,34 @@ blockquote {
   margin-top: 0.4rem;
 }
 
+div.board {
+
+  @include media-breakpoint-down(xs) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(md) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-up(lg) {
+    column-count: 2;
+  }
+
+  @include media-breakpoint-up(xl) {
+    column-count: 3;
+  }
+}
+
 div.board .member {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  width: 25rem;
   border-radius: 5px;
   margin: 0 0 1rem 1rem;
+  page-break-inside: avoid;
 }
 
 div.board .member img {
@@ -161,10 +184,22 @@ div.board .member div {
   padding: 2px 16px;
 }
 
-div.board .member h3 {
+div.board .member h2 {
   color: #ff00ff;
   font-family: "VAG Rounded BT";
   font-size: 24px;
   margin-top: 1.0rem;
   margin-bottom: 1.5rem;
+}
+
+div.board .member h3 {
+  color: #a545a5;
+  font-family: "VAG Rounded BT";
+  font-size: 18px;
+  margin-top: 1.0rem;
+  margin-bottom: 0.5rem;
+}
+
+div.board .member ul {
+  padding-left: 1.2rem;  
 }
