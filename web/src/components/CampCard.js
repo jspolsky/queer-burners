@@ -94,7 +94,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
         src={require(`../assets/social_${linkType}.svg`)}
         style={{ width: "1.2rem", paddingRight: ".35rem" }}
       />
-      <a style={{ fontSize: "0.85rem" }} href={href}>
+      <a style={{ fontSize: "0.85rem" }} href={href} target="_blank" rel="noopener noreferrer">
         {display}
       </a>
     </div>
