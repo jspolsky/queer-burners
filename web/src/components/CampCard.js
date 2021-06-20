@@ -127,6 +127,17 @@ const CampCard = (props) => {
   const [showLightbox, setShowLightbox] = useState(false);
   const o = props.o;
 
+  const displayLocation =
+    o.location && o.location.string ? (
+      <div>
+        {o.location.string === "Unknown"
+          ? "Address not set"
+          : o.location.string}
+      </div>
+    ) : (
+      ""
+    );
+
   return (
     <>
       <Lightbox
@@ -156,7 +167,7 @@ const CampCard = (props) => {
         <Card.Body>
           <Card.Subtitle className="mb-2 text-muted">
             {o.identifies}
-            {o.location && o.location.string && <div>{o.location.string}</div>}
+            {displayLocation}
           </Card.Subtitle>
           <Card.Text>
             {o.about} <JoinButton o={o} />
