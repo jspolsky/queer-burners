@@ -246,7 +246,7 @@ const locationToString = (frontage, intersection) => {
 };
 
 const campIdentifications = [
-  "LGBTQ",
+  "LGBTQIA+",
   "Lesbian / Female Identified",
   "Gay / Male Identified",
   "Trans / GNC / Non-binary",
