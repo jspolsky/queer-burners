@@ -18,7 +18,7 @@ As you develop code on your local machine in the web subdirectory, you can use t
 
 Once you're happy with your changes, commit them to github.
 
-When you are ready to deploy these changes to the live web server, build the front end (using the `npm start build`) command. This will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. Now commit again to github.
+When you are ready to deploy these changes to the live web server, build the front end (using the `npm run build`) command. This will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. Now commit again to github.
 
 As soon as you commit these `web\build` files to github, our web host, Vercel, notices the changes and deploys them to the Vercel content distribution network. That means that anything you check into `web\build` is automatically deployed to, and hosted at, [queerburners.org](https://queerburners.org). It will only take a few seconds for the new site to be live.
 
