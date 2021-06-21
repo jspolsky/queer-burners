@@ -73,6 +73,7 @@ const queryAttributes = [
   "joinOpen",
   "joinMessage",
   "joinUrl",
+  "altlocation",
   "contact", // careful, this is private data
 ];
 

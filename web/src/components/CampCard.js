@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
+import { campAlternateLocations } from "shared";
 
 function JoinButton(props) {
   const o = props.o;
@@ -123,16 +124,42 @@ const Lightbox = (props) => {
   );
 };
 
+const AlternateLocations = (props) => {
+
+  const toSentence = (arr) =>
+    arr.slice(0, -2).join(", ") +
+    (arr.slice(0, -2).length ? ", " : "") +
+    arr.slice(-2).join(" and ");
+
+  if (!props.altlocation)
+    return <></>;
+
+  var fullNameAltLocations = [];
+
+  campAlternateLocations.forEach((x) => {
+    if (props.altlocation[x.code]) {
+      fullNameAltLocations.push(x.fullname);
+    }
+  });
+
+  if (fullNameAltLocations.length === 0)
+    return <></>;
+
+  return (
+    <Card.Text  className="font-weight-light">
+      <em>This year we will be attending {toSentence(fullNameAltLocations)}.</em>
+    </Card.Text>
+  );
+};
+
 const CampCard = (props) => {
   const [showLightbox, setShowLightbox] = useState(false);
   const o = props.o;
 
   const displayLocation =
-    o.location && o.location.string ? (
+    o.location && o.location.string && o.location.string !== "Unknown" ? (
       <div>
-        {o.location.string === "Unknown"
-          ? "Address not set"
-          : o.location.string}
+          {o.location.string}
       </div>
     ) : (
       ""
@@ -172,6 +199,8 @@ const CampCard = (props) => {
           <Card.Text>
             {o.about} <JoinButton o={o} />
           </Card.Text>
+
+          <AlternateLocations altlocation={o.altlocation} />
 
           {["url", "facebook", "email", "instagram", "twitter"].map((s) => {
             return <DisplaySocialLink key={s} linkType={s} raw={o[s]} />;

@@ -18,6 +18,7 @@ import { fieldError, emptyCamp } from "shared";
 import axios from "axios";
 
 const campIdentifications = [...require("shared").campIdentifications];
+const campAlternateLocations = [...require("shared").campAlternateLocations];
 const streets = [...require("shared").streets];
 const crossStreets = require("shared").crossStreets;
 
@@ -287,6 +288,15 @@ export default class SubmitBody extends React.Component {
   }
 
   render() {
+
+    const getAltLocationFromState = (s) => {
+      if (!this.state.altlocation) 
+        return false;
+      if (!this.state.altlocation[s])
+        return false;
+      return this.state.altlocation[s];
+    };
+  
     if (this.state._submit_successful) {
       //
       // after a submit, we are going to redirect them to the directory,
@@ -381,8 +391,39 @@ export default class SubmitBody extends React.Component {
 
             <Row>
               <Col>
+                <Form.Label>Where can we find you in 2021?</Form.Label>
+                {campAlternateLocations.map((loc) => {
+                  return (
+                    <Form.Group
+                      controlId={`altlocation.${loc.code}`}
+                      key={loc.code}
+                      style={{marginBottom: "0"}}
+                    >
+                      <Form.Check
+                        inline
+                        type="switch"
+                        name={`altlocation.${loc.code}`}
+                        checked={getAltLocationFromState(loc.code)}
+                        label={loc.fullname}
+                        onChange={this.changeHandler}
+                      />
+                      {
+                        loc.linktext &&
+                          <a href={loc.link} target="_blank" rel="noopener noreferrer">{loc.linktext}</a>
+                      }
+                    </Form.Group>
+                  );
+                })}
+              </Col>
+            </Row>
+            <Row><Col>&nbsp;</Col></Row>
+
+            <Row>
+              <Col>
                 <Form.Group controlId="location.frontage">
-                  <Form.Label>Frontage</Form.Label>
+                  <Form.Label>
+                    2019 Black Rock City Location (if any)
+                  </Form.Label>
                   <Form.Control
                     name="location.frontage"
                     as="select"

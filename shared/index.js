@@ -253,6 +253,20 @@ const campIdentifications = [
   "Ally Camp",
 ];
 
+// provide a code for each alternate location that 
+// is a valid javascript identifier
+const campAlternateLocations = [
+  {fullname: "4th of Juplaya", code: "fourth"},
+  {fullname: "Renegade Burn", code: "renegade"},
+  {fullname: "Everywhen", code: "everywhen"},
+  {fullname: "BRCvr", code: "brcvr"},
+  {fullname: "SparkleVerse", code: "sparkle"},
+  {fullname: "Build-A-Burn", code: "build"},
+  {fullname: "Dusty Multiverse", code: "dusty"},
+  {fullname: "Burn Week Global Live Stream", code: "stream"},
+  {fullname: "Queerburners Spirited", code: "spirited", linktext: "More info", link: "/all-of-us-event"},
+];
+
 const streets = [
   "Unknown",
   "Esplanade",
@@ -344,6 +358,7 @@ module.exports = {
   fieldError: fieldError,
   campErrors: campErrors,
   campIdentifications: campIdentifications,
+  campAlternateLocations: campAlternateLocations,
   streets: streets,
   crossStreets: crossStreets,
   locationToString: locationToString,
