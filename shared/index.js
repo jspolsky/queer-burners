@@ -264,7 +264,7 @@ const campAlternateLocations = [
   {fullname: "Build-A-Burn", code: "build"},
   {fullname: "Dusty Multiverse", code: "dusty"},
   {fullname: "Burn Week Global Live Stream", code: "stream"},
-  {fullname: "Queerburners Spirited", code: "spirited", linktext: "More info", link: "/all-of-us-event"},
+  {fullname: "Queerburners Spirited", code: "spirited", linktext: "Oct 31-Nov 1, 2021", link: "/spirited2021"},
 ];
 
 const streets = [
