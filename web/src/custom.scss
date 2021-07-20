@@ -146,7 +146,6 @@ blockquote {
 }
 
 div.board {
-
   @include media-breakpoint-down(xs) {
     column-count: 1;
   }
@@ -169,7 +168,7 @@ div.board {
 }
 
 div.board .member {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   margin: 0 0 1rem 1rem;
   page-break-inside: avoid;
@@ -188,7 +187,7 @@ div.board .member h2 {
   color: #ff00ff;
   font-family: "VAG Rounded BT";
   font-size: 24px;
-  margin-top: 1.0rem;
+  margin-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -196,10 +195,36 @@ div.board .member h3 {
   color: #a545a5;
   font-family: "VAG Rounded BT";
   font-size: 18px;
-  margin-top: 1.0rem;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 
 div.board .member ul {
-  padding-left: 1.2rem;  
+  padding-left: 1.2rem;
+}
+
+div.homepagehero {
+  position: relative;
+  width: 100%;
+}
+
+div.homepagehero img {
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+div.homepagehero div.mission {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  width: 80%;
+  font-size: 2.7vw;
+  font-weight: 600;
+  color: #f9f;
+  text-shadow: #000 1px 0 10px;
+}
+
+div.homepagehero div.mission a {
+  color: #fcf;
+  text-decoration: underline;
 }
