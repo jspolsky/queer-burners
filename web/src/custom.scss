@@ -203,6 +203,97 @@ div.board .member ul {
   padding-left: 1.2rem;
 }
 
+// burningman.org style home page grids, used in /new-cover-org-style
+
+div.home .container {
+  background-color: #eee;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+div.home .heading-and-text {
+  padding: 1rem;
+}
+
+div.home .pull-quote {
+  display: flex;
+  align-items: center;
+}
+
+div.home .pull-quote div {
+  padding: 1rem;
+}
+
+div.home blockquote,
+div.home .pull-quote p {
+  color: #eee;
+  font-size: 1rem;
+  font-family: "VAG Rounded BT";
+  line-height: 1.2rem;
+}
+
+div.home blockquote {
+  text-align: right;
+}
+
+div.home .fit-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.blue-gradient {
+  background-image: linear-gradient(#1b3c76, #0d303f);
+}
+
+div.home h1 {
+  font-size: 1.2rem;
+}
+
+div.home p {
+  padding: 0.7rem;
+}
+
+div.home img.rel {
+  position: relative;
+}
+
+div.home .abs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: 600;
+}
+
+div.home button {
+  color: #222;
+  background-color: #f8f;
+  border-color: #000;
+  font-weight: 600;
+  font-variant: small-caps;
+}
+
+div.home2 h1 {
+  font-size: 1rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0;
+  margin-bottom: 0.2rem;
+}
+
+div.home2 p {
+  line-height: 1.2rem;
+  margin-top: 0;
+  color: #0d303f;
+  font-weight: 500;
+}
+
+div.home2 h1 a {
+  color: #ff00ff;
+}
+
+// this was an early experiment for home page, used in /new-cover-mockup
+
 div.homepagehero {
   position: relative;
   width: 100%;

@@ -15,6 +15,7 @@ import EditPosts from "./components/EditPosts";
 import EditPost from "./components/EditPost";
 import ViewPost from "./components/ViewPost";
 import Presubmit from "./components/Presubmit";
+import { HomePage } from "./components/HomePage";
 
 const Analytics = () => {
   useEffect(() => {
@@ -132,6 +133,8 @@ const TopLevelComponent = (props) => {
           path="/headeronly"
           render={() => <React.Fragment></React.Fragment>}
         />
+
+        <Route path="/org" render={() => <HomePage></HomePage>} />
 
         <Route
           path="/:post+"
