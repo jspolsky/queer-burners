@@ -75,17 +75,17 @@ export const HomePage = () => {
         <div class="container">
           <div class="row">
             <div class="col-md-4">
-              <a href="/501c3">
+              <a href="directory">
                 <img
                   class="img-fluid"
-                  src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/9ef69c96addee5271ac7e7253418e14e.jpg"
-                  alt="Fireworks at the man burn 2019"
+                  src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/05436e8b2ae6ffe341bbde5547cd6982.jpg"
+                  alt="Young men in tutus doing aerobics in front of a dusty theme camp at Burning Man"
                 />
               </a>
               <h1>
-                <a href="/501c3">Meet the board</a>
+                <a href="directory">Camp Directory</a>
               </h1>
-              <p>There is always a seat at the table!</p>
+              <p>A list of LGBTQIA+ and ally theme camps at Burning Man</p>
             </div>
             <div class="col-md-4">
               <a href="http://blog.queerburners.com">
@@ -101,39 +101,47 @@ export const HomePage = () => {
               <p>Years of history</p>
             </div>
             <div class="col-md-4">
-              <img
-                class="img-fluid"
-                src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/4f650352258c3b4e858f5c2495b83160.jpg"
-                alt="Diverse burners gathering"
-              />
-              <h1>Volunteer</h1>
-              <p>Complete the volunteer form and help out at events</p>
+              <a href="https://forms.gle/duMkJy4jhHhT8bDo9">
+                <img
+                  class="img-fluid"
+                  src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/4f650352258c3b4e858f5c2495b83160.jpg"
+                  alt="Diverse burners gathering"
+                />
+              </a>
+              <h1>
+                <a href="https://forms.gle/duMkJy4jhHhT8bDo9">Volunteer</a>
+              </h1>
+              <p>
+                Complete the{" "}
+                <a href="https://forms.gle/duMkJy4jhHhT8bDo9">volunteer form</a>{" "}
+                and help out at events
+              </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4">
-              <a href="directory">
+              <a href="board">
                 <img
                   class="img-fluid"
-                  src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/05436e8b2ae6ffe341bbde5547cd6982.jpg"
-                  alt="Young men in tutus doing aerobics in front of a dusty theme camp at Burning Man"
-                ></img>
+                  src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/9ef69c96addee5271ac7e7253418e14e.jpg"
+                  alt="Fireworks at the man burn 2019"
+                />
               </a>
               <h1>
-                <a href="directory">Camp Directory</a>
+                <a href="board">Meet the board</a>
               </h1>
-              <p>A list of LGBTQIA+ and ally theme camps at Burning Man</p>
+              <p>There is always a seat at the table!</p>
             </div>
             <div class="col-md-4">
               <img
                 class="img-fluid"
                 src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/988c4e35442994d3123cd52d9ab987c6.jpg"
                 alt="View of Black Rock City from the air, showing a huge crescent-shaped city with over 70,000 participants in a dry lake bed desert"
-              ></img>
-              <h1>Radical Inclusion</h1>
+              />
+              <h1>radical Inclusion, Diversity, Equity</h1>
               <p>
-                Queerburners centers diversity, equity, and inclusion as core
-                values of our community
+                r.I.D.E. with Queerburners centering diversity, equity, and
+                inclusion as core values of our community
               </p>
             </div>
             <div class="col-md-4">
@@ -141,7 +149,7 @@ export const HomePage = () => {
                 class="img-fluid"
                 src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/14a19d17d5f54b896cf1adab7f8f0c21.jpg"
                 alt="artwork consisting of three tall poles, each with a Bitcoin logo at the top, in the desert at Burning Man"
-              ></img>
+              />
               <h1>Donate</h1>
               <p>
                 We need your help to keep our events accessible to everyone!
