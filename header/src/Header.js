@@ -81,7 +81,7 @@ export const Header = (props) => {
             <LinkContainer to="/go-to-burning-man">
               <Nav.Link>Going&nbsp;to&nbsp;Burning&nbsp;Man</Nav.Link>
             </LinkContainer>
-            <LinkContainer title="Events" to="/all-of-us-event">
+            <LinkContainer title="Events" to="/events">
               <Nav.Link>Events</Nav.Link>
             </LinkContainer>
             <NavDropdown title="History" id="collasible-nav-dropdown">
