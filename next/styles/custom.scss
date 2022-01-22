@@ -1,0 +1,321 @@
+// customize bootstrap default variables here
+// https://getbootstrap.com/docs/4.5/getting-started/theming/
+
+// for example:
+// $body-bg: #654321;
+@font-face {
+  font-family: "VAG Rounded BT";
+  font-style: normal;
+  font-weight: normal;
+  src: local("VAG Rounded BT"), url("./VAGRON.woff") format("woff");
+}
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+.card-columns {
+  @include media-breakpoint-down(xs) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+
+  @include media-breakpoint-up(lg) {
+    column-count: 3;
+  }
+
+  @include media-breakpoint-up(xl) {
+    column-count: 4;
+  }
+}
+
+.camp-lightbox {
+  @include media-breakpoint-down(sm) {
+    width: 97%;
+  }
+
+  width: 80%;
+  max-width: none !important;
+}
+
+.GoogleUserPicture {
+  max-height: 2rem;
+  max-width: 2rem;
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+}
+
+.modal-80w {
+  width: 80%;
+  max-width: none !important;
+}
+
+.qb-footer {
+  background-color: #f7f7f7;
+  color: #495057;
+}
+
+.qb-footer p {
+  margin-bottom: 0;
+  font-size: 0.8rem;
+}
+
+.qb-footer ul {
+  padding-inline-start: 0;
+  margin-bottom: 0;
+}
+
+.qb-footer ul li {
+  display: inline-block;
+  padding-right: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+h1 {
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+h2 {
+  padding-top: 1rem;
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+.qb-textpage h3 {
+  padding-top: 1rem;
+  font-family: "VAG Rounded BT", sans-serif;
+  color: #ff00ff;
+}
+
+.qb-textpage p {
+  font-family: "Raleway", sans-serif;
+}
+
+.qb-textpage figcaption {
+  color: #770000;
+}
+
+.qb-textpage img[align="right"],
+.qb-textpage img[style*="float: right"],
+.qb-textpage img[style*="float:right"],
+.qb-textpage figure[style*="float: right"],
+.qb-textpage figure[style*="float:right"] {
+  margin: 1.5rem 0px 1.5rem 1.5rem;
+}
+
+.qb-textpage img[align="left"],
+.qb-textpage img[style*="float: left"],
+.qb-textpage img[style*="float:left"],
+.qb-textpage figure[style*="float: left"],
+.qb-textpage figure[style*="float:left"] {
+  margin: 1.5rem 1.5rem 1.5rem 0px;
+}
+
+.navbar {
+  padding: 0 1rem;
+}
+
+.navbar-dark .navbar-brand {
+  color: #ff00ff;
+  font-family: "VAG Rounded BT";
+  font-size: 24px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  font-family: "Raleway";
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffccff;
+  padding-top: 0.9rem;
+}
+
+blockquote {
+  font-size: 1.25rem;
+}
+
+.GoogleUserPicture {
+  margin-top: 0.4rem;
+}
+
+div.board {
+  @include media-breakpoint-down(xs) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-only(md) {
+    column-count: 1;
+  }
+
+  @include media-breakpoint-up(lg) {
+    column-count: 2;
+  }
+
+  @include media-breakpoint-up(xl) {
+    column-count: 3;
+  }
+}
+
+div.board .member {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  margin: 0 0 1rem 1rem;
+  page-break-inside: avoid;
+}
+
+div.board .member img {
+  border-radius: 5px 5px 0 0;
+  width: 100%;
+}
+
+div.board .member div {
+  padding: 2px 16px;
+}
+
+div.board .member h2 {
+  color: #ff00ff;
+  font-family: "VAG Rounded BT";
+  font-size: 24px;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+div.board .member h3 {
+  color: #a545a5;
+  font-family: "VAG Rounded BT";
+  font-size: 18px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+div.board .member ul {
+  padding-left: 1.2rem;
+}
+
+// burningman.org style home page grids, used in /new-cover-org-style
+
+div.home .container {
+  background-color: #eee;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+div.home .heading-and-text {
+  padding: 1rem;
+}
+
+div.home .pull-quote {
+  display: flex;
+  align-items: center;
+}
+
+div.home .pull-quote div {
+  padding: 1rem;
+}
+
+div.home blockquote,
+div.home .pull-quote p {
+  color: #eee;
+  font-size: 1rem;
+  font-family: "VAG Rounded BT";
+  line-height: 1.2rem;
+}
+
+div.home blockquote {
+  text-align: right;
+}
+
+div.home .fit-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.blue-gradient {
+  background-image: linear-gradient(#1b3c76, #0d303f);
+}
+
+div.home h1 {
+  font-size: 1.2rem;
+}
+
+div.home p {
+  padding: 0.7rem;
+}
+
+div.home img.rel {
+  position: relative;
+}
+
+div.home .abs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: 600;
+}
+
+div.home button {
+  color: #222;
+  background-color: #f8f;
+  border-color: #000;
+  font-weight: 600;
+  font-variant: small-caps;
+}
+
+div.home2 h1 {
+  font-size: 1rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0;
+  margin-bottom: 0.2rem;
+}
+
+div.home2 p {
+  line-height: 1.2rem;
+  margin-top: 0;
+  color: #0d303f;
+  font-weight: 500;
+}
+
+div.home2 h1 a {
+  color: #ff00ff;
+}
+
+// this was an early experiment for home page, used in /new-cover-mockup
+
+div.homepagehero {
+  position: relative;
+  width: 100%;
+}
+
+div.homepagehero img {
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+div.homepagehero div.mission {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  width: 80%;
+  font-size: 2.7vw;
+  font-weight: 600;
+  color: #f9f;
+  text-shadow: #000 1px 0 10px;
+}
+
+div.homepagehero div.mission a {
+  color: #fcf;
+  text-decoration: underline;
+}
