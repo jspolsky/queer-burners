@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router";
-import { useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 import axios from "axios";
 import Container from "react-bootstrap/Container";
@@ -12,10 +12,9 @@ import Col from "react-bootstrap/Col";
 
 import { googleClientId, oauthEndpoint, api } from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { LinkContainer } from "react-router-bootstrap";
 import googleIcon from "../assets/btn_google_signin_dark_normal_web.png";
 
-import { hashEmail } from "shared";
+import { hashEmail } from "../../shared";
 
 export const LogonLink = (props) => {
   if (props.useIcon) {
@@ -30,12 +29,11 @@ export const LogonLink = (props) => {
 };
 
 const LogonLinkAddress = () => {
-  let location = useLocation();
-
+  const router = useRouter();
   let link =
     oauthEndpoint +
     "?state=" +
-    encodeURIComponent(location.pathname + location.search) +
+    encodeURIComponent(router.asPath) +
     "&client_id=" +
     googleClientId +
     "&redirect_uri=" +
@@ -143,14 +141,12 @@ export const Authenticate = (props) => {
             Logged on as {props.userData.email}
             {props.userData.isAdmin && <em> (admin)</em>}
           </NavDropdown.Item>
-          <LinkContainer to="/editPosts">
+          <Link href="/editPosts">
             <NavDropdown.Item>Edit Posts</NavDropdown.Item>
-          </LinkContainer>
-          <LinkContainer to="/analytics">
-            <NavDropdown.Item>
-              Site analytics
-            </NavDropdown.Item>
-          </LinkContainer>
+          </Link>
+          <Link href="/analytics">
+            <NavDropdown.Item>Site analytics</NavDropdown.Item>
+          </Link>
           <NavDropdown.Item
             onClick={() => {
               localStorage.removeItem("userData");
@@ -169,6 +165,7 @@ export const Authenticate = (props) => {
 };
 
 export const PostAuthenticate = (props) => {
+  const router = useRouter();
   const [status, setStatus] = useState("Logging you on...");
   const [isLoggedOn, setIsLoggedOn] = useState(false);
 
@@ -219,7 +216,8 @@ export const PostAuthenticate = (props) => {
   const queryParams = new URLSearchParams(props.location.search);
 
   if (isLoggedOn) {
-    return <Redirect to={queryParams.get("state")} />;
+    router.push(queryParams.get("state"));
+    // return  <Redirect to={queryParams.get("state")} />;
   } else {
     return (
       <Container>

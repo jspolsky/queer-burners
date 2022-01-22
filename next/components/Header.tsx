@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import banner0 from "../assets/banner0.jpg";
 import banner1 from "../assets/banner1.jpg";
 import banner2 from "../assets/banner2.jpg";
@@ -11,44 +13,40 @@ import banner8 from "../assets/banner8.jpg";
 import banner9 from "../assets/banner9.jpg";
 import { Authenticate } from "./Authenticate.js";
 
-import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Carousel from "react-bootstrap/Carousel";
-import { LinkContainer } from "react-router-bootstrap";
+import UserContext from "./UserContext";
+
+const HEADER_IMAGES = [
+  banner0,
+  banner1,
+  banner2,
+  banner3,
+  banner4,
+  banner5,
+  banner6,
+  banner7,
+  banner8,
+  banner9,
+];
 
 export const HeaderImage = () => {
-  const rgImages = [
-    banner0,
-    banner1,
-    banner2,
-    banner3,
-    banner4,
-    banner5,
-    banner6,
-    banner7,
-    banner8,
-    banner9,
-  ];
-
   return (
     <Carousel controls={false} fade={true} interval={8000}>
-      {rgImages.map((i, index) => (
-        <Carousel.Item key={index}>
-          <img
-            className="img-fluid w-100"
-            src={i}
-            alt="Queerburners"
-            style={{ marginBottom: "2rem" }}
-          ></img>
+      {HEADER_IMAGES.map((src, index) => (
+        <Carousel.Item key={index} style={{ marginBottom: "2rem" }}>
+          <Image className="img-fluid w-100" src={src} alt="Queerburners" />
         </Carousel.Item>
       ))}
     </Carousel>
   );
 };
 
-export const Header = (props) => {
+export const Header = () => {
+  const { userData, setUserData } = useContext(UserContext);
+
   return (
     <>
       <Navbar
@@ -65,68 +63,70 @@ export const Header = (props) => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <LinkContainer to="/directory">
+            <Link href="/directory">
               <Nav.Link>Camp&nbsp;Directory</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/go-to-burning-man">
+            </Link>
+            <Link href="/go-to-burning-man">
               <Nav.Link>Going&nbsp;to&nbsp;Burning&nbsp;Man</Nav.Link>
-            </LinkContainer>
-            <LinkContainer title="Events" to="/events">
+            </Link>
+            <Link href="/events">
               <Nav.Link>Events</Nav.Link>
-            </LinkContainer>
-            <LinkContainer title="Calendar" to="/calendar">
+            </Link>
+            <Link href="/calendar">
               <Nav.Link>Calendar</Nav.Link>
-            </LinkContainer>
+            </Link>
             <a className="nav-link" href="https://blog.queerburners.com/">
               Blog
             </a>
             <NavDropdown title="History" id="collasible-nav-dropdown">
-              <LinkContainer to="/history">
+              <Link href="/history">
                 <NavDropdown.Item>
                   Queer Burner History at Black Rock City
                 </NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/year/2021">
+              </Link>
+              <Link href="/year/2021">
                 <NavDropdown.Item>2021 The Great Unknown</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2020">
+              </Link>
+              <Link href="/history/2020">
                 <NavDropdown.Item>2020 The Multiverse</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/year/2019">
+              </Link>
+              <Link href="/year/2019">
                 <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2018">
+              </Link>
+              <Link href="/history/2018">
                 <NavDropdown.Item>2018 iRobot</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2017">
+              </Link>
+              <Link href="/history/2017">
                 <NavDropdown.Item>2017 Radical Ritual</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2016">
+              </Link>
+              <Link href="/history/2016">
                 <NavDropdown.Item>2016 da Vinci's Workshop</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2015">
+              </Link>
+              <Link href="/history/2015">
                 <NavDropdown.Item>2015 Carnival of Mirrors</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2014">
+              </Link>
+              <Link href="/history/2014">
                 <NavDropdown.Item>2014 Caravansary</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2013">
+              </Link>
+              <Link href="/history/2013">
                 <NavDropdown.Item>2013 Cargo Cult</NavDropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/history/2012">
+              </Link>
+              <Link href="/history/2012">
                 <NavDropdown.Item>2012 Fertility 2.0</NavDropdown.Item>
-              </LinkContainer>
+              </Link>
             </NavDropdown>
           </Nav>
           <Nav>
-            <Authenticate
-              userData={props.userData}
-              OnUserDataChange={props.OnUserDataChange}
-            />
+            {typeof window !== "undefined" ? (
+              <Authenticate
+                userData={userData}
+                OnUserDataChange={setUserData}
+              />
+            ) : null}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <Link to="/">
+      <Link href="/">
         <HeaderImage />
       </Link>
     </>

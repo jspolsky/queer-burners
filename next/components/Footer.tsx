@@ -1,11 +1,11 @@
-import React from "react";
+import React, { VFC } from "react";
 
+import Link from "next/link";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
 
-export const Footer = (props) => {
+export const Footer: VFC = () => {
   return (
     <Container
       fluid
@@ -22,13 +22,19 @@ export const Footer = (props) => {
           </p>
           <ul>
             <li>
-              <Link to="/FAQ">FAQ</Link>
+              <Link href="/FAQ">
+                <a>FAQ</a>
+              </Link>
             </li>
             <li>
-              <Link to="/Privacy">Privacy Policy</Link>
+              <Link href="/Privacy">
+                <a>Privacy Policy</a>
+              </Link>
             </li>
             <li>
-              <Link to="/501c3">About</Link>
+              <Link href="/501c3">
+                <a>About</a>
+              </Link>
             </li>
 
             <li>

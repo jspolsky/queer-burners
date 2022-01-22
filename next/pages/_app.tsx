@@ -5,21 +5,17 @@ import Header from "../components/Header";
 import { useState } from "react";
 import "../styles/index.css";
 import "../styles/custom.scss";
+import UserContext from "../components/UserContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [userData, setUserData] = useState({ isLoggedOn: false });
 
   return (
-    <>
-      <Header
-        userData={userData}
-        OnUserDataChange={(newUserData: any) => {
-          setUserData(newUserData);
-        }}
-      />
+    <UserContext.Provider value={{ userData, setUserData }}>
+      <Header />
       <Component {...pageProps} />
       <Footer />
-    </>
+    </UserContext.Provider>
   );
 }
 
