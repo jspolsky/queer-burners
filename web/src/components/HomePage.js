@@ -88,7 +88,7 @@ export const HomePage = () => {
               <p>A list of LGBTQIA+ and ally theme camps at Burning Man</p>
             </div>
             <div class="col-md-4">
-              <a href="http://blog.queerburners.com">
+              <a href="http://blog.queerburners.org">
                 <img
                   class="img-fluid"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/9cd2fee6bd18ab14c6d76049b3df9f96.jpg"
@@ -96,7 +96,7 @@ export const HomePage = () => {
                 />
               </a>
               <h1>
-                <a href="http://blog.queerburners.com">Queerburners Blog</a>
+                <a href="http://blog.queerburners.org">Queerburners Blog</a>
               </h1>
               <p>Years of history</p>
             </div>
