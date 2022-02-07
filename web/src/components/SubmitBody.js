@@ -288,15 +288,12 @@ export default class SubmitBody extends React.Component {
   }
 
   render() {
-
     const getAltLocationFromState = (s) => {
-      if (!this.state.altlocation) 
-        return false;
-      if (!this.state.altlocation[s])
-        return false;
+      if (!this.state.altlocation) return false;
+      if (!this.state.altlocation[s]) return false;
       return this.state.altlocation[s];
     };
-  
+
     if (this.state._submit_successful) {
       //
       // after a submit, we are going to redirect them to the directory,
@@ -389,7 +386,7 @@ export default class SubmitBody extends React.Component {
               </Col>
             </Row>
 
-            <Row>
+            {/* <Row>
               <Col>
                 <Form.Label>Where can we find you in 2021?</Form.Label>
                 {campAlternateLocations.map((loc) => {
@@ -415,8 +412,10 @@ export default class SubmitBody extends React.Component {
                   );
                 })}
               </Col>
+            </Row> */}
+            <Row>
+              <Col>&nbsp;</Col>
             </Row>
-            <Row><Col>&nbsp;</Col></Row>
 
             <Row>
               <Col>
