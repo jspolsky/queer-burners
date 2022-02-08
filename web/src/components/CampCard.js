@@ -88,7 +88,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
     case "instagram":
       href = `https://instagram.com/${raw}`;
-      imgsrc = social_twitter;
+      imgsrc = social_instagram;
       break;
 
     case "twitter":
