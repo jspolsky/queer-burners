@@ -11,6 +11,12 @@ import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
 import { campAlternateLocations } from "shared";
 
+import social_email from "../assets/social_email.svg";
+import social_facebook from "../assets/social_facebook.svg";
+import social_instagram from "../assets/social_instagram.svg";
+import social_twitter from "../assets/social_twitter.svg";
+import social_url from "../assets/social_url.svg";
+
 function JoinButton(props) {
   const o = props.o;
   if (o.joinOpen) {
@@ -57,6 +63,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
   let href = raw;
   let display = raw;
+  let imgsrc = social_url;
 
   switch (linkType) {
     case "url":
@@ -68,6 +75,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
     case "email":
       href = `mailto:${raw}`;
+      imgsrc = social_email;
       break;
 
     case "facebook":
@@ -75,15 +83,18 @@ const DisplaySocialLink = ({ linkType, raw }) => {
         .replace(/^https?:\/\//, "")
         .replace(/\/$/, "")
         .replace(/^www\./, "");
+      imgsrc = social_facebook;
       break;
 
     case "instagram":
       href = `https://instagram.com/${raw}`;
+      imgsrc = social_twitter;
       break;
 
     case "twitter":
       href = `https://twitter.com/${raw}`;
       display = `@${raw}`;
+      imgsrc = social_twitter;
       break;
 
     default:
@@ -91,11 +102,13 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
   return (
     <div>
-      <Image
-        src={require(`../assets/social_${linkType}.svg`)}
-        style={{ width: "1.2rem", paddingRight: ".35rem" }}
-      />
-      <a style={{ fontSize: "0.85rem" }} href={href} target="_blank" rel="noopener noreferrer">
+      <Image src={imgsrc} style={{ width: "1.2rem", paddingRight: ".35rem" }} />
+      <a
+        style={{ fontSize: "0.85rem" }}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {display}
       </a>
     </div>
@@ -125,14 +138,12 @@ const Lightbox = (props) => {
 };
 
 const AlternateLocations = (props) => {
-
   const toSentence = (arr) =>
     arr.slice(0, -2).join(", ") +
     (arr.slice(0, -2).length ? ", " : "") +
     arr.slice(-2).join(" and ");
 
-  if (!props.altlocation)
-    return <></>;
+  if (!props.altlocation) return <></>;
 
   var fullNameAltLocations = [];
 
@@ -142,12 +153,13 @@ const AlternateLocations = (props) => {
     }
   });
 
-  if (fullNameAltLocations.length === 0)
-    return <></>;
+  if (fullNameAltLocations.length === 0) return <></>;
 
   return (
-    <Card.Text  className="font-weight-light">
-      <em>This year we will be attending {toSentence(fullNameAltLocations)}.</em>
+    <Card.Text className="font-weight-light">
+      <em>
+        This year we will be attending {toSentence(fullNameAltLocations)}.
+      </em>
     </Card.Text>
   );
 };
@@ -158,9 +170,7 @@ const CampCard = (props) => {
 
   const displayLocation =
     o.location && o.location.string && o.location.string !== "Unknown" ? (
-      <div>
-          {o.location.string}
-      </div>
+      <div>{o.location.string}</div>
     ) : (
       ""
     );
