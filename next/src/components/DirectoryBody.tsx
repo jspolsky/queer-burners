@@ -19,7 +19,7 @@ import CampCard from "./CampCard.js";
 import { CampData } from "../lib/api.js";
 import UserContext from "./UserContext";
 
-const campIdentifications = [...require("../../shared").campIdentifications];
+const campIdentifications = [...require("shared").campIdentifications];
 
 const neighborhood = (camp: CampData) => {
   const s430 = ["4:00", "4:15", "4:30", "4:45", "5:00", "5:15", "5:30"];

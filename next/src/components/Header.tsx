@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import banner0 from "../assets/banner0.jpg";
-import banner1 from "../assets/banner1.jpg";
-import banner2 from "../assets/banner2.jpg";
-import banner3 from "../assets/banner3.jpg";
-import banner4 from "../assets/banner4.jpg";
-import banner5 from "../assets/banner5.jpg";
-import banner6 from "../assets/banner6.jpg";
-import banner7 from "../assets/banner7.jpg";
-import banner8 from "../assets/banner8.jpg";
-import banner9 from "../assets/banner9.jpg";
+import banner0 from "../../public/assets/banner0.jpg";
+import banner1 from "../../public/assets/banner1.jpg";
+import banner2 from "../../public/assets/banner2.jpg";
+import banner3 from "../../public/assets/banner3.jpg";
+import banner4 from "../../public/assets/banner4.jpg";
+import banner5 from "../../public/assets/banner5.jpg";
+import banner6 from "../../public/assets/banner6.jpg";
+import banner7 from "../../public/assets/banner7.jpg";
+import banner8 from "../../public/assets/banner8.jpg";
+import banner9 from "../../public/assets/banner9.jpg";
 import { Authenticate } from "./Authenticate";
 
 import Navbar from "react-bootstrap/Navbar";

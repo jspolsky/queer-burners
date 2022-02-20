@@ -17,9 +17,8 @@ import {
   frontendUrl,
 } from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import googleIcon from "../assets/btn_google_signin_dark_normal_web.png";
 
-import { hashEmail } from "../../shared";
+import { hashEmail } from "shared";
 import UserContext, { UserContextProps } from "./UserContext";
 
 export const LogonLink: VFC<{ useIcon: boolean }> = (props) => {
@@ -30,7 +29,10 @@ export const LogonLink: VFC<{ useIcon: boolean }> = (props) => {
   if (props.useIcon) {
     return (
       <a href={LogonLinkAddress()}>
-        <Image src={googleIcon} alt="Sign in with Google"></Image>
+        <img
+          src="/assets/btn_google_signin_dark_normal_web.png"
+          alt="Sign in with Google"
+        ></img>
       </a>
     );
   }

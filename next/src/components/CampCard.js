@@ -9,7 +9,7 @@ import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
 import { s3images } from "../definitions.js";
-import { campAlternateLocations } from "../../shared";
+import { campAlternateLocations } from "shared";
 
 function JoinButton(props) {
   const o = props.o;
@@ -92,7 +92,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
   return (
     <div>
       <Image
-        src={require(`../assets/social_${linkType}.svg`)}
+        src={require(`../../public/assets/social_${linkType}.svg`)}
         style={{ width: "1.2rem", paddingRight: ".35rem" }}
       />
       <a
