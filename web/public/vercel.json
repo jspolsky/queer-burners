@@ -1,0 +1,10 @@
+{
+  "routes": [
+    { "src": "/manifest.json" },
+    { "src": "/favicon.ico" },
+    { "src": "/logo192.png" },
+    { "src": "/google25e2f73d4dcabc19.html" },
+    { "src": "/static/(.*)" },
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}
