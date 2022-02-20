@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import SubmitBody from "./SubmitBody";
-import { LogonLink } from "./Authenticate.js";
+import { LogonLink } from "./Authenticate";
 import { defaultYear, api } from "../definitions.js";
 
 export const Presubmit = (props) => {
@@ -63,9 +63,9 @@ export const Presubmit = (props) => {
             </p>
             <p>
               We will save your email address in case we need to contact you.
-              You'll be able to edit your camp directory listing at any time by
-              logging in again. Your email address will <strong>not</strong> be
-              shown publicly.
+              You{"'"}ll be able to edit your camp directory listing at any time
+              by logging in again. Your email address will <strong>not</strong>{" "}
+              be shown publicly.
             </p>
           </Col>
         </Row>

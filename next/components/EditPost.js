@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import Container from "react-bootstrap/Container";
@@ -13,8 +13,10 @@ import { Editor } from "@tinymce/tinymce-react";
 import DeleteButton from "./DeleteButton.js";
 
 import { api, apiKeyTinyMCE } from "../definitions.js";
+import UserContext from "./UserContext";
 
 export const EditPost = (props) => {
+  const { userData } = useContext(UserContext);
   const [path, setPath] = useState("");
   const [description, setDescription] = useState("");
   const [post, setPost] = useState("");
@@ -118,7 +120,7 @@ export const EditPost = (props) => {
     try {
       await axios.post(`${api}/posts`, postToSubmit, {
         auth: {
-          username: props.userData.idToken,
+          username: userData.idToken,
           password: "",
         },
       });
@@ -179,7 +181,7 @@ export const EditPost = (props) => {
     );
   };
 
-  if (!props.userData || !props.userData.isAdmin) {
+  if (!userData || !userData.isAdmin) {
     return (
       <Container className="qb-textpage">
         <Row>
@@ -212,9 +214,7 @@ export const EditPost = (props) => {
                   <Form.Label>Path</Form.Label>
                   <InputGroup>
                     <InputGroup.Prepend>
-                      <InputGroup.Text>
-                        queerburners.org/
-                      </InputGroup.Text>
+                      <InputGroup.Text>queerburners.org/</InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
                       type="input"
@@ -292,7 +292,7 @@ export const EditPost = (props) => {
                 <Button target="_blank" href={"/" + path}>
                   Preview
                 </Button>
-                  &nbsp;
+                &nbsp;
                 <Button
                   variant="primary"
                   onClick={saveHandler}
@@ -307,7 +307,7 @@ export const EditPost = (props) => {
                     longMessage="Are you sure you want to permanently delete this entire post from the site?"
                     apiToDelete={`${api}/posts/${path}`}
                     redirectOnSuccess="/editPosts"
-                    userData={props.userData}
+                    userData={userData}
                   />
                 )}
               </Form>

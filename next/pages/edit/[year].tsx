@@ -1,14 +1,13 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import SubmitBody from "../../components/SubmitBody";
+import UserContext from "../../components/UserContext";
 
 const Home: NextPage = () => {
-  return (
-    <SubmitBody
-      userData={userData}
-      year={props.match.params.year}
-      camp={new URLSearchParams(props.location.search).get("camp")}
-    />
-  );
+  const { query } = useRouter();
+  const { userData } = useContext(UserContext);
+  return <SubmitBody userData={userData} year={query.year} camp={query.camp} />;
 };
 
 export default Home;

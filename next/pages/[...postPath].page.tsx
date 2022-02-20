@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps<
   ParsedUrlQuery
 > = async ({ params }) => {
   const { postPath } = params || {};
-  console.log(postPath);
+
   if (postPath) {
     const postSlug = postPath.join("/");
     return {

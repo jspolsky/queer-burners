@@ -1,8 +1,7 @@
 import type { NextPage } from "next";
-import Analytics from "..components/";
 import { useEffect } from "react";
 
-const Home: NextPage = () => {
+const AnalyticsPage: NextPage = () => {
   useEffect(() => {
     window.location.href =
       "https://app.usefathom.com/share/fuivzexd/queerburners.org";
@@ -15,4 +14,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default AnalyticsPage;

@@ -11,7 +11,7 @@ import banner6 from "../assets/banner6.jpg";
 import banner7 from "../assets/banner7.jpg";
 import banner8 from "../assets/banner8.jpg";
 import banner9 from "../assets/banner9.jpg";
-import { Authenticate } from "./Authenticate.js";
+import { Authenticate } from "./Authenticate";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -56,77 +56,70 @@ export const Header = () => {
         variant="dark"
         sticky="top"
       >
-        <Navbar.Brand href="https://queerburners.org">
-          Queerburners
-        </Navbar.Brand>
-
+        <Navbar.Brand href="/">Queerburners</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Link href="/directory">
+            <Link href="/directory" passHref>
               <Nav.Link>Camp&nbsp;Directory</Nav.Link>
             </Link>
-            <Link href="/go-to-burning-man">
+            <Link href="/go-to-burning-man" passHref>
               <Nav.Link>Going&nbsp;to&nbsp;Burning&nbsp;Man</Nav.Link>
             </Link>
-            <Link href="/events">
+            <Link href="/events" passHref>
               <Nav.Link>Events</Nav.Link>
             </Link>
-            <Link href="/calendar">
+            <Link href="/calendar" passHref>
               <Nav.Link>Calendar</Nav.Link>
             </Link>
             <a className="nav-link" href="https://blog.queerburners.com/">
               Blog
             </a>
             <NavDropdown title="History" id="collasible-nav-dropdown">
-              <Link href="/history">
+              <Link href="/history" passHref>
                 <NavDropdown.Item>
                   Queer Burner History at Black Rock City
                 </NavDropdown.Item>
               </Link>
-              <Link href="/year/2021">
+              <Link href="/year/2021" passHref>
                 <NavDropdown.Item>2021 The Great Unknown</NavDropdown.Item>
               </Link>
-              <Link href="/history/2020">
+              <Link href="/history/2020" passHref>
                 <NavDropdown.Item>2020 The Multiverse</NavDropdown.Item>
               </Link>
-              <Link href="/year/2019">
+              <Link href="/year/2019" passHref>
                 <NavDropdown.Item>2019 Metamorphoses</NavDropdown.Item>
               </Link>
-              <Link href="/history/2018">
+              <Link href="/history/2018" passHref>
                 <NavDropdown.Item>2018 iRobot</NavDropdown.Item>
               </Link>
-              <Link href="/history/2017">
+              <Link href="/history/2017" passHref>
                 <NavDropdown.Item>2017 Radical Ritual</NavDropdown.Item>
               </Link>
-              <Link href="/history/2016">
+              <Link href="/history/2016" passHref>
                 <NavDropdown.Item>2016 da Vinci's Workshop</NavDropdown.Item>
               </Link>
-              <Link href="/history/2015">
+              <Link href="/history/2015" passHref>
                 <NavDropdown.Item>2015 Carnival of Mirrors</NavDropdown.Item>
               </Link>
-              <Link href="/history/2014">
+              <Link href="/history/2014" passHref>
                 <NavDropdown.Item>2014 Caravansary</NavDropdown.Item>
               </Link>
-              <Link href="/history/2013">
+              <Link href="/history/2013" passHref>
                 <NavDropdown.Item>2013 Cargo Cult</NavDropdown.Item>
               </Link>
-              <Link href="/history/2012">
+              <Link href="/history/2012" passHref>
                 <NavDropdown.Item>2012 Fertility 2.0</NavDropdown.Item>
               </Link>
             </NavDropdown>
           </Nav>
           <Nav>
-            {typeof window !== "undefined" ? (
-              <Authenticate
-                userData={userData}
-                OnUserDataChange={setUserData}
-              />
-            ) : null}
+            {/* Should only run on the client, because it accesses localStorage */}
+            {typeof window !== "undefined" ? <Authenticate /> : null}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <Link href="/">
+      <Link href="/" passHref>
         <HeaderImage />
       </Link>
     </>

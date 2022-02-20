@@ -1,26 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, VFC } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import Image from "react-bootstrap/Image";
 import Nav from "react-bootstrap/Nav";
 import Spinner from "react-bootstrap/Spinner";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { googleClientId, oauthEndpoint, api } from "../definitions.js";
+import {
+  googleClientId,
+  oauthEndpoint,
+  api,
+  frontendUrl,
+} from "../definitions.js";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import googleIcon from "../assets/btn_google_signin_dark_normal_web.png";
 
 import { hashEmail } from "../../shared";
+import UserContext, { UserContextProps } from "./UserContext";
 
-export const LogonLink = (props) => {
+export const LogonLink: VFC<{ useIcon: boolean }> = (props) => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   if (props.useIcon) {
     return (
       <a href={LogonLinkAddress()}>
-        <img src={googleIcon} alt="Sign in with Google"></img>
+        <Image src={googleIcon} alt="Sign in with Google"></Image>
       </a>
     );
   }
@@ -37,7 +47,7 @@ const LogonLinkAddress = () => {
     "&client_id=" +
     googleClientId +
     "&redirect_uri=" +
-    encodeURIComponent(window.location.origin + "/postauthenticate") +
+    encodeURIComponent(`${frontendUrl}/postauthenticate`) +
     "&response_type=code" +
     "&scope=openid%20email%20profile" +
     "&access_type=offline" +
@@ -50,8 +60,15 @@ const LogonLinkAddress = () => {
   return link;
 };
 
-const refreshToken = async (props) => {
-  let tmpUserData = JSON.parse(localStorage.getItem("userData"));
+const refreshToken = async (params: {
+  setUserData: UserContextProps["setUserData"];
+}) => {
+  const { setUserData } = params;
+
+  const localUserData = localStorage.getItem("userData");
+
+  let tmpUserData = localUserData ? JSON.parse(localUserData) : undefined;
+
   if (tmpUserData && tmpUserData.isLoggedOn && tmpUserData.refreshToken) {
     try {
       const result = await axios.post(`${api}/refreshexpiredtoken`, {
@@ -67,42 +84,45 @@ const refreshToken = async (props) => {
       tmpUserData.idToken = result.data.id_token;
       localStorage.setItem("userData", JSON.stringify(tmpUserData));
 
-      props.OnUserDataChange({
-        ...props.userData,
+      setUserData((prev: any) => ({
+        ...prev,
         expires: tmpUserData.expires,
         idToken: tmpUserData.idToken,
-      });
+      }));
     } catch (e) {
       console.log("Token refresh failed");
       localStorage.removeItem("userData");
-      props.OnUserDataChange({ isLoggedOn: false });
+      setUserData({ isLoggedOn: false });
     }
   } else {
     console.log("Unable to refresh token");
     localStorage.removeItem("userData");
-    props.OnUserDataChange({ isLoggedOn: false });
+    setUserData({ isLoggedOn: false });
   }
 };
 
-export const Authenticate = (props) => {
+export const Authenticate = () => {
+  const { userData, setUserData } = useContext(UserContext);
   // User first arrives, checked if they are supposed to be logged on
 
   useEffect(() => {
-    if (!props.userData.isLoggedOn) {
+    if (!userData.isLoggedOn) {
       // user isn't logged on. Do they want to be?
 
-      let tmpUserData = JSON.parse(localStorage.getItem("userData"));
+      const localUserData = localStorage.getItem("userData");
+
+      let tmpUserData = localUserData ? JSON.parse(localUserData) : undefined;
       if (tmpUserData && tmpUserData.isLoggedOn) {
         // yes. Is their token still good?
         if (new Date(tmpUserData.expires).valueOf() > new Date().valueOf()) {
           // Yes! Log them on
-          props.OnUserDataChange(tmpUserData);
+          setUserData(tmpUserData);
         } else {
-          refreshToken(props);
+          refreshToken({ setUserData });
         }
       }
     }
-  }, [props.userData, props]);
+  }, [userData, setUserData]);
 
   // every 10 seconds, we check if the user login token is expiring.
   // If so, we try to refresh your token.
@@ -113,13 +133,12 @@ export const Authenticate = (props) => {
   useEffect(() => {
     let interval = setInterval(async () => {
       if (
-        props.userData.isLoggedOn &&
-        new Date(props.userData.expires).valueOf() - 10000 <
-          new Date().valueOf()
+        userData.isLoggedOn &&
+        new Date(userData.expires).valueOf() - 10000 < new Date().valueOf()
       ) {
         // user token expired.
 
-        await refreshToken(props);
+        await refreshToken({ setUserData });
       }
     }, 10000);
 
@@ -128,30 +147,34 @@ export const Authenticate = (props) => {
     };
   });
 
-  if (props.userData && props.userData.isLoggedOn) {
+  if (userData && userData.isLoggedOn) {
     return (
       <>
         <Image
           roundedCircle
-          src={props.userData.imageUrl}
+          src={userData.imageUrl}
           className="GoogleUserPicture"
         ></Image>
-        <NavDropdown alignRight title={props.userData.fullName}>
+        <NavDropdown
+          id={userData.fullName}
+          alignRight
+          title={userData.fullName}
+        >
           <NavDropdown.Item>
-            Logged on as {props.userData.email}
-            {props.userData.isAdmin && <em> (admin)</em>}
+            Logged on as {userData.email}
+            {userData.isAdmin && <em> (admin)</em>}
           </NavDropdown.Item>
-          <Link href="/editPosts">
+          <Link href="/editPosts" passHref>
             <NavDropdown.Item>Edit Posts</NavDropdown.Item>
           </Link>
-          <Link href="/analytics">
+          <Link href="/analytics" passHref>
             <NavDropdown.Item>Site analytics</NavDropdown.Item>
           </Link>
           <NavDropdown.Item
             onClick={() => {
               localStorage.removeItem("userData");
               localStorage.setItem("oauthPrompt", "consent");
-              props.OnUserDataChange({ isLoggedOn: false });
+              setUserData({ isLoggedOn: false });
             }}
           >
             Logout
@@ -164,60 +187,60 @@ export const Authenticate = (props) => {
   }
 };
 
-export const PostAuthenticate = (props) => {
+export const PostAuthenticate = () => {
+  const { setUserData } = useContext(UserContext);
   const router = useRouter();
   const [status, setStatus] = useState("Logging you on...");
   const [isLoggedOn, setIsLoggedOn] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log(
-          `authcode is ${new URLSearchParams(props.location.search).get(
-            "code"
-          )}`
-        );
+    const { code } = router.query;
+    if (code) {
+      const fetchData = async () => {
+        try {
+          console.log(`authcode is ${code}`);
 
-        const result = await axios.post(`${api}/googleidtokenfromauthcode`, {
-          code: new URLSearchParams(props.location.search).get("code"),
-          redirect_uri: `${window.location.origin}/postauthenticate`,
-        });
+          const result = await axios.post(`${api}/googleidtokenfromauthcode`, {
+            code,
+            redirect_uri: `${frontendUrl}/postauthenticate`,
+          });
 
-        setStatus("Success");
-        setIsLoggedOn(true);
+          setStatus("Success");
+          setIsLoggedOn(true);
 
-        const userData = {
-          isLoggedOn: true,
-          idToken: result.data.idToken,
-          fullName: result.data.name,
-          email: result.data.email,
-          hashEmail: hashEmail(result.data.email),
-          isAdmin: result.data.isadmin,
-          imageUrl: result.data.imageUrl,
-          expires: new Date(
-            new Date().valueOf() + 1000 * Number(result.data.duration)
-          ),
-          refreshToken: result.data.refreshToken,
-        };
+          const userData = {
+            isLoggedOn: true,
+            idToken: result.data.idToken,
+            fullName: result.data.name,
+            email: result.data.email,
+            hashEmail: hashEmail(result.data.email),
+            isAdmin: result.data.isadmin,
+            imageUrl: result.data.imageUrl,
+            expires: new Date(
+              new Date().valueOf() + 1000 * Number(result.data.duration)
+            ),
+            refreshToken: result.data.refreshToken,
+          };
 
-        localStorage.setItem("userData", JSON.stringify(userData));
-        localStorage.removeItem("oauthPrompt");
-        props.OnUserDataChange(userData);
-      } catch (err) {
-        console.error("Error logging on");
-        console.error(err.response.data);
-        setStatus("An error occurred logging you on.");
-      }
-    };
+          localStorage.setItem("userData", JSON.stringify(userData));
+          localStorage.removeItem("oauthPrompt");
+          setUserData(userData);
+        } catch (err: any) {
+          console.error("Error logging on");
+          console.error(err.response.data);
+          setStatus("An error occurred logging you on.");
+        }
+      };
 
-    fetchData();
-  }, [props.location.search, props]);
-
-  const queryParams = new URLSearchParams(props.location.search);
+      fetchData();
+    }
+  }, [router.query, setUserData]);
 
   if (isLoggedOn) {
-    router.push(queryParams.get("state"));
-    // return  <Redirect to={queryParams.get("state")} />;
+    router.push(
+      typeof router.query.state === "string" ? router.query.state : "/"
+    );
+    return null;
   } else {
     return (
       <Container>

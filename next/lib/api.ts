@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosBasicCredentials, AxiosRequestConfig } from "axios";
 import { api } from "../definitions";
 
 export const fetchPostHtml = async (params: {
@@ -18,4 +18,44 @@ export const getAllPostSlugs = async (): Promise<string[]> => {
     .then(({ data }) => data.map(({ path }) => path));
 
   return paths;
+};
+
+export type CampData = {
+  campFee: boolean;
+  joinOpen: boolean;
+  facebook: string;
+  location: { string: string; frontage: string; intersection: string };
+  fullSizeImage: string;
+  identifies: string;
+  virginsWelcome: boolean;
+  created: string;
+  email: string;
+  offerShowers: boolean;
+  url: string;
+  name: string;
+  joinMessage: string;
+  twitter: string;
+  offerWater: boolean;
+  instagram: string;
+  about: string;
+  offerMeals: boolean;
+  year: number;
+  thumbnail: string;
+  joinUrl: string;
+  hashEmail: string;
+  contact?: {
+    email: string;
+  };
+};
+
+export const fetchAllCamps = async (params: {
+  auth?: AxiosBasicCredentials;
+  year: number;
+}): Promise<CampData[]> => {
+  const { year, auth } = params;
+  const camps = await axios
+    .get(`${api}/camps/${year}`, { auth })
+    .then(({ data }) => data);
+
+  return camps;
 };

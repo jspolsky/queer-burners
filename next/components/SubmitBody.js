@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router";
+import { withRouter } from "next/router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
-import { LogonLink } from "./Authenticate.js";
+import { LogonLink } from "./Authenticate";
 import { ImageUploader } from "./ImageUploader.js";
 import DeleteButton from "./DeleteButton.js";
 
@@ -22,7 +22,7 @@ const campAlternateLocations = [...require("shared").campAlternateLocations];
 const streets = [...require("shared").streets];
 const crossStreets = require("shared").crossStreets;
 
-export default class SubmitBody extends React.Component {
+class SubmitBody extends React.Component {
   constructor(props) {
     super(props);
 
@@ -288,15 +288,12 @@ export default class SubmitBody extends React.Component {
   }
 
   render() {
-
     const getAltLocationFromState = (s) => {
-      if (!this.state.altlocation) 
-        return false;
-      if (!this.state.altlocation[s])
-        return false;
+      if (!this.state.altlocation) return false;
+      if (!this.state.altlocation[s]) return false;
       return this.state.altlocation[s];
     };
-  
+
     if (this.state._submit_successful) {
       //
       // after a submit, we are going to redirect them to the directory,
@@ -307,10 +304,8 @@ export default class SubmitBody extends React.Component {
         ? this.props.saveCopyAsYear
         : this.state.year;
 
-      return (
-        <Redirect
-          to={`/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`}
-        />
+      this.props.router.push(
+        `/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`
       );
     } else if (!this.props.userData.isLoggedOn) {
       return this.NotLoggedIn();
@@ -397,7 +392,7 @@ export default class SubmitBody extends React.Component {
                     <Form.Group
                       controlId={`altlocation.${loc.code}`}
                       key={loc.code}
-                      style={{marginBottom: "0"}}
+                      style={{ marginBottom: "0" }}
                     >
                       <Form.Check
                         inline
@@ -407,16 +402,23 @@ export default class SubmitBody extends React.Component {
                         label={loc.fullname}
                         onChange={this.changeHandler}
                       />
-                      {
-                        loc.linktext &&
-                          <a href={loc.link} target="_blank" rel="noopener noreferrer">{loc.linktext}</a>
-                      }
+                      {loc.linktext && (
+                        <a
+                          href={loc.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {loc.linktext}
+                        </a>
+                      )}
                     </Form.Group>
                   );
                 })}
               </Col>
             </Row>
-            <Row><Col>&nbsp;</Col></Row>
+            <Row>
+              <Col>&nbsp;</Col>
+            </Row>
 
             <Row>
               <Col>
@@ -797,3 +799,5 @@ export default class SubmitBody extends React.Component {
       );
   }
 }
+
+export default withRouter(SubmitBody);
