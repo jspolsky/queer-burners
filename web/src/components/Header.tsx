@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import banner0 from "../../public/assets/banner0.jpg";
@@ -17,7 +17,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Carousel from "react-bootstrap/Carousel";
-import UserContext from "./UserContext";
 
 const HEADER_IMAGES = [
   banner0,
@@ -37,7 +36,7 @@ export const HeaderImage = () => {
     <Carousel controls={false} fade={true} interval={8000}>
       {HEADER_IMAGES.map((src, index) => (
         <Carousel.Item key={index} style={{ marginBottom: "2rem" }}>
-          <Image className="img-fluid w-100" src={src} alt="Queerburners" />
+          <Image src={src} alt="Queerburners" layout="responsive" />
         </Carousel.Item>
       ))}
     </Carousel>
@@ -45,8 +44,6 @@ export const HeaderImage = () => {
 };
 
 export const Header = () => {
-  const { userData, setUserData } = useContext(UserContext);
-
   return (
     <>
       <Navbar
