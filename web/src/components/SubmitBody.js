@@ -384,7 +384,7 @@ class SubmitBody extends React.Component {
               </Col>
             </Row>
 
-            <Row>
+            {/* <Row>
               <Col>
                 <Form.Label>Where can we find you in 2021?</Form.Label>
                 {campAlternateLocations.map((loc) => {
@@ -415,11 +415,10 @@ class SubmitBody extends React.Component {
                   );
                 })}
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col>&nbsp;</Col>
             </Row>
-
             <Row>
               <Col>
                 <Form.Group controlId="location.frontage">

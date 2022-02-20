@@ -11,6 +11,12 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { s3images } from "../definitions.js";
 import { campAlternateLocations } from "shared";
 
+import social_email from "../assets/social_email.svg";
+import social_facebook from "../assets/social_facebook.svg";
+import social_instagram from "../assets/social_instagram.svg";
+import social_twitter from "../assets/social_twitter.svg";
+import social_url from "../assets/social_url.svg";
+
 function JoinButton(props) {
   const o = props.o;
   if (o.joinOpen) {
@@ -57,6 +63,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
   let href = raw;
   let display = raw;
+  let imgsrc = social_url;
 
   switch (linkType) {
     case "url":
@@ -68,6 +75,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
     case "email":
       href = `mailto:${raw}`;
+      imgsrc = social_email;
       break;
 
     case "facebook":
@@ -75,15 +83,18 @@ const DisplaySocialLink = ({ linkType, raw }) => {
         .replace(/^https?:\/\//, "")
         .replace(/\/$/, "")
         .replace(/^www\./, "");
+      imgsrc = social_facebook;
       break;
 
     case "instagram":
       href = `https://instagram.com/${raw}`;
+      imgsrc = social_instagram;
       break;
 
     case "twitter":
       href = `https://twitter.com/${raw}`;
       display = `@${raw}`;
+      imgsrc = social_twitter;
       break;
 
     default:
@@ -91,10 +102,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
   return (
     <div>
-      <Image
-        src={require(`../../public/assets/social_${linkType}.svg`)}
-        style={{ width: "1.2rem", paddingRight: ".35rem" }}
-      />
+      <Image src={imgsrc} style={{ width: "1.2rem", paddingRight: ".35rem" }} />
       <a
         style={{ fontSize: "0.85rem" }}
         href={href}

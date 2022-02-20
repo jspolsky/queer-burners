@@ -69,7 +69,7 @@ export const Header = () => {
             <Link href="/calendar" passHref>
               <Nav.Link>Calendar</Nav.Link>
             </Link>
-            <a className="nav-link" href="https://blog.queerburners.com/">
+            <a className="nav-link" href="https://blog.queerburners.org/">
               Blog
             </a>
             <NavDropdown title="History" id="collasible-nav-dropdown">

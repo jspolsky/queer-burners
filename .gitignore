@@ -12,6 +12,7 @@
 
 # deploy doesn't need to be checked in
 /build
+build
 
 # misc
 .DS_Store
