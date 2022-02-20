@@ -3,20 +3,20 @@ import React from "react";
 export const HomePage = () => {
   return (
     <>
-      <div class="home">
-        <div class="container">
-          <div class="row no-gutters">
-            <div class="col-md-6">
+      <div className="home">
+        <div className="container">
+          <div className="row no-gutters">
+            <div className="col-md-6">
               <a href="all-of-us-event">
                 <img
-                  class="fit-image"
+                  className="fit-image"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/625098c4beeb2c8b04033bddad2ea7e0.jpg"
                   alt="happy burners holding hands and watching a sunset"
                 />
               </a>
             </div>
-            <div class="col-md-6 text-center my-auto">
-              <div class="heading-and-text">
+            <div className="col-md-6 text-center my-auto">
+              <div className="heading-and-text">
                 <h1>Mission</h1>
                 <p>
                   The Queerburners mission and vision is to create accountable
@@ -26,15 +26,15 @@ export const HomePage = () => {
                   Principles to guide the way.
                 </p>
                 <a href="501c3">
-                  <button class="btn btn-info" type="button">
+                  <button className="btn btn-info" type="button">
                     LEARN MORE
                   </button>
                 </a>
               </div>
             </div>
           </div>
-          <div class="row no-gutters">
-            <div class="col-md-6 blue-gradient pull-quote">
+          <div className="row no-gutters">
+            <div className="col-md-6 blue-gradient pull-quote">
               <div>
                 <p>
                   &ldquo;We came to Burning Man because we saw something was
@@ -47,13 +47,13 @@ export const HomePage = () => {
                 </blockquote>
               </div>
             </div>
-            <div class="col-md-6 text-center my-auto">
+            <div className="col-md-6 text-center my-auto">
               <img
-                class="fit-image rel"
+                className="fit-image rel"
                 src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/852c236f7b238683d7c9082a09bd2852.jpg"
                 alt="a dozen tepee-shaped greeter tents in Black Rock City with colorful flags fluttering above"
               />
-              <div class="abs">
+              <div className="abs">
                 <p>
                   Queerburners will produce two to three main events per year,
                   and will seek artists and performers to feature. It is our
@@ -61,7 +61,7 @@ export const HomePage = () => {
                   artists succeed.
                 </p>
                 <a href="all-of-us-event">
-                  <button class="btn btn-info" type="button">
+                  <button className="btn btn-info" type="button">
                     PARTICIPATE
                   </button>
                 </a>
@@ -71,13 +71,13 @@ export const HomePage = () => {
         </div>
       </div>
       <div>&nbsp;</div>
-      <div class="home2">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4">
+      <div className="home2">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4">
               <a href="directory">
                 <img
-                  class="img-fluid"
+                  className="img-fluid"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/05436e8b2ae6ffe341bbde5547cd6982.jpg"
                   alt="Young men in tutus doing aerobics in front of a dusty theme camp at Burning Man"
                 />
@@ -87,10 +87,10 @@ export const HomePage = () => {
               </h1>
               <p>A list of LGBTQIA+ and ally theme camps at Burning Man</p>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
               <a href="http://blog.queerburners.com">
                 <img
-                  class="img-fluid"
+                  className="img-fluid"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/9cd2fee6bd18ab14c6d76049b3df9f96.jpg"
                   alt="Brightly colored dayglo flags fluttering in the wind at night in front of Comfort and Joy theme camp"
                 />
@@ -100,10 +100,10 @@ export const HomePage = () => {
               </h1>
               <p>Years of history</p>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
               <a href="https://forms.gle/duMkJy4jhHhT8bDo9">
                 <img
-                  class="img-fluid"
+                  className="img-fluid"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/4f650352258c3b4e858f5c2495b83160.jpg"
                   alt="Diverse burners gathering"
                 />
@@ -118,11 +118,11 @@ export const HomePage = () => {
               </p>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4">
+          <div className="row">
+            <div className="col-md-4">
               <a href="board">
                 <img
-                  class="img-fluid"
+                  className="img-fluid"
                   src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/9ef69c96addee5271ac7e7253418e14e.jpg"
                   alt="Fireworks at the man burn 2019"
                 />
@@ -132,9 +132,9 @@ export const HomePage = () => {
               </h1>
               <p>There is always a seat at the table!</p>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
               <img
-                class="img-fluid"
+                className="img-fluid"
                 src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/988c4e35442994d3123cd52d9ab987c6.jpg"
                 alt="View of Black Rock City from the air, showing a huge crescent-shaped city with over 70,000 participants in a dry lake bed desert"
               />
@@ -144,9 +144,9 @@ export const HomePage = () => {
                 inclusion as core values of our community
               </p>
             </div>
-            <div class="col-md-4">
+            <div className="col-md-4">
               <img
-                class="img-fluid"
+                className="img-fluid"
                 src="https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/14a19d17d5f54b896cf1adab7f8f0c21.jpg"
                 alt="artwork consisting of three tall poles, each with a Bitcoin logo at the top, in the desert at Burning Man"
               />

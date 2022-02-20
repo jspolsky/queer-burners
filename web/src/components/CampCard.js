@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Link from "next/link";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
 import Popover from "react-bootstrap/Popover";
@@ -7,7 +8,6 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
 import { campAlternateLocations } from "shared";
 
@@ -92,10 +92,15 @@ const DisplaySocialLink = ({ linkType, raw }) => {
   return (
     <div>
       <Image
-        src={require(`../assets/social_${linkType}.svg`)}
+        src={require(`../../public/assets/social_${linkType}.svg`)}
         style={{ width: "1.2rem", paddingRight: ".35rem" }}
       />
-      <a style={{ fontSize: "0.85rem" }} href={href} target="_blank" rel="noopener noreferrer">
+      <a
+        style={{ fontSize: "0.85rem" }}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {display}
       </a>
     </div>
@@ -125,14 +130,12 @@ const Lightbox = (props) => {
 };
 
 const AlternateLocations = (props) => {
-
   const toSentence = (arr) =>
     arr.slice(0, -2).join(", ") +
     (arr.slice(0, -2).length ? ", " : "") +
     arr.slice(-2).join(" and ");
 
-  if (!props.altlocation)
-    return <></>;
+  if (!props.altlocation) return <></>;
 
   var fullNameAltLocations = [];
 
@@ -142,12 +145,13 @@ const AlternateLocations = (props) => {
     }
   });
 
-  if (fullNameAltLocations.length === 0)
-    return <></>;
+  if (fullNameAltLocations.length === 0) return <></>;
 
   return (
-    <Card.Text  className="font-weight-light">
-      <em>This year we will be attending {toSentence(fullNameAltLocations)}.</em>
+    <Card.Text className="font-weight-light">
+      <em>
+        This year we will be attending {toSentence(fullNameAltLocations)}.
+      </em>
     </Card.Text>
   );
 };
@@ -158,9 +162,7 @@ const CampCard = (props) => {
 
   const displayLocation =
     o.location && o.location.string && o.location.string !== "Unknown" ? (
-      <div>
-          {o.location.string}
-      </div>
+      <div>{o.location.string}</div>
     ) : (
       ""
     );
@@ -282,14 +284,14 @@ const CampCard = (props) => {
         {props.ismine && (
           <Card.Footer>
             This is your camp - you can&nbsp;
-            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            <Link href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
               edit it!
             </Link>
           </Card.Footer>
         )}
         {!props.ismine && props.isadmin && (
           <Card.Footer>
-            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            <Link href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
               Edit
             </Link>
             {o.contact && o.contact.email && o.contact.name && (
