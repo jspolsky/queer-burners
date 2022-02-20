@@ -1,5 +1,6 @@
 {
-  "name": "next",
+  "name": "queer-burners",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
