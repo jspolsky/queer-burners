@@ -11,11 +11,11 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { s3images } from "../definitions.js";
 import { campAlternateLocations } from "shared";
 
-import social_email from "../assets/social_email.svg";
-import social_facebook from "../assets/social_facebook.svg";
-import social_instagram from "../assets/social_instagram.svg";
-import social_twitter from "../assets/social_twitter.svg";
-import social_url from "../assets/social_url.svg";
+import social_email from "../../public/assets/social_email.svg";
+import social_facebook from "../../public/assets/social_facebook.svg";
+import social_instagram from "../../public/assets/social_instagram.svg";
+import social_twitter from "../../public/assets/social_twitter.svg";
+import social_url from "../../public/assets/social_url.svg";
 
 function JoinButton(props) {
   const o = props.o;
