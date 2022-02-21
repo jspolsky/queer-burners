@@ -51,9 +51,10 @@ class SubmitBody extends React.Component {
       _ready_to_show_form: false,
       _submit_disabled: false,
     };
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
-  submitHandler = async (event) => {
+  async submitHandler(event) {
     event.preventDefault();
     this.setState({
       _validated: true,
@@ -117,7 +118,7 @@ class SubmitBody extends React.Component {
       console.error(error);
       this.setState({ _error_submit: msg, _submit_in_progress: false });
     }
-  };
+  }
 
   fieldValidator = (key, value) => {
     const err = fieldError(key, value);
@@ -307,6 +308,7 @@ class SubmitBody extends React.Component {
       this.props.router.push(
         `/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`
       );
+      return null;
     } else if (!this.props.userData.isLoggedOn) {
       return this.NotLoggedIn();
     } else if (!this.state._ready_to_show_form) {

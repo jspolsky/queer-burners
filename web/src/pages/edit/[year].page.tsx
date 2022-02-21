@@ -4,10 +4,10 @@ import { useContext } from "react";
 import SubmitBody from "../../components/SubmitBody";
 import UserContext from "../../components/UserContext";
 
-const Home: NextPage = () => {
+const SubmitBodyPage: NextPage = () => {
   const { query } = useRouter();
   const { userData } = useContext(UserContext);
   return <SubmitBody userData={userData} year={query.year} camp={query.camp} />;
 };
 
-export default Home;
+export default SubmitBodyPage;
