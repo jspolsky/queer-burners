@@ -47,7 +47,6 @@ const DirectoryByYearPage: NextPage<DirectoryByPageProps> = ({
   year,
   publicCamps,
 }) => {
-  const { query } = useRouter();
   const { userData } = useContext(UserContext);
 
   const [authenticatedCamps, setAuthenticatedCamps] = useState<CampData[]>([]);
@@ -65,7 +64,6 @@ const DirectoryByYearPage: NextPage<DirectoryByPageProps> = ({
     <DirectoryBody
       year={year}
       camps={userData.isLoggedOn ? authenticatedCamps : publicCamps}
-      search={typeof query.s === "string" ? query.s : undefined}
     />
   );
 };

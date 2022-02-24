@@ -1,4 +1,4 @@
-import React, { useContext, useState, VFC } from "react";
+import React, { useContext, useEffect, useState, VFC } from "react";
 
 import Link from "next/link";
 import Container from "react-bootstrap/Container";
@@ -18,6 +18,7 @@ import CampCard from "./CampCard.js";
 
 import { CampData } from "../lib/api.js";
 import UserContext from "./UserContext";
+import { useRouter } from "next/router";
 
 const campIdentifications = [...require("shared").campIdentifications];
 
@@ -40,23 +41,22 @@ const neighborhood = (camp: CampData) => {
 };
 
 type DirectoryBodyProps = {
-  initialSearchString?: string;
-  search?: string;
   camps: CampData[];
   year: number;
 };
 
-export const DirectoryBody: VFC<DirectoryBodyProps> = ({
-  initialSearchString,
-  camps,
-  year,
-  ...props
-}) => {
+export const DirectoryBody: VFC<DirectoryBodyProps> = ({ camps, year }) => {
+  const router = useRouter();
   const { userData } = useContext(UserContext);
-  const [searchString, setSearchString] = useState<string>(
-    initialSearchString ?? ""
-  );
+  const [searchString, setSearchString] = useState<string>("");
+
   const [filter, setFilter] = useState<string>("all");
+
+  useEffect(() => {
+    if (typeof router.query.s === "string") {
+      setSearchString(router.query.s);
+    }
+  }, [router]);
 
   let filterButtonString = filter;
   if (filter === "all") {
@@ -201,7 +201,7 @@ export const DirectoryBody: VFC<DirectoryBodyProps> = ({
                         isadmin={userData.isAdmin}
                       />
                     ))}
-                  {props.search ? (
+                  {router.query.s ? (
                     <Card bg="success" text="white">
                       <Card.Header>
                         <strong>Thank you!</strong>
@@ -233,6 +233,12 @@ export const DirectoryBody: VFC<DirectoryBodyProps> = ({
                         <Button
                           onClick={() => {
                             setSearchString("");
+                            /** Remove the query parameter */
+                            const { s, ...remainingQuery } = router.query;
+                            router.replace({
+                              pathname: router.pathname,
+                              query: remainingQuery,
+                            });
                           }}
                         >
                           Ok
