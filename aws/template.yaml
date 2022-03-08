@@ -99,6 +99,7 @@ Resources:
       FunctionName: qb-mycamps-get
       Handler: multifunc.myCampsGet
       Policies: AmazonDynamoDBReadOnlyAccess
+      Timeout: 15
       Events:
         MyCampsGet:
           Type: Api
