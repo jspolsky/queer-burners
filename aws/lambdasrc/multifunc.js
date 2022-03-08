@@ -553,7 +553,9 @@ exports.myCampsGet = async (event) => {
 
   try {
     const data = await db.scan(params).promise();
-    let camps = data.Items.filter((x) => x.contact.email === remoteUser.email);
+    let camps = data.Items.filter(
+      (x) => x.contact && x.contact.email === remoteUser.email
+    );
     return StandardResponse(camps);
   } catch (e) {
     return StandardError(e);
