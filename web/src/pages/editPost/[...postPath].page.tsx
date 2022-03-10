@@ -2,14 +2,13 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import EditPost from "../../components/EditPost";
 
-type ParsedUrlQuery = {
-  postPath: string[];
-};
-
 const EditPostPage: NextPage = () => {
   const { query } = useRouter();
 
-  const postSlug = (query as ParsedUrlQuery).postPath.join("/");
+  const postSlug =
+    query.postPath && Array.isArray(query.postPath)
+      ? query.postPath.join("/")
+      : undefined;
 
   return <EditPost post={postSlug} />;
 };
