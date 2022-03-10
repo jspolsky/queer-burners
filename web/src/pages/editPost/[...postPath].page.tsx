@@ -1,13 +1,17 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 import EditPost from "../../components/EditPost";
-import UserContext from "../../components/UserContext";
+
+type ParsedUrlQuery = {
+  postPath: string[];
+};
 
 const EditPostPage: NextPage = () => {
   const { query } = useRouter();
 
-  return <EditPost post={query.post} />;
+  const postSlug = (query as ParsedUrlQuery).postPath.join("/");
+
+  return <EditPost post={postSlug} />;
 };
 
 export default EditPostPage;
