@@ -1,4 +1,4 @@
-export const frontendUrl = "https://queerburners.org";
+export const frontendUrl = "http://localhost:3000";
 
 export const defaultYear = new Date().getFullYear();
 export const api =
