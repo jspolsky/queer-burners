@@ -1,4 +1,6 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../components/UserContext";
 import ViewPost from "../components/ViewPost";
 import { getAllPostSlugs, fetchPostHtml } from "../lib/api";
 
@@ -41,8 +43,25 @@ export const getStaticProps: GetStaticProps<
   throw new Error("");
 };
 
-const PostPage: NextPage<PostPageProps> = ({ postSlug, postHtml }) => {
-  return <ViewPost postSlug={postSlug} postHtml={postHtml} />;
+const PostPage: NextPage<PostPageProps> = ({
+  postSlug,
+  postHtml: staticPostHtml,
+}) => {
+  const { userData } = useContext(UserContext);
+
+  const [fetchedPostHtml, setFetchedPostHtml] = useState<string>();
+
+  const userIsAdmin = userData && userData.isAdmin;
+
+  useEffect(() => {
+    if (userIsAdmin) {
+      void fetchPostHtml({ postSlug }).then(setFetchedPostHtml);
+    }
+  }, [postSlug, userIsAdmin]);
+
+  const postHtml = userIsAdmin ? fetchedPostHtml : staticPostHtml;
+
+  return postHtml ? <ViewPost postSlug={postSlug} postHtml={postHtml} /> : null;
 };
 
 export default PostPage;
