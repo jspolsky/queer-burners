@@ -1,3 +1,8 @@
+export const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
+  ? process.env.NEXT_PUBLIC_FRONTEND_URL
+  : process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : "http://localhost:3000";
 export const defaultYear = new Date().getFullYear();
 export const api =
   "https://wwe0vuykb9.execute-api.us-east-2.amazonaws.com/Prod";

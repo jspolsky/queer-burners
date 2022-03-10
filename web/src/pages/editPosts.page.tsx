@@ -1,34 +1,37 @@
-import React, { useState, useEffect } from "react";
+import type { NextPage } from "next";
+import React, { useState, useEffect, useContext } from "react";
+import Link from "next/link";
 import axios from "axios";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
 
 import { api } from "../definitions.js";
+import UserContext from "../components/UserContext";
 
-export const EditPosts = (props) => {
+const EditPostsPage: NextPage = () => {
+  const { userData } = useContext(UserContext);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(`${api}/posts`);
 
-      const sortedPosts = result.data.sort((a, b) =>
+      const sortedPosts = result.data.sort((a: any, b: any) =>
         a.path.localeCompare(b.path)
       );
 
       setData(sortedPosts);
     };
 
-    if (props.userData && props.userData.isAdmin) {
+    if (userData && userData.isAdmin) {
       fetchData();
     }
-  }, [props.userData]);
+  }, [userData]);
 
-  if (!props.userData || !props.userData.isAdmin) {
+  if (!userData || !userData.isAdmin) {
     return (
       <Container className="qb-textpage">
         <Row>
@@ -66,21 +69,25 @@ export const EditPosts = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((i) => (
+                  {data.map((i: any) => (
                     <tr key={i.path}>
                       <td>/{i.path}</td>
                       <td>{i.description}</td>
                       <td>
-                        <Link to={i.path}>View</Link>
+                        <Link href={i.path}>
+                          <a>View</a>
+                        </Link>
                         &nbsp;|&nbsp;
-                        <Link to={`/editPost/${i.path}`}>Edit</Link>
+                        <Link href={`/editPost/${i.path}`}>
+                          <a>Edit</a>
+                        </Link>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
               <p>
-                <Link to={"/newPost"}>+ Add a new post</Link>
+                <Link href={"/newPost"}>+ Add a new post</Link>
               </p>
             </>
           )}
@@ -90,4 +97,4 @@ export const EditPosts = (props) => {
   );
 };
 
-export default EditPosts;
+export default EditPostsPage;

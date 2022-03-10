@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
-import { Redirect } from "react-router";
+import { useRouter } from "next/router";
 
 const DeleteButton = (props) => {
+  const router = useRouter();
   const [show, setShow] = useState(false);
   const [needsScroll, setNeedsScroll] = useState(false);
-  const [done, setDone] = useState(false);
   const alertEl = useRef(null);
 
   useEffect(() => {
@@ -19,10 +19,6 @@ const DeleteButton = (props) => {
       setNeedsScroll(false);
     }
   }, [needsScroll]);
-
-  if (done) {
-    return <Redirect to={props.redirectOnSuccess}></Redirect>;
-  }
 
   return (
     <>
@@ -50,7 +46,7 @@ const DeleteButton = (props) => {
                     password: "",
                   },
                 });
-                setDone(true);
+                router.push(props.redirectOnSuccess);
               }}
               variant="danger"
             >

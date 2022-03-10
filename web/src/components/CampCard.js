@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Link from "next/link";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
 import Popover from "react-bootstrap/Popover";
@@ -7,15 +8,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Link } from "react-router-dom";
 import { s3images } from "../definitions.js";
 import { campAlternateLocations } from "shared";
-
-import social_email from "../assets/social_email.svg";
-import social_facebook from "../assets/social_facebook.svg";
-import social_instagram from "../assets/social_instagram.svg";
-import social_twitter from "../assets/social_twitter.svg";
-import social_url from "../assets/social_url.svg";
 
 function JoinButton(props) {
   const o = props.o;
@@ -63,7 +57,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
   let href = raw;
   let display = raw;
-  let imgsrc = social_url;
+  let imgsrc = "/assets/social_url.svg";
 
   switch (linkType) {
     case "url":
@@ -75,7 +69,7 @@ const DisplaySocialLink = ({ linkType, raw }) => {
 
     case "email":
       href = `mailto:${raw}`;
-      imgsrc = social_email;
+      imgsrc = "/assets/social_email.svg";
       break;
 
     case "facebook":
@@ -83,18 +77,18 @@ const DisplaySocialLink = ({ linkType, raw }) => {
         .replace(/^https?:\/\//, "")
         .replace(/\/$/, "")
         .replace(/^www\./, "");
-      imgsrc = social_facebook;
+      imgsrc = "/assets/social_facebook.svg";
       break;
 
     case "instagram":
       href = `https://instagram.com/${raw}`;
-      imgsrc = social_instagram;
+      imgsrc = "/assets/social_instagram.svg";
       break;
 
     case "twitter":
       href = `https://twitter.com/${raw}`;
       display = `@${raw}`;
-      imgsrc = social_twitter;
+      imgsrc = "/assets/social_twitter.svg";
       break;
 
     default:
@@ -292,14 +286,14 @@ const CampCard = (props) => {
         {props.ismine && (
           <Card.Footer>
             This is your camp - you can&nbsp;
-            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            <Link href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
               edit it!
             </Link>
           </Card.Footer>
         )}
         {!props.ismine && props.isadmin && (
           <Card.Footer>
-            <Link to={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
+            <Link href={`/edit/${o.year}/?camp=${encodeURIComponent(o.name)}`}>
               Edit
             </Link>
             {o.contact && o.contact.email && o.contact.name && (

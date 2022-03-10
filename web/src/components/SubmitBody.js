@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router";
+import { withRouter } from "next/router";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
-import { LogonLink } from "./Authenticate.js";
+import { LogonLink } from "./Authenticate";
 import { ImageUploader } from "./ImageUploader.js";
 import DeleteButton from "./DeleteButton.js";
 
@@ -22,7 +22,7 @@ const campAlternateLocations = [...require("shared").campAlternateLocations];
 const streets = [...require("shared").streets];
 const crossStreets = require("shared").crossStreets;
 
-export default class SubmitBody extends React.Component {
+class SubmitBody extends React.Component {
   constructor(props) {
     super(props);
 
@@ -51,9 +51,10 @@ export default class SubmitBody extends React.Component {
       _ready_to_show_form: false,
       _submit_disabled: false,
     };
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
-  submitHandler = async (event) => {
+  async submitHandler(event) {
     event.preventDefault();
     this.setState({
       _validated: true,
@@ -117,7 +118,7 @@ export default class SubmitBody extends React.Component {
       console.error(error);
       this.setState({ _error_submit: msg, _submit_in_progress: false });
     }
-  };
+  }
 
   fieldValidator = (key, value) => {
     const err = fieldError(key, value);
@@ -304,11 +305,10 @@ export default class SubmitBody extends React.Component {
         ? this.props.saveCopyAsYear
         : this.state.year;
 
-      return (
-        <Redirect
-          to={`/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`}
-        />
+      this.props.router.push(
+        `/year/${yearToBounce}?s=${encodeURIComponent(this.state.name)}`
       );
+      return null;
     } else if (!this.props.userData.isLoggedOn) {
       return this.NotLoggedIn();
     } else if (!this.state._ready_to_show_form) {
@@ -394,7 +394,7 @@ export default class SubmitBody extends React.Component {
                     <Form.Group
                       controlId={`altlocation.${loc.code}`}
                       key={loc.code}
-                      style={{marginBottom: "0"}}
+                      style={{ marginBottom: "0" }}
                     >
                       <Form.Check
                         inline
@@ -404,10 +404,15 @@ export default class SubmitBody extends React.Component {
                         label={loc.fullname}
                         onChange={this.changeHandler}
                       />
-                      {
-                        loc.linktext &&
-                          <a href={loc.link} target="_blank" rel="noopener noreferrer">{loc.linktext}</a>
-                      }
+                      {loc.linktext && (
+                        <a
+                          href={loc.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {loc.linktext}
+                        </a>
+                      )}
                     </Form.Group>
                   );
                 })}
@@ -416,7 +421,6 @@ export default class SubmitBody extends React.Component {
             <Row>
               <Col>&nbsp;</Col>
             </Row>
-
             <Row>
               <Col>
                 <Form.Group controlId="location.frontage">
@@ -796,3 +800,5 @@ export default class SubmitBody extends React.Component {
       );
   }
 }
+
+export default withRouter(SubmitBody);
