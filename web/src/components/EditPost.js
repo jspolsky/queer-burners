@@ -60,19 +60,10 @@ export const EditPost = (props) => {
         setDescription(event.target.value);
         break;
 
-      case "post":
-        setPost(event.target.value);
-        break;
-
       default:
         break;
     }
 
-    setFormValidated(false);
-  };
-
-  const postChangeHandler = (event) => {
-    setPost(event.target.getContent());
     setFormValidated(false);
   };
 
@@ -250,7 +241,7 @@ export const EditPost = (props) => {
                   </Form.Text>
                 </Form.Group>
                 <Editor
-                  initialValue={post}
+                  value={post}
                   apiKey={apiKeyTinyMCE}
                   init={{
                     height: 500,
@@ -273,7 +264,10 @@ export const EditPost = (props) => {
                     toolbar:
                       "undo redo removeformat | formatselect | bold italic | alignleft aligncenter alignright | image link | blockquote bullist numlist outdent indent | charmap emoticons | code help",
                   }}
-                  onChange={postChangeHandler}
+                  onEditorChange={(change) => {
+                    setPost(change);
+                    setFormValidated(false);
+                  }}
                 />
                 <br />
                 {saveError && (
