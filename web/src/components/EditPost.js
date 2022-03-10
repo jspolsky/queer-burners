@@ -60,6 +60,10 @@ export const EditPost = (props) => {
         setDescription(event.target.value);
         break;
 
+      case "post":
+        setPost(event.target.value);
+        break;
+
       default:
         break;
     }
