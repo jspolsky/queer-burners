@@ -13,7 +13,7 @@ type PostPageProps = {
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async () => {
   return {
-    fallback: true,
+    fallback: "blocking",
     paths: (await getAllPostSlugs()).map((path) => ({
       params: {
         postPath: path.split("/"),
@@ -31,6 +31,7 @@ export const getStaticProps: GetStaticProps<
   if (postPath) {
     const postSlug = postPath.join("/");
     return {
+      revalidate: 10,
       props: {
         postSlug,
         postHtml: await fetchPostHtml({ postSlug }),
