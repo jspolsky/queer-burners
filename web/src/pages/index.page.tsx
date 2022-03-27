@@ -11,6 +11,7 @@ export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
   const postSlug = "greetersStation";
 
   return {
+    revalidate: 10,
     props: {
       postSlug,
       postHtml: await fetchPostHtml({ postSlug }),
