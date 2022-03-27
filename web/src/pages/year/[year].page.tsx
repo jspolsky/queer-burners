@@ -34,6 +34,7 @@ export const getStaticProps: GetStaticProps<
     const year = parseInt(stringifiedYear, 10);
 
     return {
+      revalidate: 10,
       props: {
         year,
         publicCamps: await fetchAllCamps({ year }),

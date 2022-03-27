@@ -11,6 +11,7 @@ type DirectoryPageProps = {
 
 export const getStaticProps: GetStaticProps<DirectoryPageProps> = async () => {
   return {
+    revalidate: 10,
     props: {
       publicCamps: await fetchAllCamps({ year: defaultYear }),
     },
