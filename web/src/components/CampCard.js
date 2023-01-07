@@ -8,7 +8,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import Tooltip from "react-bootstrap/Tooltip";
-import { s3images } from "../definitions.js";
+import { s3imagesDownload } from "../definitions.js";
 import { campAlternateLocations } from "shared";
 
 function JoinButton(props) {
@@ -174,7 +174,7 @@ const CampCard = (props) => {
       <Lightbox
         show={showLightbox}
         setShow={setShowLightbox}
-        image={`${s3images}/${o.fullSizeImage}`}
+        image={`${s3imagesDownload}/${o.fullSizeImage}`}
         name={o.name}
         about={o.about}
         centered
@@ -184,7 +184,7 @@ const CampCard = (props) => {
           <Card.Img
             role="button"
             variant="top"
-            src={`${s3images}/${o.thumbnail}`}
+            src={`${s3imagesDownload}/${o.thumbnail}`}
             onClick={() => {
               setShowLightbox(!!o.fullSizeImage); // only show lightbox if fullSizeImage present
             }}

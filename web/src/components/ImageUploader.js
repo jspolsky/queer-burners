@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 export const ImageUploader = ({
   thumbnail,
   onChange,
-  s3images,
+  s3imagesUpload,
   api,
   onSubmitInProgress,
 }) => {
@@ -20,9 +20,9 @@ export const ImageUploader = ({
 
   useEffect(() => {
     if (thumbnail.length > 0 && objectUrl.length === 0) {
-      setObjectUrl(`${s3images}/${thumbnail}`);
+      setObjectUrl(`${s3imagesUpload}/${thumbnail}`);
     }
-  }, [thumbnail, s3images, objectUrl.length]);
+  }, [thumbnail, s3imagesUpload, objectUrl.length]);
 
   useEffect(() => {
     if (needsScroll) {
