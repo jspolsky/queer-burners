@@ -12,7 +12,7 @@ import { LogonLink } from "./Authenticate";
 import { ImageUploader } from "./ImageUploader.js";
 import DeleteButton from "./DeleteButton.js";
 
-import { defaultYear, api, s3images } from "../definitions.js";
+import { defaultYear, api, s3imagesUpload } from "../definitions.js";
 import { fieldError, emptyCamp } from "shared";
 
 import axios from "axios";
@@ -580,7 +580,7 @@ class SubmitBody extends React.Component {
                     onChange={(thumbnail) => {
                       this.setState({ thumbnail: thumbnail });
                     }}
-                    s3images={s3images}
+                    s3imagesUpload={s3imagesUpload}
                     api={api}
                     onSubmitInProgress={(inProgress) => {
                       this.setState({ _submit_disabled: inProgress });

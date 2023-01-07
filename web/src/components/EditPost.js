@@ -12,7 +12,7 @@ import Alert from "react-bootstrap/Alert";
 import { Editor } from "@tinymce/tinymce-react";
 import DeleteButton from "./DeleteButton.js";
 
-import { api, apiKeyTinyMCE } from "../definitions.js";
+import { api, apiKeyTinyMCE, s3imagesDownload } from "../definitions.js";
 import UserContext from "./UserContext";
 
 export const EditPost = (props) => {
@@ -172,7 +172,7 @@ export const EditPost = (props) => {
     });
 
     success(
-      `https://s3.us-east-2.amazonaws.com/queerburnersdirectory.com-images/${uploader.data.fileName}`
+      `${s3imagesDownload}/${uploader.data.fileName}`
     );
   };
 

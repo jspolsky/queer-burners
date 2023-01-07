@@ -1,5 +1,12 @@
 import React from "react";
 
+//
+// IMPORTANT
+// This component is not used in production. The home page is actually loaded from 
+// a post called /greetersStation.
+// This code was just a testbed for developing and debugging that page easily.
+//
+
 export const HomePage = () => {
   return (
     <>
