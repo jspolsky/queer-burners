@@ -15,7 +15,7 @@ export const Footer: VFC = () => {
       <Row>
         <Col>
           <p>
-            We are grateful to <a href="https://duncan.co">Duncan Rawlinson</a>{" "}
+            © 2023 Queer Burners, a 501(c)3 Organization. We are grateful to <a href="https://duncan.co">Duncan Rawlinson</a>{" "}
             (CC BY-NC 3.0) and Wink Maltman for the header images, and many
             burners and friends throughout the years for their contributions to
             this site.
