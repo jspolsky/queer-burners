@@ -13,6 +13,6 @@
     "google-auth-library": "^6.0.6",
     "nodemailer": "^6.4.11",
     "shared": "file:../../../shared",
-    "sharp": "^0.25.4"
+    "sharp": "^0.30.5"
   }
 }
