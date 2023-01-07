@@ -25,8 +25,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 aws/packaged.yaml
-web/src/camp_images/*
 aws/templatelocal.yaml
-2019 data - all camps.json
 queer-burners.code-workspace
 header/.eslintcache
