@@ -16,15 +16,14 @@ You'll find this code in the `web` subdirectory.
 - We use [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html)
 - For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
 
-As you develop code on your local machine in the web subdirectory, you can use the `npm start` command which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
+As you develop code on your local machine in the web subdirectory, run 
 
-Once you're happy with your changes, commit them to github.
+* `npm run build`
+* `npm start`
 
-When you are ready to deploy these changes to the live web server, build the front end (using the `npm run build`) command. This will generate a bunch of compressed and optimized files and put those in the `web\build` subdirectory. Now commit again to github.
+which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
 
-As soon as you commit these `web\build` files to github, our web host, Vercel, notices the changes and deploys them to the Vercel content distribution network. That means that anything you check into `web\build` is automatically deployed to, and hosted at, [queerburners.org](https://queerburners.org). It will only take a few seconds for the new site to be live.
-
-So far, the front end consists entirely of static files. Vercel serves them off of their content distribution network, like any old fashioned web server, but no actual code is running on the Vercel server.
+Once you're happy with your changes, commit them to github. That will make them live.
 
 ## The Server Side (but it's serverless)
 
