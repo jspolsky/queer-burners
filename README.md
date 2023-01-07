@@ -4,14 +4,16 @@ Here are some notes to future developers that want to modify this project.
 
 # Site Architecture
 
-The site is serverless. Instead of having a web server running code, the site is implemented as a single page React app. That means most of the logic is running in JavaScript on the client (in a web browser). There is also an API running on AWS to save things like camp directory entries and page content, and we use S3 to store user-uploaded pictures.
+The site is built using [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html). This allows us to host it on [Vercel](https://vercel.com/). Because we don't get much traffic, the free [Hobby Plan](https://vercel.com/pricing) from Vercel is sufficient for our needs.
+
+The JavaScript website calls our own API which is running on [AWS Lambda](https://aws.amazon.com/lambda/) to save things like camp directory entries and page content. We also use [AWS S3](https://aws.amazon.com/s3) to store user-uploaded pictures.
 
 ## The Client Side
 
 You'll find this code in the `web` subdirectory.
 
-- All code is written in modern ECMAScript 6 (aka Javascript) and developed with `node` and `npm`
-- We use the [React](https://reactjs.org/docs/getting-started.html) framework, in particular [Create React App](https://create-react-app.dev/)
+- All code is written in Javascript or Typescript.
+- We use [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html)
 - For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
 
 As you develop code on your local machine in the web subdirectory, you can use the `npm start` command which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
