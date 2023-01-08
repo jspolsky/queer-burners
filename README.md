@@ -39,7 +39,7 @@ To store this data on the server, Queerburners has a RESTful API which is runnin
 
 Whenever the API needs to store some data:
 
-- User-uploaded images are stored in [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html).
+- User-uploaded images are stored in [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html). The are served to web browsers via [CloudFront](https://aws.amazon.com/cloudfront/), a CDN which is faster at serving images than plain old S3.
 - Other data, like information about theme camps, is in [Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html), a simple NoSQL database that stores JSON objects. We access DynamoDB through the JavaScript [DocumentClient](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html) library.
 
 Here is a more complete list of technologies, frameworks, and libraries that are used to build Queer Burners Directory, along with links to the documentation.
@@ -61,12 +61,17 @@ This is where you work on the front end and the react code.
 
 Install `node` and `npm` to work on the website.
 
-**npm start** will start a local web server for testing. Whenever you edit and save files locally, your browser will refresh automatically with the latest version.
+- **npm start build** invokes the next.js build process, which makes your code ready to run locally.
+
+- **npm start** will start a local web server for testing, accessible as http://localhost:3000/
 
 Once you have everything working locally:
 
-- **npm start build** builds the `web/build` subdirectory which is what you deploy to the server
-- Then just check that into github. Vercel will automatically pick it up and in a minute or two the new live site will appear at queerburners.org.
+- Check it into github. Vercel will automatically pick it up and in a minute or two the new live site will appear at queerburners.org.
+
+GitHub Pro Tip:
+
+- Always work in the **dev** branch, locally. When you get it working locally, commit and push your changes to the dev branch. Vercel will build this branch and serve it at a magic URL so you can test it. When you're happy, create a pull request with all the changes in **dev** and then merge it into **master**.
 
 ## The **aws** directory
 
