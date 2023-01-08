@@ -108,6 +108,8 @@ Ready to make changes to the server side code? First develop them locally.
 
 - You may want to install [Postman](https://www.postman.com) to test the API directly before you try to get it to work from the web front end.
 
+- When you run ./local-sam.sh, and hit the API locally via localhost:3001, you might get a 502 error. In the terminal window where ./local-sam.sh is running, you might see an error "No response from invoke container". This might mean that the version of the **lambdalayer** on the server is more recent than the one hardcoded in the script `local-sam.sh`. Log onto the AWS Lamba console, look under Additional Resources > Layers > NodeModulesLayer, then under **VersionDetails** you'll see a version number. Update `local-sam.sh` with this newer version number.
+
 Once the server-side code is tested locally, you can deploy it to Amazon.
 
 - The script ./deploy-sam.sh deploys any changes you have made to the lamdba functions (locally) up to AWS.
