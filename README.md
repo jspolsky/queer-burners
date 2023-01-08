@@ -19,7 +19,7 @@ You'll find this code in the `web` subdirectory.
 As you develop code on your local machine in the web subdirectory, run 
 
 * `npm run build`
-* `npm start`
+* `npm run dev`
 
 which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
 
