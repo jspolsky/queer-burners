@@ -141,6 +141,14 @@ blockquote {
   font-size: 1.25rem;
 }
 
+.qb-textpage blockquote {
+  font-size: 1rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  padding-left: 1rem;
+  border-left: gray 2px solid;
+}
+
 .GoogleUserPicture {
   margin-top: 0.4rem;
 }
