@@ -78,6 +78,9 @@ export const Header = () => {
                   Queer Burner History at Black Rock City
                 </NavDropdown.Item>
               </Link>
+              <Link href="/year/2023" passHref>
+                <NavDropdown.Item>2023 Animalia</NavDropdown.Item>
+              </Link>
               <Link href="/year/2022" passHref>
                 <NavDropdown.Item>2022 Waking Dreams</NavDropdown.Item>
               </Link>
