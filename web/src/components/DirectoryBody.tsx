@@ -43,9 +43,14 @@ const neighborhood = (camp: CampData) => {
 type DirectoryBodyProps = {
   camps: CampData[];
   year: number;
+  postHtml: string;
 };
 
-export const DirectoryBody: VFC<DirectoryBodyProps> = ({ camps, year }) => {
+export const DirectoryBody: VFC<DirectoryBodyProps> = ({
+  camps,
+  year,
+  postHtml,
+}) => {
   const router = useRouter();
   const { userData } = useContext(UserContext);
   const [searchString, setSearchString] = useState<string>("");
@@ -88,6 +93,7 @@ export const DirectoryBody: VFC<DirectoryBodyProps> = ({ camps, year }) => {
         <Row className="pb-4">
           <Col>
             <h1>Theme Camp Directory {year}</h1>
+            <div dangerouslySetInnerHTML={{ __html: postHtml }} />
           </Col>
           <Col md="auto">
             <Form inline>

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { DirectoryBody } from "../../components/DirectoryBody";
 import UserContext from "../../components/UserContext";
 import { defaultYear } from "../../definitions";
-import { CampData, fetchAllCamps } from "../../lib/api";
+import { CampData, fetchAllCamps, fetchPostHtmlNoError } from "../../lib/api";
 
 type ParsedUrlQuery = {
   year: string;
@@ -13,6 +13,7 @@ type ParsedUrlQuery = {
 type DirectoryByPageProps = {
   year: number;
   publicCamps: CampData[];
+  publicHtml: string;
 };
 
 export const getStaticPaths: GetStaticPaths<ParsedUrlQuery> = async () => {
@@ -38,6 +39,7 @@ export const getStaticProps: GetStaticProps<
       props: {
         year,
         publicCamps: await fetchAllCamps({ year }),
+        publicHtml: await fetchPostHtmlNoError({ postSlug: "history/" + year }),
       },
     };
   }
@@ -47,6 +49,7 @@ export const getStaticProps: GetStaticProps<
 const DirectoryByYearPage: NextPage<DirectoryByPageProps> = ({
   year,
   publicCamps,
+  publicHtml,
 }) => {
   const { userData } = useContext(UserContext);
 
@@ -65,6 +68,7 @@ const DirectoryByYearPage: NextPage<DirectoryByPageProps> = ({
     <DirectoryBody
       year={year}
       camps={userData.isLoggedOn ? authenticatedCamps : publicCamps}
+      postHtml={publicHtml}
     />
   );
 };

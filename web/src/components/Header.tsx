@@ -84,7 +84,7 @@ export const Header = () => {
               <Link href="/year/2022" passHref>
                 <NavDropdown.Item>2022 Waking Dreams</NavDropdown.Item>
               </Link>
-              <Link href="/year/2021" passHref>
+              <Link href="/history/2021" passHref>
                 <NavDropdown.Item>2021 The Great Unknown</NavDropdown.Item>
               </Link>
               <Link href="/history/2020" passHref>
