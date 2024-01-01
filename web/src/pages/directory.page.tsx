@@ -34,18 +34,20 @@ const DirectoryPage: NextPage<DirectoryPageProps> = ({ publicCamps }) => {
     }
   }, [userData]);
 
-  if (router.query.result === 'json') {
-    
-    const campsToDisplay = JSON.stringify(publicCamps.map(item => {
-      return {
-        name: item.name,
-        location: item.location.string,
-        identifies: item.identifies,
-      };
-    }), null, 2);
+  if (router.query.result === "json") {
+    const campsToDisplay = JSON.stringify(
+      publicCamps.map((item) => {
+        return {
+          name: item.name,
+          location: item.location.string,
+          identifies: item.identifies,
+        };
+      }),
+      null,
+      2
+    );
     return <pre>{campsToDisplay}</pre>;
-
-} else {  
+  } else {
     return (
       <DirectoryBody
         camps={userData.isLoggedOn ? authenticatedCamps : publicCamps}
