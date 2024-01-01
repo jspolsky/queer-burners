@@ -12,6 +12,17 @@ export const fetchPostHtml = async (params: {
   return postHtml;
 };
 
+export const fetchPostHtmlNoError = async (params: {
+  postSlug: string;
+}): Promise<string> => {
+  const postHtml = await axios
+    .get(`${api}/posts/${params.postSlug}`)
+    .then(({ data }) => data.post)
+    .catch(() => "");
+
+  return postHtml;
+};
+
 export const getAllPostSlugs = async (): Promise<string[]> => {
   const paths = await axios
     .get<{ path: string }[]>(`${api}/posts`)

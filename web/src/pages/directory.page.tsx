@@ -3,11 +3,12 @@ import { useContext, useEffect, useState } from "react";
 import { DirectoryBody } from "../components/DirectoryBody";
 import UserContext from "../components/UserContext";
 import { defaultYear } from "../definitions";
-import { CampData, fetchAllCamps } from "../lib/api";
+import { CampData, fetchAllCamps, fetchPostHtmlNoError } from "../lib/api";
 import { useRouter } from "next/router";
 
 type DirectoryPageProps = {
   publicCamps: CampData[];
+  postHtml: string;
 };
 
 export const getStaticProps: GetStaticProps<DirectoryPageProps> = async () => {
@@ -15,11 +16,17 @@ export const getStaticProps: GetStaticProps<DirectoryPageProps> = async () => {
     revalidate: 10,
     props: {
       publicCamps: await fetchAllCamps({ year: defaultYear }),
+      postHtml: await fetchPostHtmlNoError({
+        postSlug: "history/" + defaultYear,
+      }),
     },
   };
 };
 
-const DirectoryPage: NextPage<DirectoryPageProps> = ({ publicCamps }) => {
+const DirectoryPage: NextPage<DirectoryPageProps> = ({
+  publicCamps,
+  postHtml,
+}) => {
   const { userData } = useContext(UserContext);
   const router = useRouter();
 
@@ -34,22 +41,25 @@ const DirectoryPage: NextPage<DirectoryPageProps> = ({ publicCamps }) => {
     }
   }, [userData]);
 
-  if (router.query.result === 'json') {
-    
-    const campsToDisplay = JSON.stringify(publicCamps.map(item => {
-      return {
-        name: item.name,
-        location: item.location.string,
-        identifies: item.identifies,
-      };
-    }), null, 2);
+  if (router.query.result === "json") {
+    const campsToDisplay = JSON.stringify(
+      publicCamps.map((item) => {
+        return {
+          name: item.name,
+          location: item.location.string,
+          identifies: item.identifies,
+        };
+      }),
+      null,
+      2
+    );
     return <pre>{campsToDisplay}</pre>;
-
-} else {  
+  } else {
     return (
       <DirectoryBody
         camps={userData.isLoggedOn ? authenticatedCamps : publicCamps}
         year={defaultYear}
+        postHtml={postHtml}
       />
     );
   }
