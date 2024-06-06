@@ -425,7 +425,7 @@ class SubmitBody extends React.Component {
               <Col>
                 <Form.Group controlId="location.frontage">
                   <Form.Label>
-                    2023 Black Rock City Location (if any)
+                    2024 Black Rock City Location (if any)
                   </Form.Label>
                   <Form.Control
                     name="location.frontage"
