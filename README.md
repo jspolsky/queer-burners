@@ -16,10 +16,10 @@ You'll find this code in the `web` subdirectory.
 - We use [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html)
 - For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
 
-As you develop code on your local machine in the web subdirectory, run 
+As you develop code on your local machine in the web subdirectory, run
 
-* `npm run build`
-* `npm run dev`
+- `npm run build`
+- `npm run dev`
 
 which will launch a web server, and open your browser to http://localhost:3000 to test the changes you've made.
 
@@ -61,9 +61,9 @@ This is where you work on the front end and the react code.
 
 Install `node` and `npm` to work on the website.
 
-- **npm start build** invokes the next.js build process, which makes your code ready to run locally.
+- **npm run build** invokes the next.js build process, which makes your code ready to run locally.
 
-- **npm start** will start a local web server for testing, accessible as http://localhost:3000/
+- **npm run dev** will start a local web server for testing, accessible as http://localhost:3000/
 
 Once you have everything working locally:
 
