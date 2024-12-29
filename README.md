@@ -6,6 +6,8 @@ Here are some notes to future developers that want to modify this project.
 
 The site is built using [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html). This allows us to host it on [Vercel](https://vercel.com/). Because we don't get much traffic, the free [Hobby Plan](https://vercel.com/pricing) from Vercel is sufficient for our needs.
 
+As of 2025, we are still using older versions of Next.JS (12.0), React, Bootstrap, React Bootstrap, and many other libraries. The latest versions of these libraries went through many, many non-backwards-compatible changes and we just don't have the cycles to port to newer versions for what is essentially a perfectly good working website.
+
 The JavaScript website calls our own API which is running on [AWS Lambda](https://aws.amazon.com/lambda/) to save things like camp directory entries and page content. We also use [AWS S3](https://aws.amazon.com/s3) to store user-uploaded pictures.
 
 ## The Client Side
@@ -15,6 +17,10 @@ You'll find this code in the `web` subdirectory.
 - All code is written in Javascript or Typescript.
 - We use [Next.JS](https://nextjs.org), a framework for [React](https://reactjs.org/docs/getting-started.html)
 - For CSS and styling, [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction/) based on [Bootstrap 4.5](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
+
+Many of the functions of the app require users to be logged on. The only method we provide for logging in users is [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2/web-server) which means they just log on with their Google account; we don't need to secure their passwords or anything and Google sends us back a reliably email address.
+
+When you are trying to develop code on your local machine, if you log on, you will notice that the OAuth flow causes you to be logged on to the production server at queerburners.org, not your local development server, which isn't helpful. To fix this, edit `frontendUrl` in `definitions.js` but don't check that change in.
 
 As you develop code on your local machine in the web subdirectory, run
 
