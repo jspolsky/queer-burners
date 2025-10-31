@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tinymce/tinymce-react": "^3.13.0",
-    "axios": "^0.25.0",
+    "@tinymce/tinymce-react": "^6.3.0",
+    "axios": "^1.13.1",
     "bootstrap": "^4.5.2",
     "next": "^12.3.4",
     "react": "17.0.2",
@@ -18,7 +18,7 @@
     "react-dom": "17.0.2",
     "sass": "^1.49.0",
     "shared": "../shared",
-    "sharp": "^0.31.3"
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
